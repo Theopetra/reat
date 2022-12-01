@@ -1,11 +1,14 @@
 import Image from "next/image";
 import { ButtonColors, ButtonTypes, IconButton, NavButton } from "./Button";
 import { NavText } from "./Text";
+import { useRouter } from "next/router";
 
 export const NAV_HEIGHT = "130PX";
 export const NAV_HEIGHT_OFFSET = "230PX";
 
 const Nav = () => {
+  const router = useRouter();
+
   return (
     <div
       style={{
@@ -14,16 +17,34 @@ const Nav = () => {
       }}
       className="w-screen relative z-40 flex flex-row items-center justify-between bg-transparent p-4 2xl:px-40  max-w-[1800px]"
     >
-      <Image
-        src={"/images/REAT-logo.png"}
-        alt="REAT Logo"
-        height={129}
-        width={129}
-      />
+      <div onClick={() => router.push("/")} className="cursor-pointer">
+        <Image
+          src={"/images/REAT-logo.png"}
+          alt="REAT Logo"
+          height={129}
+          width={129}
+        />
+      </div>
+
       <div className="flex flex-row items-center gap-10">
-        <NavText customClass="text-white cursor-pointer">DONATE</NavText>
-        <NavText customClass="text-white cursor-pointer">STACK</NavText>
-        <NavText customClass="text-white cursor-pointer">CLAIM</NavText>
+        <NavText
+          onClick={() => router.push("/donate")}
+          customClass="text-white cursor-pointer"
+        >
+          DONATE
+        </NavText>
+        <NavText
+          onClick={() => router.push("/stack")}
+          customClass="text-white cursor-pointer"
+        >
+          STACK
+        </NavText>
+        <NavText
+          onClick={() => router.push("/claim")}
+          customClass="text-white cursor-pointer"
+        >
+          CLAIM
+        </NavText>
         <NavButton>Connect</NavButton>
       </div>
     </div>

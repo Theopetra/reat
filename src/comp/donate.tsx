@@ -7,6 +7,16 @@ import { NAV_HEIGHT, NAV_HEIGHT_OFFSET } from "./Nav";
 import { BASIC_HOME_STYLE } from "./Home";
 import { NavButton, TileButton } from "./Button";
 import TrendingPool from "./TrendingPool";
+import { toast } from "react-toastify";
+import {
+  TaxDisclaimer,
+  DonationReceipt,
+  PoolOpen,
+  PoolMining,
+  PoolCompleted,
+  CreatePool,
+  FinancialDisclaimer,
+} from "./Models";
 
 type Tile = {
   icon: any;
@@ -30,7 +40,7 @@ export const Tile = ({ icon, title, text }: Tile) => {
   );
 };
 
-const PoolTile = () => {
+export const PoolTile = () => {
   return (
     <div className="flex flex-col h-[456px] w-[380px] bg-lightBlack rounded-[28px] p-9 gap-5">
       <div className="flex w-full items-center flex-row justify-between">
@@ -69,7 +79,7 @@ const PoolTile = () => {
               11-15-2022
             </Text>
           </div>
-          <div className="flex flex pr-6 flex-col items-start">
+          <div className="flex  pr-6 flex-col items-start">
             <Text customClass="text-lightGray" type={TextTypes.SubText}>
               Claim Date
             </Text>
@@ -87,7 +97,7 @@ const PoolTile = () => {
               10
             </Text>
           </div>
-          <div className="flex flex pr-6 flex-col items-start">
+          <div className="flex pr-6 flex-col items-start">
             <Text customClass="text-lightGray" type={TextTypes.SubText}>
               Fee
             </Text>
@@ -115,11 +125,29 @@ const PoolTile = () => {
           </div>
         </div>
       </div>
-      <TileButton customClass="px-10">Join Mining Pool</TileButton>
+      <TileButton customClass="px-12">Join Mining Pool</TileButton>
     </div>
   );
 };
+
+type ToastShowProp = {
+  ToastComp: React.FC<{ closeToast?: () => void }>;
+};
 const Donate = () => {
+  const handleToast = (props: ToastShowProp) => {
+    toast(({ closeToast }) => <props.ToastComp closeToast={closeToast} />, {
+      autoClose: false,
+      hideProgressBar: true,
+      style: {
+        backgroundColor: "transparent",
+      },
+      draggable: false,
+      closeOnClick: false,
+      closeButton: true,
+      position: "top-center",
+    });
+  };
+
   return (
     <div className="bg-black">
       <div className="donateLanding" />
@@ -136,7 +164,86 @@ const Donate = () => {
         <div className="flex flex-col w-full max-w-[1140px] items-center gap-20">
           <div className="flex w-full flex-col items-center gap-6">
             <div className="flex w-full flex-row items-center justify-between gap-10">
-              <TextHeader> Mining Pools</TextHeader>
+              <TextHeader>Mining Pools</TextHeader>
+              <div className="flex flex-row items-center gap-3">
+                <Text
+                  customClass="text-gray font-large text-lg"
+                  type={TextTypes.SubText}
+                  onClick={() =>
+                    handleToast({
+                      ToastComp: TaxDisclaimer,
+                    })
+                  }
+                >
+                  Tax Disclaimer
+                </Text>
+                <Text
+                  customClass="text-gray font-large text-lg"
+                  type={TextTypes.SubText}
+                  onClick={() =>
+                    handleToast({
+                      ToastComp: FinancialDisclaimer,
+                    })
+                  }
+                >
+                  Financial Disclaimer
+                </Text>
+                <Text
+                  customClass="text-gray font-large text-lg"
+                  type={TextTypes.SubText}
+                  onClick={() =>
+                    handleToast({
+                      ToastComp: PoolMining,
+                    })
+                  }
+                >
+                  Pool Mining
+                </Text>
+                <Text
+                  customClass="text-gray font-large text-lg"
+                  type={TextTypes.SubText}
+                  onClick={() =>
+                    handleToast({
+                      ToastComp: PoolCompleted,
+                    })
+                  }
+                >
+                  Pool Completed
+                </Text>
+                <Text
+                  customClass="text-gray font-large text-lg"
+                  type={TextTypes.SubText}
+                  onClick={() =>
+                    handleToast({
+                      ToastComp: CreatePool,
+                    })
+                  }
+                >
+                  Create Pool
+                </Text>
+                <Text
+                  customClass="text-gray font-large text-lg"
+                  type={TextTypes.SubText}
+                  onClick={() =>
+                    handleToast({
+                      ToastComp: PoolOpen,
+                    })
+                  }
+                >
+                  Pool Open
+                </Text>
+                <Text
+                  customClass="text-gray font-large text-lg"
+                  type={TextTypes.SubText}
+                  onClick={() =>
+                    handleToast({
+                      ToastComp: DonationReceipt,
+                    })
+                  }
+                >
+                  Donation Receipt
+                </Text>
+              </div>
             </div>
             <div
               style={{
@@ -164,6 +271,15 @@ const Donate = () => {
             </div>
           </div>
         </div>
+      </div>
+      <div
+        style={{
+          height: "80vh",
+          width: "100vw",
+        }}
+      >
+        <div className="donateLanding" />
+        <div className="landingOverlayFlip" />
       </div>
     </div>
   );

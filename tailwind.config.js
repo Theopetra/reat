@@ -23,6 +23,8 @@ module.exports = {
         lightYellow: "#E5BD4D",
         darkYellow: "#CF9940",
         lightBlack: "#262626",
+        gray: "#8C8D8A",
+        midGray: "#464646",
       },
       backgroundImage: {
         home: "url('/images/Home.png')",

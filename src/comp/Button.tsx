@@ -18,6 +18,7 @@ export enum ButtonColors {
   Gold,
   GreenGradient,
   YelloGradient,
+  Gray,
 }
 
 const ButtonColorMaps: Record<ButtonColors, string> = {
@@ -26,6 +27,7 @@ const ButtonColorMaps: Record<ButtonColors, string> = {
   [ButtonColors.GreenGradient]: "bg-gradient-to-r from-lightGreen to-darkGreen",
   [ButtonColors.YelloGradient]:
     "bg-gradient-to-r from-lightYellow to-darkYellow",
+  [ButtonColors.Gray]: "bg-gray",
 };
 
 type ButtonProps = TemplateButton & {
@@ -115,6 +117,24 @@ export const TileButton = ({
     >
       {children}
     </Button>
+  );
+};
+
+export const ModelButton = (props: ButtonProps) => {
+  return (
+    <div
+      onClick={props.onClick}
+      className={classNames(
+        "cursor-pointer   m-auto hover:shadow-xl text-center transition-all",
+        ButtonTypeMaps[props.type],
+        ButtonColorMaps[props.color],
+        props.customClass
+      )}
+    >
+      <Text customClass="text-white" type={TextTypes.SubText}>
+        {props.children}
+      </Text>
+    </div>
   );
 };
 

@@ -10,6 +10,7 @@ export enum TextTypes {
   NavText,
   BodySubText,
   TextHeader,
+  TriText,
   // BoldBody,
 }
 
@@ -20,7 +21,8 @@ const TextTypesMap: Record<TextTypes, string> = {
     "text-2xl md:text-4xl lg:text-4xl xl:text-5xl xxl:text-6xl	 text-green",
   [TextTypes.ButtonText]:
     "font-light   md:text-[24px] md:leading-[36px] text-white",
-  [TextTypes.SubText]: "font-textRegular text-lg text-lightGray",
+  [TextTypes.SubText]: "font-textRegular text-lg ",
+  [TextTypes.TriText]: "font-textRegular text-sm text-lightGray",
 
   [TextTypes.BoldSubText]: "font-textRegular text-2xl font-medium ",
   [TextTypes.NavText]: "text-xl  font-textRegular font-medium",
@@ -35,7 +37,10 @@ type TextProps = TemplateText & {
 
 const Text = (props: TextProps) => {
   return (
-    <p className={classNames(" ", props.customClass, TextTypesMap[props.type])}>
+    <p
+      onClick={props.onClick}
+      className={classNames(" ", props.customClass, TextTypesMap[props.type])}
+    >
       {props.children}
     </p>
   );

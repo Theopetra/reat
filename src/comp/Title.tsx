@@ -6,6 +6,7 @@ export enum TitleTypes {
   SubHeader,
   TriHeader,
   RaxHeader,
+  ModelHeader,
 }
 //md:text-[50px] md:leading-[75px]
 const TitleTypeMaps: Record<TitleTypes, string> = {
@@ -16,6 +17,7 @@ const TitleTypeMaps: Record<TitleTypes, string> = {
   [TitleTypes.TriHeader]: "text-white font-[50px] RaxtorRegular ",
   [TitleTypes.RaxHeader]:
     "text-white text-[200px] tracking-[0.4em] font-headerRax",
+  [TitleTypes.ModelHeader]: "font-headerBold text-3xl",
 };
 
 type Title = TemplateTitle & {
@@ -53,6 +55,14 @@ export const RaxHeader = ({ customClass, children }: TemplateTitle) => {
 export const TitleHeader = ({ customClass, children }: TemplateTitle) => {
   return (
     <Title type={TitleTypes.Header} customClass={customClass}>
+      {children}
+    </Title>
+  );
+};
+
+export const ModelTitle = ({ customClass, children }: TemplateTitle) => {
+  return (
+    <Title type={TitleTypes.ModelHeader} customClass={customClass}>
       {children}
     </Title>
   );

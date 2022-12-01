@@ -11,7 +11,14 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <StateLogic>
       <ConnectWallet>
-        <ToastContainer />
+        <ToastContainer
+          style={{
+            minWidth: "450px",
+            backgroundColor: "transparent",
+            boxShadow: "none",
+          }}
+          enableMultiContainer={false}
+        />
         <div className="w-screen flex flex-col items-center bg-[##0B0B0B]  m-auto">
           <Nav />
           <Component {...pageProps} />
