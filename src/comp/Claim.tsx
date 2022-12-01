@@ -45,7 +45,7 @@ const Claim = () => {
           </div>
           <div className="flex self-start flex-row items-start">
             <BodySubText customClass="text-left curosr-pointer underline text-lightGray">
-              Claim Stacking Rewards
+              View my Donation Receipts
             </BodySubText>
           </div>
           <div className="flex flex-col w-full max-w-[1140px] items-center gap-20">
