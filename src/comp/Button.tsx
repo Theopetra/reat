@@ -47,9 +47,13 @@ const Button = (props: ButtonProps) => {
       )}
     >
       {props.type === ButtonTypes.Primary ? (
-        <Text type={TextTypes.LargeButton}>{props.children}</Text>
+        <Text customClass="font-bold" type={TextTypes.LargeButton}>
+          {props.children}
+        </Text>
       ) : (
-        <Text type={TextTypes.ButtonText}>{props.children}</Text>
+        <Text customClass="font-bold" type={TextTypes.ButtonText}>
+          {props.children}
+        </Text>
       )}
     </div>
   );
@@ -74,9 +78,13 @@ export const IconButton = (props: ButtonIconProps) => {
     >
       <Image src={props.icon} alt="Icon" width={20} height={20} />
       {props.type === ButtonTypes.Primary ? (
-        <Text type={TextTypes.LargeButton}>{props.children}</Text>
+        <Text customClass="!font-bold" type={TextTypes.LargeButton}>
+          {props.children}
+        </Text>
       ) : (
-        <Text type={TextTypes.ButtonText}>{props.children}</Text>
+        <Text customClass="!font-bold" type={TextTypes.ButtonText}>
+          {props.children}
+        </Text>
       )}
     </div>
   );

@@ -73,7 +73,9 @@ a {
 .Toastify__close-button {
   color: #fff;
 }
-
+.Toastify__progress-bar {
+  background: #e5bd4d !important;
+}
 .Toastify__close-button {
   color: #fff;
   height: 25px;

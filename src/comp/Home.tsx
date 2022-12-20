@@ -67,7 +67,7 @@ const Home = () => {
       >
         <RaxHeader customClass="text-center">REAT</RaxHeader>
 
-        <div className="max-w-xxl">
+        <div className="max-w-4xl">
           <BodySubText customClass="text-center text-lightGray">
             Donate STX with others to increase the pool’s chance of winning
             blocks & help improve housing affordability across America

@@ -47,7 +47,7 @@ const Text = (props: TextProps) => {
 };
 
 type TemplateText = {
-  children: string;
+  children: string | number;
   customClass?: string;
   onClick?: () => void;
 };

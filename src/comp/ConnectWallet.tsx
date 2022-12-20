@@ -29,10 +29,11 @@ const ConnectWallet = ({ children }: ConnectWalletType) => {
   const [loading, _Loading] = useState<boolean>(false);
 
   useEffect(() => {
-    const senderAddy = localStorage.getItem("walletID");
+    const senderAddy = localStorage.getItem("principal");
     //const senderAddy = "SP329G766AV8Z01X9EEAHPDQ4WDJXT2A0XB383MGP";
-
+    console.log("senderAddy", senderAddy);
     if (senderAddy) {
+      console.log("does this run");
       _authenticated(true);
       _senderAddress(senderAddy);
     }
@@ -40,7 +41,7 @@ const ConnectWallet = ({ children }: ConnectWalletType) => {
 
   const AUTH_OPTIONS: any = {
     appDetails: {
-      name: "Mutant Monkeys",
+      name: "Theo",
       icon: "https://cdn.discordapp.com/attachments/973373774101618778/978172941802029096/SLIME.png",
     },
     username: "test",
@@ -50,6 +51,7 @@ const ConnectWallet = ({ children }: ConnectWalletType) => {
         _Loading(true);
         let userData = STACKS_USER_SESSION.loadUserData();
 
+        console.log("userData", userData);
         const senderAddress = userData.profile.stxAddress.mainnet;
         //const senderAddress = "SP31WTJ415SNJM9H6202S3WK9AFQXQZMT48PESBQE";
         _authenticated(true);
@@ -57,9 +59,7 @@ const ConnectWallet = ({ children }: ConnectWalletType) => {
 
         _Loading(false);
 
-        //fetchBreedingTools(senderAddress);
-
-        localStorage.setItem("walletID", senderAddress);
+        localStorage.setItem("principal", senderAddress);
       } catch (err) {
         toast.error("Could Not Authenticate");
         _Loading(false);

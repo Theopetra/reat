@@ -1,10 +1,13 @@
+import { ColorRing } from "react-loader-spinner";
+import { useAppState } from "../state";
 import { ModelButton, TileButton, ButtonColors, ButtonTypes } from "./Button";
+import { PoolOpenType } from "./Models/PoolOpen";
 import Text, { BodySubText, NavText, TextTypes } from "./Text";
 import { ModelTitle } from "./Title";
 
 export type ModelInfoProps = {
   title: string;
-  text: string;
+  text: string | number;
 };
 
 export const ModelInfo = ({ title, text }: ModelInfoProps) => {
@@ -20,13 +23,26 @@ export const ModelInfo = ({ title, text }: ModelInfoProps) => {
   );
 };
 
-type ModelProps = {
+export type ModelProps = {
   closeToast?: () => void;
 };
 
+export const TOAST_CONFIG: any = {
+  autoClose: 10000,
+  hideProgressBar: true,
+  style: {
+    backgroundColor: "transparent",
+  },
+  draggable: false,
+  closeOnClick: false,
+  closeButton: true,
+  position: "top-center",
+};
+export const MODEL_BASIC_STYLES =
+  "flex flex-col h-auto  min-w-[320px] w-[4000px] max-w-[380px] bg-lightBlack rounded-[20px] p-9 gap-5";
 export const TaxDisclaimer = ({ closeToast }: ModelProps) => {
   return (
-    <div className="flex flex-col h-auto w-[380px] bg-lightBlack rounded-[20px] p-9 gap-5">
+    <div className={MODEL_BASIC_STYLES}>
       <ModelTitle>Tax Disclaimer</ModelTitle>
       <div
         style={{
@@ -74,7 +90,7 @@ export const TaxDisclaimer = ({ closeToast }: ModelProps) => {
 
 export const FinancialDisclaimer = ({ closeToast }: ModelProps) => {
   return (
-    <div className="flex flex-col h-auto w-[380px] bg-lightBlack rounded-[20px] p-9 gap-5">
+    <div className={MODEL_BASIC_STYLES}>
       <ModelTitle>Financial Disclaimer</ModelTitle>
       <div
         style={{
@@ -120,7 +136,7 @@ export const FinancialDisclaimer = ({ closeToast }: ModelProps) => {
 
 export const PoolMining = ({ closeToast }: ModelProps) => {
   return (
-    <div className="flex flex-col h-auto w-[400px] bg-lightBlack rounded-[20px] p-9 gap-5">
+    <div className={MODEL_BASIC_STYLES}>
       <div className="flex flex-row items-center justify-between">
         <ModelTitle>San Jose</ModelTitle>
         <Text
@@ -161,7 +177,7 @@ export const PoolMining = ({ closeToast }: ModelProps) => {
 
 export const StackReat = ({ closeToast }: ModelProps) => {
   return (
-    <div className="flex flex-col h-auto w-[400px] bg-lightBlack rounded-[20px] p-9 gap-5">
+    <div className={MODEL_BASIC_STYLES}>
       <div className="flex flex-row items-center justify-between">
         <ModelTitle>Stack REAT</ModelTitle>
       </div>
@@ -200,7 +216,7 @@ export const StackReat = ({ closeToast }: ModelProps) => {
 
 export const UnStackReat = ({ closeToast }: ModelProps) => {
   return (
-    <div className="flex flex-col h-auto w-[400px] bg-lightBlack rounded-[20px] p-9 gap-5">
+    <div className={MODEL_BASIC_STYLES}>
       <div className="flex flex-row items-center justify-between">
         <ModelTitle>Unstack REAT</ModelTitle>
       </div>
@@ -236,16 +252,18 @@ export const UnStackReat = ({ closeToast }: ModelProps) => {
     </div>
   );
 };
-export const PoolCompleted = ({ closeToast }: ModelProps) => {
+
+export const PoolInfo = ({ closeToast, pool }: PoolOpenType) => {
+  const { currentBlockHeight } = useAppState();
   return (
-    <div className="flex flex-col h-auto w-[400px] bg-lightBlack rounded-[20px] p-9 gap-5">
+    <div className={MODEL_BASIC_STYLES}>
       <div className="flex flex-row items-center justify-between">
-        <ModelTitle>San Jose</ModelTitle>
+        <ModelTitle>{pool.name}</ModelTitle>
         <Text
           customClass="text-white font-large text-lg"
           type={TextTypes.SubText}
         >
-          COMPLETE
+          {pool.poolStatus}
         </Text>
       </div>
       <div
@@ -257,13 +275,30 @@ export const PoolCompleted = ({ closeToast }: ModelProps) => {
       />
       <div className="flex flex-col gap-4">
         <Text type={TextTypes.BoldSubText}>Pool Details</Text>
-        <ModelInfo title="Donation Closed" text="11-15-2022" />
-        <ModelInfo title="Claim Date" text="01-01-2023" />
-        <ModelInfo title="Contributors" text="12" />
-        <ModelInfo title="STX Committed" text="800" />
-        <ModelInfo title="REAT Won" text="15,000" />
-        <ModelInfo title="Completion" text="72%" />
-        <ModelInfo title="Fee" text="1.5%" />
+        <ModelInfo title="Donation Start" text={pool.contributionStartHeight} />
+
+        <ModelInfo title="Donation Closed" text={pool.contributionEndHeight} />
+        <ModelInfo
+          title="Mine Start"
+          text={pool.startedMineHeight ? pool.startedMineHeight : "N/A"}
+        />
+
+        <ModelInfo
+          title="Claim Date"
+          text={pool.startedMineHeight ? pool.startedMineHeight + 200 : "N/A"}
+        />
+        <ModelInfo title="Contributors" text={pool.totalContributions} />
+        <ModelInfo title="STX Committed" text={pool.totalContributions} />
+        <ModelInfo title="Fee" text={pool.ownerFee} />
+        <ModelInfo title="REAT Won" text={pool.totalCoinsWon} />
+        <ModelInfo
+          title="Completion"
+          text={
+            pool.startedMineHeight
+              ? (pool.startedMineHeight + 200) / currentBlockHeight
+              : "N/A"
+          }
+        />
       </div>
       <div></div>
       <div className="flex flex-row jusitfy-between items-center">
@@ -274,13 +309,6 @@ export const PoolCompleted = ({ closeToast }: ModelProps) => {
         >
           BACK
         </ModelButton>
-        <ModelButton
-          customClass="px-12"
-          type={ButtonTypes.Nav}
-          color={ButtonColors.YelloGradient}
-        >
-          CLAIM REAT
-        </ModelButton>
       </div>
     </div>
   );
@@ -288,128 +316,10 @@ export const PoolCompleted = ({ closeToast }: ModelProps) => {
 
 export const MODEL_INPUT_STYLE =
   "flex-1 h-[45px] pl-2 text-white bg-transparent";
-export const CreatePool = ({ closeToast }: ModelProps) => {
-  return (
-    <div className="flex flex-col h-auto w-[400px] bg-lightBlack rounded-[20px] p-9 gap-5">
-      <ModelTitle>San Jose</ModelTitle>
-      <div
-        style={{
-          border: "1px solid #F5F5F5",
-          width: "100%",
-          height: "0px",
-        }}
-      />
-      <div className="flex flex-col gap-2">
-        <NavText customClass="text-left text-lightGray">
-          Amount of STX to Commit
-        </NavText>
-        <div className="w-full flex flex-row bg-midGray rounded-xl px-4 py-2 justify-between items-center">
-          <input
-            className={MODEL_INPUT_STYLE}
-            placeholder="978 STX Available"
-          />
-        </div>
-      </div>
-      <div className="flex flex-col gap-2">
-        <NavText customClass="text-left text-lightGray">
-          Amount of STX to Commit
-        </NavText>
-        <div className="w-full flex flex-row bg-midGray rounded-xl px-4 py-2 justify-between items-center">
-          <input
-            className={MODEL_INPUT_STYLE}
-            placeholder="978 STX Available"
-          />
-        </div>
-      </div>
-      <div className="flex flex-col gap-2">
-        <NavText customClass="text-left text-lightGray">
-          Amount of STX to Commit
-        </NavText>
-        <div className="w-full flex flex-row bg-midGray rounded-xl px-4 py-2 justify-between items-center">
-          <input
-            className={MODEL_INPUT_STYLE}
-            placeholder="978 STX Available"
-          />
-        </div>
-      </div>
-
-      <div className="flex flex-row mt-4 jusitfy-between items-center">
-        <ModelButton
-          onClick={() => (closeToast ? closeToast() : null)}
-          type={ButtonTypes.Nav}
-          color={ButtonColors.Gray}
-        >
-          BACK
-        </ModelButton>
-        <ModelButton
-          customClass="px-12"
-          type={ButtonTypes.Nav}
-          color={ButtonColors.YelloGradient}
-        >
-          CREATE POOL
-        </ModelButton>
-      </div>
-    </div>
-  );
-};
-export const PoolOpen = ({ closeToast }: ModelProps) => {
-  return (
-    <div className="flex flex-col h-auto w-[400px] bg-lightBlack rounded-[20px] p-9 gap-5">
-      <div className="flex flex-row items-center justify-between">
-        <ModelTitle>San Jose</ModelTitle>
-        <Text
-          customClass="text-darkGreen font-large text-lg"
-          type={TextTypes.SubText}
-        >
-          OPEN
-        </Text>
-      </div>
-      <div
-        style={{
-          border: "1px solid #F5F5F5",
-          width: "100%",
-          height: "0px",
-        }}
-      />
-      <NavText customClass="text-left text-lightGray">
-        Amount of STX to Commit
-      </NavText>
-      <div className="w-full flex flex-row bg-midGray rounded-xl px-4 py-2 justify-between items-center">
-        <input className={MODEL_INPUT_STYLE} placeholder="978 STX Available" />
-        <ModelButton type={ButtonTypes.Nav} color={ButtonColors.YelloGradient}>
-          MAX
-        </ModelButton>
-      </div>
-      <div className="flex flex-col gap-4">
-        <ModelInfo title="Donation Closes" text="11-15-2022" />
-        <ModelInfo title="Claim Date" text="  01-01-2023" />
-        <ModelInfo title="Contributors" text="12" />
-        <ModelInfo title="STX Committed" text="800" />
-        <ModelInfo title="Fee" text=" 1.5%" />
-      </div>
-      <div className="flex flex-row jusitfy-between items-center">
-        <ModelButton
-          onClick={() => (closeToast ? closeToast() : null)}
-          type={ButtonTypes.Nav}
-          color={ButtonColors.Gray}
-        >
-          BACK
-        </ModelButton>
-        <ModelButton
-          type={ButtonTypes.Nav}
-          customClass="px-10"
-          color={ButtonColors.YelloGradient}
-        >
-          START MINNING
-        </ModelButton>
-      </div>
-    </div>
-  );
-};
 
 export const DonationReceipt = ({ closeToast }: ModelProps) => {
   return (
-    <div className="flex flex-col h-auto w-[400px] bg-lightBlack rounded-[20px] p-9 gap-5">
+    <div className={MODEL_BASIC_STYLES}>
       <ModelTitle>Donation Receipt</ModelTitle>
       <div
         style={{
@@ -454,6 +364,62 @@ export const DonationReceipt = ({ closeToast }: ModelProps) => {
           DOWNLOAD RECEIPT
         </ModelButton>
       </div>
+    </div>
+  );
+};
+
+type TransactionSubmittedType = ModelProps & {
+  txId: string;
+};
+export const TransactionSubmitted = ({
+  closeToast,
+  txId,
+}: TransactionSubmittedType) => {
+  const handleLinkTx = () => {
+    window.open(
+      `https://explorer.stacks.co/txid/0x${txId ?? ""}?chain=mainnet`
+    );
+  };
+
+  return (
+    <div className={MODEL_BASIC_STYLES}>
+      <ModelTitle>Transaction Submitted </ModelTitle>
+      <div
+        style={{
+          border: "1px solid #F5F5F5",
+          width: "100%",
+          height: "0px",
+        }}
+      />
+      <div
+        onClick={() => handleLinkTx()}
+        className="flex flex-col gap-2 items-center cursor-pointer"
+      >
+        <ColorRing
+          visible={true}
+          height="180"
+          width="180"
+          ariaLabel="blocks-loading"
+          wrapperStyle={{}}
+          wrapperClass="blocks-wrapper"
+          colors={["#E5BD4D", "#E5BD4D", "#E5BD4D", "#E5BD4D", "#E5BD4D"]}
+        />
+        <Text
+          customClass="!text-lightYellow underline"
+          type={TextTypes.BoldSubText}
+        >
+          View Status
+        </Text>
+      </div>
+
+      <ModelButton
+        onClick={() => (closeToast ? closeToast() : null)}
+        type={ButtonTypes.Nav}
+        color={ButtonColors.Gray}
+        customClass="mt-4"
+      >
+        Close
+      </ModelButton>
     </div>
   );
 };

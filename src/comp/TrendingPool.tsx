@@ -1,4 +1,4 @@
-import { useAppState } from "../state";
+import { POOL_STATUS, POOL_TYPE, useAppState } from "../state";
 import Text, { BodySubText, TextHeader, TextTypes } from "./Text";
 import Image from "next/image";
 import { TitleHeader } from "./Title";
@@ -9,14 +9,54 @@ import { NavButton } from "./Button";
 import { Tile } from "./donate";
 
 const TrendingPool = () => {
+  const { pools, currentBlockHeight } = useAppState();
+  if (pools.length === 0) {
+    return (
+      <div className="flex flex-col h-[456px] w-[380px] bg-lightBlack rounded-[28px] p-9 gap-5">
+        <div className="w-full flex-col flex gap-2.5">
+          <div className="flex flex-row items-center justify-between ">
+            <Text customClass="text-lightGray" type={TextTypes.SubText}>
+              Pool
+            </Text>
+            <Text
+              customClass="text-darkGreen font-large text-lg"
+              type={TextTypes.SubText}
+            >
+              OPEN
+            </Text>
+          </div>
+          <Text
+            customClass="text-white  text-2xl "
+            type={TextTypes.BoldSubText}
+          >
+            Fetching Pools
+          </Text>
+        </div>
+        <div className="w-full flex-col flex gap-2.5">
+          <Text customClass="text-lightGray" type={TextTypes.SubText}>
+            Cause
+          </Text>
+
+          <Text
+            customClass="text-white  text-2xl "
+            type={TextTypes.BoldSubText}
+          >
+            Help provide affordable rental housing to the citizens of San Jose
+            through capped rents.
+          </Text>
+        </div>
+        <div />
+      </div>
+    );
+  }
+
+  const pool = pools[0];
+
   return (
     <div className="flex flex-col w-full max-w-[1140px] items-center gap-20">
       <div className="flex w-full flex-col items-center gap-6">
         <div className="flex w-full flex-row items-center justify-between gap-10">
-          <TextHeader>Trending Pools - San Jose</TextHeader>
-          <TextHeader customClass="text-lightYellow">
-            3,763 Available STX
-          </TextHeader>
+          <TextHeader>{`Trending Pools - ${pool.name}`}</TextHeader>
         </div>
         <div
           style={{
@@ -26,8 +66,8 @@ const TrendingPool = () => {
           }}
         />
       </div>
-      <div className="flex w-full flex-row justify-between items-center gap-6">
-        <div className="flex flex-col h-[456px] w-[380px] bg-lightBlack rounded-[28px] p-9 gap-5">
+      <div className="flex w-full flex-col md:flex-row justify-between items-center gap-6">
+        <div className="flex flex-col  min-h-[300px] h-[1000px] max-h-[456px] min-w-[300px] max-w-[380px] bg-lightBlack rounded-[28px] p-9 gap-5">
           <div className="w-full flex-col flex gap-2.5">
             <div className="flex flex-row items-center justify-between ">
               <Text customClass="text-lightGray" type={TextTypes.SubText}>
@@ -37,14 +77,14 @@ const TrendingPool = () => {
                 customClass="text-darkGreen font-large text-lg"
                 type={TextTypes.SubText}
               >
-                OPEN
+                {pool.poolStatus === POOL_STATUS.OPEN ? "OPEN" : "CLOSED"}
               </Text>
             </div>
             <Text
               customClass="text-white  text-2xl "
               type={TextTypes.BoldSubText}
             >
-              San Jose
+              {pool.name}
             </Text>
           </div>
           <div className="w-full flex-col flex gap-2.5">
@@ -63,32 +103,40 @@ const TrendingPool = () => {
           <div />
           <NavButton customClass="px-12">Join Mining Pool</NavButton>
         </div>
-        <div className="flex flex-col gap-5">
-          <div className="flex flex-row flex-wrap gap-10">
-            <Tile icon="/images/community.svg" title="Contributors" text="28" />
+        <div className="flex flex-col items-center justify-center gap-5">
+          <div className="flex flex-col md:flex-row flex-wrap gap-10">
+            <Tile
+              icon="/images/community.svg"
+              title="Contributors"
+              text={pool.poolMembers.length}
+            />
             <Tile
               icon="/images/padlock.svg"
               title="Contributions Close"
-              text="11-11-2023"
+              text={pool.contributionEndHeight}
             />
             <Tile
               icon="/images/block.svg"
               title="Starting Date"
-              text="01-11-2023"
+              text={pool.contributionStartHeight}
             />
           </div>
-          <div className="flex flex-row flex-wrap gap-10">
+          <div className="flex  flex-col md:flex-row flex-wrap gap-10">
             <Tile
               icon="/images/StxLogo.png"
               title="Total STX Raised"
-              text="300"
+              text={`${pool.totalContributions} STX`}
             />
             <Tile
               icon="/images/user.svg"
               title="Your Contribution"
-              text="0 STX"
+              text={`${pool.totalContributions} STX`}
             />
-            <Tile icon="/images/tags.svg" title="Pool Fee" text="1%" />
+            <Tile
+              icon="/images/tags.svg"
+              title="Pool Fee"
+              text={`${pool.ownerFee}%`}
+            />
           </div>
         </div>
       </div>

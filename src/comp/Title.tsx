@@ -12,12 +12,12 @@ export enum TitleTypes {
 const TitleTypeMaps: Record<TitleTypes, string> = {
   [TitleTypes.empty]: "",
   [TitleTypes.Header]:
-    "text-white text-[160px] tracking-[0.4em] font-headerBold",
+    "text-white text-[40px] lg:text-[160px] tracking-[0.4em] font-headerBold",
   [TitleTypes.SubHeader]: "text-white font-[100px] RaxtorRegular ",
   [TitleTypes.TriHeader]: "text-white font-[50px] RaxtorRegular ",
   [TitleTypes.RaxHeader]:
-    "text-white text-[200px] tracking-[0.4em] font-headerRax",
-  [TitleTypes.ModelHeader]: "font-headerBold text-3xl",
+    "text-white text-[70px] md:text-[200px] tracking-[0.2em] font-headerRax",
+  [TitleTypes.ModelHeader]: "font-headerBold  lg:text-3xl",
 };
 
 type Title = TemplateTitle & {
