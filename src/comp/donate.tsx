@@ -127,7 +127,7 @@ export const PoolTile = (
               Committed STX
             </Text>
             <Text customClass="text-lightGray" type={TextTypes.SubText}>
-              {pool.totalContributions}
+              {pool.totalContributions / 1000000}
             </Text>
           </div>
           <div className="flex pr-6 flex-col items-end">
@@ -166,23 +166,18 @@ export const PoolTile = (
           Claim
         </TileButton>
       )}
-      {pool.poolStatus === POOL_STATUS.UNKNOWN && (
-        <ModelButton
-          onClick={() => pool.handleTileClick(pool)}
-          type={ButtonTypes.Nav}
-          color={ButtonColors.Gray}
-        >
-          View Details
-        </ModelButton>
-      )}
-      {pool.poolStatus === POOL_STATUS.MINING && (
-        <TileButton
-          onClick={() => pool.handleTileClick(pool)}
-          customClass="px-12"
-        >
-          View Details
-        </TileButton>
-      )}
+
+      {pool.poolStatus === POOL_STATUS.UNKNOWN ||
+        pool.poolStatus === POOL_STATUS.MINING ||
+        (pool.poolStatus === POOL_STATUS.PENDING && (
+          <ModelButton
+            onClick={() => pool.handleTileClick(pool)}
+            type={ButtonTypes.Nav}
+            color={ButtonColors.Gray}
+          >
+            View Details
+          </ModelButton>
+        ))}
     </div>
   );
 };
@@ -252,6 +247,11 @@ const Donate = () => {
         TOAST_CONFIG
       );
       return null;
+    } else {
+      toast(
+        ({ closeToast }) => <PoolInfo pool={pool} closeToast={closeToast} />,
+        TOAST_CONFIG
+      );
     }
   };
   return (

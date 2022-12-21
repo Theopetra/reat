@@ -259,6 +259,7 @@ export const PoolInfo = ({ closeToast, pool }: PoolOpenType) => {
     <div className={MODEL_BASIC_STYLES}>
       <div className="flex flex-row items-center justify-between">
         <ModelTitle>{pool.name}</ModelTitle>
+
         <Text
           customClass="text-white font-large text-lg"
           type={TextTypes.SubText}
@@ -274,7 +275,12 @@ export const PoolInfo = ({ closeToast, pool }: PoolOpenType) => {
         }}
       />
       <div className="flex flex-col gap-4">
-        <Text type={TextTypes.BoldSubText}>Pool Details</Text>
+        <div className="flex flex-row justify-between items-center">
+          <Text type={TextTypes.BoldSubText}>Pool Details</Text>
+          <div className="text-xs text-lightGray ">
+            {"Block #" + currentBlockHeight}
+          </div>
+        </div>
         <ModelInfo title="Donation Start" text={pool.contributionStartHeight} />
 
         <ModelInfo title="Donation Closed" text={pool.contributionEndHeight} />

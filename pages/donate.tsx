@@ -36,10 +36,10 @@ const fetchPools = async () => {
     for (const pool of TOTAL_POOLS) {
       // fetch the pool info
       const fetchedPool = await fetchPool(pool);
-      console.log("fetchedPool", fetchedPool);
+
       if (fetchedPool.value !== null) {
         // parse the pool name
-        console.log("fetchedPool", fetchedPool.value.value);
+
         const parsedPool = parseContractPoolData(fetchedPool, pool);
 
         if (parsedPool) {

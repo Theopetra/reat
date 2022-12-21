@@ -41,8 +41,8 @@ const TrendingPool = () => {
             customClass="text-white  text-2xl "
             type={TextTypes.BoldSubText}
           >
-            Help provide affordable rental housing to the citizens of San Jose
-            through capped rents.
+            Donate STX with others to increase the pool’s chance of winning
+            blocks & help improve housing affordability across America
           </Text>
         </div>
         <div />
@@ -50,7 +50,15 @@ const TrendingPool = () => {
     );
   }
 
-  const pool = pools[0];
+  // revers order of pools then loop through them to find the first open pool
+  const flipped = pools.reverse();
+  let pool = flipped.find((pool) => {
+    return pool.poolStatus === POOL_STATUS.OPEN;
+  });
+
+  if (!pool) {
+    pool = pools[0];
+  }
 
   return (
     <div className="flex flex-col w-full max-w-[1140px] items-center gap-20">
@@ -96,8 +104,8 @@ const TrendingPool = () => {
               customClass="text-white  text-2xl "
               type={TextTypes.BoldSubText}
             >
-              Help provide affordable rental housing to the citizens of San Jose
-              through capped rents.
+              Donate STX with others to increase the pool’s chance of winning
+              blocks & help improve housing affordability across America
             </Text>
           </div>
           <div />

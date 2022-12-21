@@ -4,6 +4,7 @@ import { NavText } from "./Text";
 import { useRouter } from "next/router";
 import { useConnect } from "@stacks/connect-react";
 import { useAppState } from "../state";
+import { isMobile } from "react-device-detect";
 
 export const NAV_HEIGHT = "130PX";
 export const NAV_HEIGHT_OFFSET = "230PX";
@@ -138,24 +139,26 @@ export const Footer = () => {
             Real Equity for America Today
           </NavText>
         </div>
-        <div className="flex flex-col md:flex-row space-between items-center gap-10">
-          <IconButton
-            type={ButtonTypes.Nav}
-            color={ButtonColors.GreenGradient}
-            onClick={() => hanldeTwitter()}
-            icon={"/images/twitter.svg"}
-          >
-            Follow Us on Twitter
-          </IconButton>
-          <IconButton
-            type={ButtonTypes.Nav}
-            color={ButtonColors.GreenGradient}
-            onClick={() => hanldeTwitter()}
-            icon={"/images/document.svg"}
-          >
-            Read Our White Paper
-          </IconButton>
-        </div>
+        {!isMobile && (
+          <div className="flex flex-col md:flex-row space-between items-center gap-10">
+            <IconButton
+              type={ButtonTypes.Nav}
+              color={ButtonColors.GreenGradient}
+              onClick={() => hanldeTwitter()}
+              icon={"/images/twitter.svg"}
+            >
+              Follow Us on Twitter
+            </IconButton>
+            <IconButton
+              type={ButtonTypes.Nav}
+              color={ButtonColors.GreenGradient}
+              onClick={() => hanldeTwitter()}
+              icon={"/images/document.svg"}
+            >
+              Read Our White Paper
+            </IconButton>
+          </div>
+        )}
       </div>
     </div>
   );

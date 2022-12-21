@@ -35,6 +35,7 @@ export enum POOL_STATUS {
   READY = "READY",
   COMPLETE = "COMPLETE",
   UNKNOWN = "UNKNOWN",
+  PENDING = "PENDING",
 }
 const INIT_STATE = {
   senderAddress: undefined,
@@ -111,7 +112,15 @@ const StateLogic = (props: React.PropsWithChildren<{}>) => {
             ...pool,
             poolStatus: POOL_STATUS.COMPLETE,
           };
+        } else if (pool.contributionStartHeight > currentBlockHeight) {
+          console.log("nada");
+          return {
+            ...pool,
+            poolStatus: POOL_STATUS.PENDING,
+          };
         } else {
+          console.log("wtf", pool);
+          console.log("pool,", pool.contributionStartHeight);
           return pool;
         }
       });

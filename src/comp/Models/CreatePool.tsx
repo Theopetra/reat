@@ -225,7 +225,12 @@ const CreatePool = ({ closeToast }: ModelProps) => {
   };
   return (
     <div className={MODEL_BASIC_STYLES}>
-      <ModelTitle>Create Pool</ModelTitle>
+      <div className="flex flex-row justify-between items-center">
+        <ModelTitle>Create Pool</ModelTitle>
+        <div className="text-xs text-lightGray ">
+          {"Block #" + currentBlockHeight}
+        </div>
+      </div>
       <div
         style={{
           border: "1px solid #F5F5F5",

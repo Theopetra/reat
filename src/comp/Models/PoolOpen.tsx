@@ -125,7 +125,7 @@ const PoolOpen = ({ closeToast, pool }: PoolOpenType) => {
         ),
       ];
 
-      const args = [uintCV(pool.id), uintCV(poolInput.stxAmount)];
+      const args = [uintCV(pool.id), uintCV(postConditionAmount)];
 
       const txOptions: any = {
         contractAddress: POOL_ADDRESS,
@@ -163,7 +163,7 @@ const PoolOpen = ({ closeToast, pool }: PoolOpenType) => {
           customClass="text-darkGreen font-large text-lg"
           type={TextTypes.SubText}
         >
-          OPEN
+          {pool.poolStatus}
         </Text>
       </div>
       <div

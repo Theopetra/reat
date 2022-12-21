@@ -88,7 +88,7 @@ export const MINING_STAKING_NAME = "tear-mining-staking";
 export const POOL_ADDRESS = "SP3TRA756H9TDMBQEPWC3WAKCBHQFTJ24VY8PAYQ2";
 export const POOL_NAME = "tear-pool";
 
-export const TOTAL_POOLS = [1, 2, 3, 4, 5, 6, 7];
+export const TOTAL_POOLS = [1, 2, 3, 4, 5, 6, 7, 8];
 
 export const fetchPool = async (poolId: number) => {
   try {
@@ -126,9 +126,20 @@ export const parseContractPoolData = (
     );
 
     let startedMineHeight = null;
-    if (fetchedPool.value.value.startedMineHeight.value) {
-      startedMineHeight =
-        parseInt(fetchedPool.value.value.startedMineHeight.value) || null;
+    console.log(
+      "fetchedPool.value.value.startedMineHeight",
+      fetchedPool.value.value.startedMineHeight
+    );
+    if (fetchedPool.value.value.startedMineHeight.type === "(optional uint)") {
+      console.log(
+        "fetchedPool.value.value.startedMineHeight.value",
+        fetchedPool.value.value.startedMineHeight.value.value
+      );
+      startedMineHeight = parseInt(
+        fetchedPool.value.value.startedMineHeight.value.value
+      );
+    } else {
+      startedMineHeight = null;
     }
 
     const poolOwner = fetchedPool.value.value.poolOwner.value;
