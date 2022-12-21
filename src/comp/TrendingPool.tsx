@@ -10,6 +10,7 @@ import { Tile } from "./donate";
 
 const TrendingPool = () => {
   const { pools, currentBlockHeight } = useAppState();
+
   if (pools.length === 0) {
     return (
       <div className="flex flex-col h-[456px] w-[380px] bg-lightBlack rounded-[28px] p-9 gap-5">
@@ -41,8 +42,8 @@ const TrendingPool = () => {
             customClass="text-white  text-2xl "
             type={TextTypes.BoldSubText}
           >
-            Help provide affordable rental housing to the citizens of San Jose
-            through capped rents.
+            Donate STX with others to increase the pool’s chance of winning
+            blocks & help improve housing affordability across America
           </Text>
         </div>
         <div />
@@ -50,7 +51,14 @@ const TrendingPool = () => {
     );
   }
 
-  const pool = pools[0];
+  // revers order of pools then loop through them to find the first open pool
+  let pool = pools.reverse().find((pool) => {
+    return pool.poolStatus === POOL_STATUS.OPEN;
+  });
+
+  if (!pool) {
+    pool = pools[0];
+  }
 
   return (
     <div className="flex flex-col w-full max-w-[1140px] items-center gap-20">

@@ -35,27 +35,12 @@ export enum POOL_STATUS {
   READY = "READY",
   COMPLETE = "COMPLETE",
   UNKNOWN = "UNKNOWN",
+  PENDING = "PENDING",
 }
 const INIT_STATE = {
   senderAddress: undefined,
   authenticated: false,
-  pools: [
-    {
-      name: "InitPool",
-      contributionStartHeight: 87448,
-      contributionEndHeight: 87498,
-      startedMineHeight: 0,
-      poolOwner: "test",
-      ownerFee: 0,
-      poolMembers: ["test"],
-      poolMinMembers: 0,
-      claimHeights: [0, 2],
-      totalContributions: 0,
-      totalCoinsWon: 0,
-      poolStatus: POOL_STATUS.UNKNOWN,
-      id: 1,
-    },
-  ],
+  pools: [],
 };
 
 export const StateContext = createContext<INIT_STATE_TYPE>(null!);
@@ -111,10 +96,19 @@ const StateLogic = (props: React.PropsWithChildren<{}>) => {
             ...pool,
             poolStatus: POOL_STATUS.COMPLETE,
           };
+        } else if (pool.contributionStartHeight > currentBlockHeight) {
+          console.log("nada");
+          return {
+            ...pool,
+            poolStatus: POOL_STATUS.PENDING,
+          };
         } else {
+          console.log("wtf", pool);
+          console.log("pool,", pool.contributionStartHeight);
           return pool;
         }
       });
+      console.log("currentBlockHeight", currentBlockHeight);
       console.log("does this run");
       _pools(updatedPools);
     }

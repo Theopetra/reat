@@ -1,16 +1,16 @@
 import { classNames } from "../const";
 import Text, { TextTypes } from "./Text";
+import Image from "next/image";
+
 export enum ButtonTypes {
   Primary,
   Secondary,
-  Nav,
 }
 
-import Image from "next/image";
-const ButtonTypeMaps: Record<ButtonTypes, string> = {
-  [ButtonTypes.Primary]: " py-4 px-4  min-w-[240px] lg:min-w-[330px]",
-  [ButtonTypes.Secondary]: "py-2 px-8 min-w-[200px]",
-  [ButtonTypes.Nav]: "py-2 px-8 rounded-lg py-1.5 px-5 ",
+// work here
+export const ButtonTypeMaps: Record<ButtonTypes, string> = {
+  [ButtonTypes.Primary]: " ",
+  [ButtonTypes.Secondary]: "",
 };
 
 export enum ButtonColors {
@@ -19,6 +19,8 @@ export enum ButtonColors {
   GreenGradient,
   YelloGradient,
   Gray,
+  Blue,
+  DarkBlue,
 }
 
 const ButtonColorMaps: Record<ButtonColors, string> = {
@@ -28,11 +30,13 @@ const ButtonColorMaps: Record<ButtonColors, string> = {
   [ButtonColors.YelloGradient]:
     "bg-gradient-to-r from-lightYellow to-darkYellow",
   [ButtonColors.Gray]: "bg-gray",
+  [ButtonColors.Blue]: "bg-blue",
+  [ButtonColors.DarkBlue]: "bg-darkBlue",
 };
 
 type ButtonProps = TemplateButton & {
   type: ButtonTypes;
-  color: ButtonColors;
+  color?: ButtonColors;
 };
 
 const Button = (props: ButtonProps) => {
@@ -40,9 +44,9 @@ const Button = (props: ButtonProps) => {
     <div
       onClick={props.onClick}
       className={classNames(
-        "cursor-pointer   m-auto hover:shadow-xl text-center transition-all",
+        "cursor-pointer  m-auto hover:shadow-xl text-center transition-all",
         ButtonTypeMaps[props.type],
-        ButtonColorMaps[props.color],
+        //ButtonColorMaps[props.color],
         props.customClass
       )}
     >
@@ -89,11 +93,30 @@ export const IconButton = (props: ButtonIconProps) => {
     </div>
   );
 };
+
 type TemplateButton = {
   customClass?: string;
   children: string;
   onClick?: () => void;
 };
+
+export const BlueButton = ({
+  children,
+  customClass,
+  onClick,
+}: TemplateButton) => {
+  return (
+    <Button
+      type={ButtonTypes.Nav}
+      color={ButtonColors.Blue}
+      onClick={onClick}
+      customClass={customClass}
+    >
+      {children}
+    </Button>
+  );
+};
+
 export const NavButton = ({
   children,
   customClass,
@@ -135,7 +158,7 @@ export const ModelButton = (props: ButtonProps) => {
       className={classNames(
         "cursor-pointer   m-auto hover:shadow-xl text-center transition-all",
         ButtonTypeMaps[props.type],
-        ButtonColorMaps[props.color],
+        //ButtonColorMaps[props.color],
         props.customClass
       )}
     >

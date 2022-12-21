@@ -5,23 +5,18 @@ import { TitleHeader } from "./Title";
 import { NAV_HEIGHT, NAV_HEIGHT_OFFSET } from "./Nav";
 
 import { BASIC_HOME_STYLE } from "./Home";
-import {
+import Button, {
+  BlueButton,
   ButtonColors,
   ButtonTypes,
   ModelButton,
   NavButton,
   TileButton,
 } from "./Button";
+
 import TrendingPool from "./TrendingPool";
 import { toast } from "react-toastify";
-import {
-  TaxDisclaimer,
-  DonationReceipt,
-  PoolMining,
-  FinancialDisclaimer,
-  PoolInfo,
-  TOAST_CONFIG,
-} from "./Models";
+import { TaxDisclaimer, PoolInfo, TOAST_CONFIG } from "./Models";
 
 import CreatePool from "./Models/CreatePool";
 import PoolOpen from "./Models/PoolOpen";
@@ -166,23 +161,17 @@ export const PoolTile = (
           Claim
         </TileButton>
       )}
-      {pool.poolStatus === POOL_STATUS.UNKNOWN && (
-        <ModelButton
-          onClick={() => pool.handleTileClick(pool)}
-          type={ButtonTypes.Nav}
-          color={ButtonColors.Gray}
-        >
-          View Details
-        </ModelButton>
-      )}
-      {pool.poolStatus === POOL_STATUS.MINING && (
-        <TileButton
-          onClick={() => pool.handleTileClick(pool)}
-          customClass="px-12"
-        >
-          View Details
-        </TileButton>
-      )}
+      {pool.poolStatus === POOL_STATUS.UNKNOWN ||
+        pool.poolStatus === POOL_STATUS.MINING ||
+        (pool.poolStatus === POOL_STATUS.PENDING && (
+          <ModelButton
+            onClick={() => pool.handleTileClick(pool)}
+            type={ButtonTypes.Nav}
+            color={ButtonColors.Gray}
+          >
+            View Details
+          </ModelButton>
+        ))}
     </div>
   );
 };
@@ -252,6 +241,11 @@ const Donate = () => {
         TOAST_CONFIG
       );
       return null;
+    } else {
+      toast(
+        ({ closeToast }) => <PoolInfo pool={pool} closeToast={closeToast} />,
+        TOAST_CONFIG
+      );
     }
   };
   return (
@@ -269,6 +263,10 @@ const Donate = () => {
         <TileButton onClick={() => createPool()} customClass="px-12">
           Create Pool Pool
         </TileButton>
+        <BlueButton>Blue Button</BlueButton>
+        <Button type={ButtonTypes.Primary} color={ButtonColors.DarkBlue}>
+          Dark Blue Button
+        </Button>
         <TrendingPool />
         <div className="flex flex-col w-full max-w-[1140px] items-center gap-20">
           <div className="flex w-full flex-col items-center gap-6">
