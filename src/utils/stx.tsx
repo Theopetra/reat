@@ -88,7 +88,7 @@ export const MINING_STAKING_NAME = "tear-mining-staking";
 export const POOL_ADDRESS = "SP3TRA756H9TDMBQEPWC3WAKCBHQFTJ24VY8PAYQ2";
 export const POOL_NAME = "tear-pool";
 
-export const TOTAL_POOLS = [1, 2, 3, 4, 5];
+export const TOTAL_POOLS = [1, 2, 3, 4, 5, 6, 7];
 
 export const fetchPool = async (poolId: number) => {
   try {

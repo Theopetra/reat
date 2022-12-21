@@ -158,7 +158,7 @@ const PoolOpen = ({ closeToast, pool }: PoolOpenType) => {
   return (
     <div className={MODEL_BASIC_STYLES}>
       <div className="flex flex-row items-center justify-between">
-        <ModelTitle>San Jose</ModelTitle>
+        <ModelTitle>{pool.name}</ModelTitle>
         <Text
           customClass="text-darkGreen font-large text-lg"
           type={TextTypes.SubText}
