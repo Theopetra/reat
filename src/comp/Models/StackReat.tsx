@@ -267,7 +267,7 @@ const StackReat = () => {
           />
           <ModelButton
             type={ButtonTypes.Nav}
-            color={ButtonColors.YelloGradient}
+            color={ButtonColors.GreenGradient}
           >
             MAX
           </ModelButton>
@@ -293,7 +293,7 @@ const StackReat = () => {
           />
           <ModelButton
             type={ButtonTypes.Nav}
-            color={ButtonColors.YelloGradient}
+            color={ButtonColors.GreenGradient}
           >
             MAX
           </ModelButton>
