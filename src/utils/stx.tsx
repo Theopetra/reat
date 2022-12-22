@@ -90,6 +90,11 @@ export const POOL_NAME = "tear-pool";
 
 export const TOTAL_POOLS = [1, 2, 3, 4, 5, 6, 7, 8];
 
+export const TOKEN_ADDRESS = "SP3TRA756H9TDMBQEPWC3WAKCBHQFTJ24VY8PAYQ2";
+export const TOKEN_NAME = "tear-token";
+export const TOKEN_ID = "uTEAR";
+
+export const STX_MULTIPLE = 1000000;
 export const fetchPool = async (poolId: number) => {
   try {
     const readOnlyCall = await callReadOnlyFunction({
@@ -126,15 +131,8 @@ export const parseContractPoolData = (
     );
 
     let startedMineHeight = null;
-    console.log(
-      "fetchedPool.value.value.startedMineHeight",
-      fetchedPool.value.value.startedMineHeight
-    );
+
     if (fetchedPool.value.value.startedMineHeight.type === "(optional uint)") {
-      console.log(
-        "fetchedPool.value.value.startedMineHeight.value",
-        fetchedPool.value.value.startedMineHeight.value.value
-      );
       startedMineHeight = parseInt(
         fetchedPool.value.value.startedMineHeight.value.value
       );

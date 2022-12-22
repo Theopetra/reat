@@ -15,7 +15,7 @@ import {
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { POOL_TYPE, useAppState } from "../../state";
-import { POOL_ADDRESS, POOL_NAME } from "../../utils/stx";
+import { POOL_ADDRESS, POOL_NAME, STX_MULTIPLE } from "../../utils/stx";
 import { ModelButton, TileButton, ButtonColors, ButtonTypes } from "../Button";
 import {
   ModelInfo,
@@ -115,7 +115,8 @@ const PoolOpen = ({ closeToast, pool }: PoolOpenType) => {
       }
 
       const stxPostConditionCode = FungibleConditionCode.LessEqual;
-      const postConditionAmount = 1000000 * parseInt(poolInput.stxAmount, 10);
+      const postConditionAmount =
+        STX_MULTIPLE * parseInt(poolInput.stxAmount, 10);
 
       const postConditions = [
         makeStandardSTXPostCondition(
@@ -207,7 +208,10 @@ const PoolOpen = ({ closeToast, pool }: PoolOpenType) => {
         />
         <ModelInfo title="Claim Block" text={pool.startedMineHeight || "N/A"} />
         <ModelInfo title="Contributors" text={pool.totalContributions} />
-        <ModelInfo title="STX Committed" text={pool.totalContributions} />
+        <ModelInfo
+          title="STX Committed"
+          text={pool.totalContributions / STX_MULTIPLE}
+        />
         <ModelInfo title="Fee" text={pool.ownerFee + "%"} />
       </div>
       <div className="flex flex-row jusitfy-between items-center">

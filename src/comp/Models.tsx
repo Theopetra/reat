@@ -1,5 +1,6 @@
 import { ColorRing } from "react-loader-spinner";
 import { useAppState } from "../state";
+import { STX_MULTIPLE } from "../utils/stx";
 import { ModelButton, TileButton, ButtonColors, ButtonTypes } from "./Button";
 import { PoolOpenType } from "./Models/PoolOpen";
 import Text, { BodySubText, NavText, TextTypes } from "./Text";
@@ -294,7 +295,10 @@ export const PoolInfo = ({ closeToast, pool }: PoolOpenType) => {
           text={pool.startedMineHeight ? pool.startedMineHeight + 200 : "N/A"}
         />
         <ModelInfo title="Contributors" text={pool.totalContributions} />
-        <ModelInfo title="STX Committed" text={pool.totalContributions} />
+        <ModelInfo
+          title="STX Committed"
+          text={pool.totalContributions / STX_MULTIPLE}
+        />
         <ModelInfo title="Fee" text={pool.ownerFee} />
         <ModelInfo title="REAT Won" text={pool.totalCoinsWon} />
         <ModelInfo

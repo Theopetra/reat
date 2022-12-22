@@ -13,7 +13,7 @@ import {
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { POOL_TYPE, useAppState } from "../../state";
-import { POOL_ADDRESS, POOL_NAME } from "../../utils/stx";
+import { POOL_ADDRESS, POOL_NAME, STX_MULTIPLE } from "../../utils/stx";
 import { ModelButton, TileButton, ButtonColors, ButtonTypes } from "../Button";
 import {
   ModelInfo,
@@ -112,8 +112,11 @@ const StartPool = ({ closeToast, pool }: PoolOpenType) => {
           title="Claim Date"
           text={pool.startedMineHeight ? pool.startedMineHeight + 200 : "N/A"}
         />
-        <ModelInfo title="Contributors" text={pool.totalContributions} />
-        <ModelInfo title="STX Committed" text={pool.totalContributions} />
+        <ModelInfo title="Contributors" text={pool.poolMembers.length + ""} />
+        <ModelInfo
+          title="STX Committed"
+          text={pool.totalContributions / STX_MULTIPLE}
+        />
         <ModelInfo title="Fee" text={pool.ownerFee} />
       </div>
       <div></div>
