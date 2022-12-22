@@ -4,8 +4,9 @@ import { NAV_HEIGHT_OFFSET } from "./Nav";
 import { BASIC_HOME_STYLE } from "./Home";
 import { ButtonColors, ButtonTypes, ModelButton } from "./Button";
 import { ModelInfo, ModelInfoProps, MODEL_INPUT_STYLE } from "./Models";
-import { PoolTile } from "./donate";
+
 import { StackingHistoryTile } from "./Stack";
+import PoolTile from "./PoolTile";
 
 const Claim = () => {
   return (
@@ -38,9 +39,9 @@ const Claim = () => {
           </div>
           <div className="flex flex-col gap-12">
             <div className="flex w-full flex-row justify-between items-center gap-6">
+              {/* <PoolTile />
               <PoolTile />
-              <PoolTile />
-              <PoolTile />
+              <PoolTile /> */}
             </div>
           </div>
           <div className="flex self-start flex-row items-start">

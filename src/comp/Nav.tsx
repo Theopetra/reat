@@ -81,12 +81,12 @@ const Nav = () => {
           >
             STACK
           </NavText>
-          <NavText
+          {/* <NavText
             onClick={() => router.push("/claim")}
             customClass="text-white cursor-pointer"
           >
             CLAIM
-          </NavText>
+          </NavText> */}
         </div>
 
         {authenticated && (
