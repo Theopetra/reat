@@ -26,13 +26,19 @@ import {
 import CreatePool from "./Models/CreatePool";
 import PoolOpen from "./Models/PoolOpen";
 import StartPool from "./Models/StartPool";
+import { useConnect } from "@stacks/connect-react";
 
 const PoolTile = (
   pool: POOL_TYPE & { handleTileClick: (pool: POOL_TYPE) => void }
 ) => {
-  const { senderAddress } = useAppState();
+  const { senderAddress, authenticated } = useAppState();
+  const { doOpenAuth } = useConnect();
 
   const isOwner = pool.poolOwner === senderAddress;
+
+  const handleAuth = () => {
+    doOpenAuth();
+  };
 
   return (
     <div className="flex flex-col  min-h-[300px] max-h-[456px] min-w-[320px] md:min-w-[340px] max-w-[380px] bg-lightBlack rounded-[28px] p-5 md:p-9 gap-5">
@@ -118,45 +124,58 @@ const PoolTile = (
           </div>
         </div>
       </div>
-      {pool.poolStatus === POOL_STATUS.READY && isOwner && (
-        <TileButton
-          onClick={() => pool.handleTileClick(pool)}
-          customClass="px-12"
-        >
-          Start Mining
-        </TileButton>
-      )}
+      {authenticated ? (
+        <>
+          {pool.poolStatus === POOL_STATUS.READY && isOwner && (
+            <TileButton
+              onClick={() => pool.handleTileClick(pool)}
+              customClass="px-12"
+            >
+              Start Mining
+            </TileButton>
+          )}
 
-      {pool.poolStatus === POOL_STATUS.OPEN && (
-        <TileButton
-          onClick={() => pool.handleTileClick(pool)}
-          customClass="px-12"
-        >
-          Join Mining Pool
-        </TileButton>
-      )}
+          {pool.poolStatus === POOL_STATUS.OPEN && (
+            <TileButton
+              onClick={() => pool.handleTileClick(pool)}
+              customClass="px-12"
+            >
+              Join Mining Pool
+            </TileButton>
+          )}
 
-      {pool.poolStatus === POOL_STATUS.COMPLETE && (
-        <TileButton
-          onClick={() => pool.handleTileClick(pool)}
-          customClass="px-12"
-        >
-          Claim
-        </TileButton>
-      )}
+          {pool.poolStatus === POOL_STATUS.COMPLETE && (
+            <TileButton
+              onClick={() => pool.handleTileClick(pool)}
+              customClass="px-12"
+            >
+              Claim
+            </TileButton>
+          )}
 
-      {pool.poolStatus === POOL_STATUS.UNKNOWN ||
-        pool.poolStatus === POOL_STATUS.MINING ||
-        (pool.poolStatus === POOL_STATUS.PENDING && (
-          <ModelButton
-            onClick={() => pool.handleTileClick(pool)}
-            type={ButtonTypes.Nav}
-            color={ButtonColors.Gray}
-          >
-            View Details
-          </ModelButton>
-        ))}
+          {pool.poolStatus === POOL_STATUS.UNKNOWN ||
+            pool.poolStatus === POOL_STATUS.MINING ||
+            (pool.poolStatus === POOL_STATUS.PENDING && (
+              <ModelButton
+                onClick={() => pool.handleTileClick(pool)}
+                type={ButtonTypes.Nav}
+                color={ButtonColors.Gray}
+              >
+                View Details
+              </ModelButton>
+            ))}
+        </>
+      ) : (
+        <>
+          <TileButton onClick={() => handleAuth()} customClass="px-12">
+            Connect Wallet
+          </TileButton>
+        </>
+      )}
     </div>
   );
 };
 export default PoolTile;
+function doOpenAuth() {
+  throw new Error("Function not implemented.");
+}
