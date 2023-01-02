@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { StackingType } from "./comp/Stack";
 
 export type POOL_TYPE = {
   name: string;
@@ -22,12 +23,15 @@ type INIT_STATE_TYPE = {
   totalStx: number;
   pools: POOL_TYPE[];
   currentBlockHeight: number;
+  stakingHistory: StackingType[];
+  currentBlockHeightIsoDate: string | null;
 
   _senderAddress: (address: string | undefined) => void;
   _authenticated: (authenticated: boolean) => void;
   _totalStx(stx: number): void;
   _pools: (pool: POOL_TYPE[]) => void;
   _currentBlockHeight: (currentBlockHeight: number) => void;
+  _currentBlockHeightIsoDate: (currentBlockHeightIsoDate: string) => void;
 };
 export enum POOL_STATUS {
   MINING = "MINING",
@@ -40,23 +44,8 @@ export enum POOL_STATUS {
 const INIT_STATE = {
   senderAddress: undefined,
   authenticated: false,
-  pools: [
-    {
-      name: "InitPool",
-      contributionStartHeight: 87448,
-      contributionEndHeight: 87498,
-      startedMineHeight: 0,
-      poolOwner: "test",
-      ownerFee: 0,
-      poolMembers: ["test"],
-      poolMinMembers: 0,
-      claimHeights: [0, 2],
-      totalContributions: 0,
-      totalCoinsWon: 0,
-      poolStatus: POOL_STATUS.UNKNOWN,
-      id: 1,
-    },
-  ],
+  pools: [],
+  stakingHistory: [],
 };
 
 export const StateContext = createContext<INIT_STATE_TYPE>(null!);
@@ -70,8 +59,13 @@ const StateLogic = (props: React.PropsWithChildren<{}>) => {
   const [pools, _pools] = useState<POOL_TYPE[]>(INIT_STATE.pools);
 
   const [currentBlockHeight, _currentBlockHeight] = useState<number>(0);
+  const [currentBlockHeightIsoDate, _currentBlockHeightIsoDate] = useState<
+    null | string
+  >(null);
 
   const [totalStx, _totalStx] = useState<number>(0);
+
+  const [stakingHistory, _stakingHistory] = useState<StackingType[]>([]);
 
   useEffect(() => {
     if (currentBlockHeight) {
@@ -144,6 +138,12 @@ const StateLogic = (props: React.PropsWithChildren<{}>) => {
 
     totalStx,
     _totalStx,
+
+    stakingHistory,
+    _stakingHistory,
+
+    currentBlockHeightIsoDate,
+    _currentBlockHeightIsoDate,
   };
 
   return (

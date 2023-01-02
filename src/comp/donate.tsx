@@ -1,11 +1,11 @@
 import { POOL_STATUS, POOL_TYPE, useAppState } from "../state";
 import Text, { TextHeader, TextTypes } from "./Text";
 import Image from "next/image";
-import { TitleHeader } from "./Title";
+import { ModelTitle, TitleHeader } from "./Title";
 import { NAV_HEIGHT_OFFSET } from "./Nav";
 
 import { BASIC_HOME_STYLE } from "./Home";
-import { TileButton } from "./Button";
+import { FilterButton, TileButton } from "./Button";
 import TrendingPool from "./TrendingPool";
 import { toast } from "react-toastify";
 import { TaxDisclaimer, PoolInfo, TOAST_CONFIG } from "./Models";
@@ -14,6 +14,9 @@ import CreatePool from "./Models/CreatePool";
 import PoolOpen from "./Models/PoolOpen";
 import StartPool from "./Models/StartPool";
 import PoolTile from "./PoolTile";
+import { useEffect, useState } from "react";
+import { fetchPrincipalStxBalance } from "../utils/stxHelperFuncs";
+import { STX_MULTIPLE } from "../utils/stx";
 type Tile = {
   icon: any;
   title: string;
@@ -37,12 +40,39 @@ export const Tile = ({ icon, title, text }: Tile) => {
   );
 };
 
-type ToastShowProp = {
-  ToastComp: React.FC<{ closeToast?: () => void }>;
-};
+enum POOL_FILTER {
+  ALL = "All",
+  OPEN = "Open",
+  CURRENTLY_MINING = "Currently Mining",
+  COMPLETED = "Completed",
+}
 const Donate = () => {
   const { pools, senderAddress } = useAppState();
 
+  const [stxBalance, setStxBalance] = useState<null | number>(null);
+
+  const [selectedPoolFilter, setSelectedPoolFilter] = useState<POOL_FILTER>(
+    POOL_FILTER.ALL
+  );
+
+  console.log("selectedPoolFilter", selectedPoolFilter);
+  useEffect(() => {
+    handleFetchingPrincipalBalance();
+  }, [senderAddress]);
+
+  const handleFetchingPrincipalBalance = async () => {
+    try {
+      if (senderAddress) {
+        const totalStx = await fetchPrincipalStxBalance(senderAddress);
+        console.log("totalStx", totalStx);
+        const stx = Math.trunc(totalStx / STX_MULTIPLE);
+        setStxBalance(stx);
+      }
+    } catch (err) {
+      console.log("err", err);
+    }
+  };
+  /*
   const handleToast = (props: ToastShowProp) => {
     toast(({ closeToast }) => <props.ToastComp closeToast={closeToast} />, {
       autoClose: false,
@@ -56,7 +86,7 @@ const Donate = () => {
       position: "top-center",
     });
   };
-
+  */
   const createPool = () => {
     toast(({ closeToast }) => <CreatePool closeToast={closeToast} />, {
       autoClose: false,
@@ -74,34 +104,28 @@ const Donate = () => {
   const renderPools = () => {
     //console.log("render pools", pools);
     return pools.map((pool) => {
-      return (
-        <PoolTile handleTileClick={handleTileClick} key={pool.name} {...pool} />
-      );
+      return <PoolTile key={pool.name} {...pool} />;
     });
   };
 
-  const handleTileClick = (pool: POOL_TYPE) => {
-    console.log("selected pool pool", pool);
-    const isOwner = pool.poolOwner === senderAddress;
+  const handleFilterButtons = (filter: POOL_FILTER) => {
+    setSelectedPoolFilter(filter);
+  };
 
-    if (pool.poolStatus === POOL_STATUS.OPEN) {
-      toast(
-        ({ closeToast }) => <PoolOpen pool={pool} closeToast={closeToast} />,
-        TOAST_CONFIG
+  const renderPoolFilterButtons = () => {
+    // loop through each item in POOL_FILTER and return a component
+    return Object.values(POOL_FILTER).map((filter) => {
+      console.log("fitle", filter);
+      return (
+        <FilterButton
+          onClick={() => handleFilterButtons(filter)}
+          active={selectedPoolFilter === filter}
+          key={filter}
+        >
+          {filter}
+        </FilterButton>
       );
-      return null;
-    } else if (pool.poolStatus === POOL_STATUS.READY && isOwner) {
-      toast(
-        ({ closeToast }) => <StartPool pool={pool} closeToast={closeToast} />,
-        TOAST_CONFIG
-      );
-      return null;
-    } else {
-      toast(
-        ({ closeToast }) => <PoolInfo pool={pool} closeToast={closeToast} />,
-        TOAST_CONFIG
-      );
-    }
+    });
   };
   return (
     <div className="bg-black">
@@ -116,25 +140,26 @@ const Donate = () => {
       >
         <TitleHeader customClass="text-center">DONATE</TitleHeader>
         <TileButton onClick={() => createPool()} customClass="px-12">
-          Create Pool Pool
+          Admin Create Pool
         </TileButton>
-        <TrendingPool />
+        <TrendingPool totalStx={stxBalance} />
         <div className="flex flex-col w-full max-w-[1140px] items-center gap-20">
           <div className="flex w-full flex-col items-center gap-6">
             <div className="flex w-full flex-row items-center justify-between gap-10">
-              <TextHeader>Mining Pools</TextHeader>
-              <div className="flex flex-row items-center gap-3">
-                <Text
-                  customClass="text-gray font-large text-lg"
-                  type={TextTypes.SubText}
-                  onClick={() =>
-                    handleToast({
-                      ToastComp: TaxDisclaimer,
-                    })
-                  }
-                >
-                  Tax Disclaimer
-                </Text>
+              <div className="flex flex-row w-80 items-center justify-between ">
+                <TextHeader>Mining Pools</TextHeader>
+                <div
+                  style={{
+                    height: "40px",
+                    width: "1px",
+                    borderRadius: "8px",
+                    backgroundColor: "#fff",
+                  }}
+                />
+              </div>
+
+              <div className="flex px-10 flex-1 flex-row items-center justify-between gap-3 ">
+                {renderPoolFilterButtons()}
                 {/* <Text
                   customClass="text-gray font-large text-lg"
                   type={TextTypes.SubText}
@@ -215,6 +240,12 @@ const Donate = () => {
           <div className="flex flex-col justify-center gap-12">
             <div className="flex w-full flex-col lg:flex-row flex-wrap justify-center items-center gap-y-6 gap-x-8">
               {renderPools()}
+              {pools.length === 0 && (
+                <div className="flex flex-col w-full items-center text-center gap-5">
+                  <ModelTitle>No Pools Created</ModelTitle>
+                  <ModelTitle>Create a Pool above</ModelTitle>
+                </div>
+              )}
             </div>
           </div>
         </div>

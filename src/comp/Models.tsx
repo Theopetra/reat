@@ -55,11 +55,12 @@ export const TaxDisclaimer = ({ closeToast }: ModelProps) => {
       <div className="flex flex-col gap-3">
         <Text type={TextTypes.SubText}>
           Mining REAT is a charitable act & contributions are considered a
-          donation to the REAT non-profit.
+          donation to the REAT non profit.
         </Text>
         <Text type={TextTypes.SubText}>
           The responsibility is that of your account to file any receipts in a
-          manner that details the charitable donations of your mining activities
+          manner that details the charitable donations of your mining
+          activities.
         </Text>
       </div>
       <div className="flex flex-row gap-2.5">
@@ -102,10 +103,10 @@ export const FinancialDisclaimer = ({ closeToast }: ModelProps) => {
       />
       <div className="flex flex-col gap-3">
         <Text type={TextTypes.SubText}>
-          In no way does the REAT token represent any physical real estate or
-          the value of real estate held by any of the subsidiaries connected to
-          the REAT non-profit. Any token purchases should not be taken with the
-          expectation of an increase in value.
+          This token is not liquid. This token is NOT a representation of real
+          estate whatsoever. REAT is a community token that represents your
+          donation to REAT, which is an affordable housing project. Do not
+          expect to profit whatsoever.
         </Text>
       </div>
       <div className="flex flex-row gap-2.5">

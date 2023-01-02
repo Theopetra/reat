@@ -12,10 +12,12 @@ import {
   TOTAL_POOLS,
   fetchPool,
   parseContractPoolData,
+  fetchCurrentCycleIndex,
 } from "../src/utils/stx";
 import { StacksMainnet } from "@stacks/network";
 import { POOL_TYPE, useAppState } from "../src/state";
 import { useEffect } from "react";
+import { fetchBlockDate, fetchLatestPool } from "../src/utils/stxHelperFuncs";
 
 export const getStaticProps: GetStaticProps = async () => {
   // must be async
@@ -28,12 +30,23 @@ export const getStaticProps: GetStaticProps = async () => {
   };
 };
 
-const fetchPools = async () => {
-  console.log("did this run");
+export const fetchPools = async () => {
   try {
+    const fetchLatestPoolRes = await fetchLatestPool();
+    console.log("fetchLatestPoolRes", fetchLatestPoolRes);
+
+    let totalPools = [];
+    if (fetchLatestPoolRes.value && fetchLatestPoolRes.value.poolIndex) {
+      const LPI = parseInt(fetchLatestPoolRes.value.poolIndex.value);
+      // for every whole number between 1 and LPI, push it to the totalPools array
+      for (let i = 1; i <= LPI; i++) {
+        totalPools.push(i);
+      }
+    }
+    console.log("totalPools", totalPools);
     const pools: POOL_TYPE[] = [];
 
-    for (const pool of TOTAL_POOLS) {
+    for (const pool of totalPools) {
       // fetch the pool info
       const fetchedPool = await fetchPool(pool);
 
@@ -47,6 +60,7 @@ const fetchPools = async () => {
         }
       }
     }
+
     return pools;
   } catch (err) {
     console.log("err", err);
@@ -59,7 +73,6 @@ const Donate: NextPage = ({
   const { _pools } = useAppState();
   useEffect(() => {
     if (pools) {
-      console.log("pools", pools);
       _pools(pools);
     }
   }, [pools]);

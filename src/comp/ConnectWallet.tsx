@@ -41,8 +41,8 @@ const ConnectWallet = ({ children }: ConnectWalletType) => {
 
   const AUTH_OPTIONS: any = {
     appDetails: {
-      name: "Theo",
-      icon: "https://cdn.discordapp.com/attachments/973373774101618778/978172941802029096/SLIME.png",
+      name: "REAT",
+      icon: "https://cdn.discordapp.com/attachments/898235553978417232/1058463664811823235/Captura_de_Pantalla_2022-12-30_a_las_2.16.06_p.m..png",
     },
     username: "test",
     redirectTo: "/",

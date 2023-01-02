@@ -7,6 +7,7 @@ import { ModelInfo, ModelInfoProps, MODEL_INPUT_STYLE } from "./Models";
 
 import { StackingHistoryTile } from "./Stack";
 import PoolTile from "./PoolTile";
+import StakingHistory from "./StakingHisotry";
 
 const Claim = () => {
   return (
@@ -26,7 +27,7 @@ const Claim = () => {
             <div className="flex w-full flex-row items-center justify-between gap-10">
               <TextHeader>Claim Donation Rewards</TextHeader>
               <TextHeader customClass="text-lightGreen">
-                33,333 Unclaimed REAT
+                Fetch total unclaim TEAR
               </TextHeader>
             </div>
             <div
@@ -52,9 +53,9 @@ const Claim = () => {
           <div className="flex flex-col w-full max-w-[1140px] items-center gap-20">
             <div className="flex w-full flex-col items-center gap-6">
               <div className="flex w-full flex-row items-center justify-between gap-10">
-                <TextHeader>Stacking History</TextHeader>
+                <TextHeader>Claim Stacking Rewards</TextHeader>
                 <TextHeader customClass="text-lightGreen">
-                  21,200 Unclaimed STX
+                  Fetch Total able to claim
                 </TextHeader>
               </div>
 
@@ -65,10 +66,7 @@ const Claim = () => {
                   height: "0px",
                 }}
               />
-              <div className="flex flex-col w-full gap-5 mt-6">
-                <StackingHistoryTile />
-                <StackingHistoryTile />
-              </div>
+              <StakingHistory />
             </div>
           </div>
         </div>

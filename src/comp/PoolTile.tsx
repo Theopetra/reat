@@ -28,9 +28,7 @@ import PoolOpen from "./Models/PoolOpen";
 import StartPool from "./Models/StartPool";
 import { useConnect } from "@stacks/connect-react";
 
-const PoolTile = (
-  pool: POOL_TYPE & { handleTileClick: (pool: POOL_TYPE) => void }
-) => {
+const PoolTile = (pool: POOL_TYPE) => {
   const { senderAddress, authenticated } = useAppState();
   const { doOpenAuth } = useConnect();
 
@@ -38,6 +36,29 @@ const PoolTile = (
 
   const handleAuth = () => {
     doOpenAuth();
+  };
+
+  const handleTileClick = (pool: POOL_TYPE) => {
+    const isOwner = pool.poolOwner === senderAddress;
+
+    if (pool.poolStatus === POOL_STATUS.OPEN) {
+      toast(
+        ({ closeToast }) => <PoolOpen pool={pool} closeToast={closeToast} />,
+        TOAST_CONFIG
+      );
+      return null;
+    } else if (pool.poolStatus === POOL_STATUS.READY && isOwner) {
+      toast(
+        ({ closeToast }) => <StartPool pool={pool} closeToast={closeToast} />,
+        TOAST_CONFIG
+      );
+      return null;
+    } else {
+      toast(
+        ({ closeToast }) => <PoolInfo pool={pool} closeToast={closeToast} />,
+        TOAST_CONFIG
+      );
+    }
   };
 
   return (
@@ -128,7 +149,7 @@ const PoolTile = (
         <>
           {pool.poolStatus === POOL_STATUS.READY && isOwner && (
             <TileButton
-              onClick={() => pool.handleTileClick(pool)}
+              onClick={() => handleTileClick(pool)}
               customClass="px-12"
             >
               Start Mining
@@ -137,7 +158,7 @@ const PoolTile = (
 
           {pool.poolStatus === POOL_STATUS.OPEN && (
             <TileButton
-              onClick={() => pool.handleTileClick(pool)}
+              onClick={() => handleTileClick(pool)}
               customClass="px-12"
             >
               Join Mining Pool
@@ -146,24 +167,24 @@ const PoolTile = (
 
           {pool.poolStatus === POOL_STATUS.COMPLETE && (
             <TileButton
-              onClick={() => pool.handleTileClick(pool)}
+              onClick={() => handleTileClick(pool)}
               customClass="px-12"
             >
               Claim
             </TileButton>
           )}
 
-          {pool.poolStatus === POOL_STATUS.UNKNOWN ||
+          {(pool.poolStatus === POOL_STATUS.UNKNOWN ||
             pool.poolStatus === POOL_STATUS.MINING ||
-            (pool.poolStatus === POOL_STATUS.PENDING && (
-              <ModelButton
-                onClick={() => pool.handleTileClick(pool)}
-                type={ButtonTypes.Nav}
-                color={ButtonColors.Gray}
-              >
-                View Details
-              </ModelButton>
-            ))}
+            pool.poolStatus === POOL_STATUS.PENDING) && (
+            <ModelButton
+              onClick={() => handleTileClick(pool)}
+              type={ButtonTypes.Nav}
+              color={ButtonColors.Gray}
+            >
+              View Details
+            </ModelButton>
+          )}
         </>
       ) : (
         <>

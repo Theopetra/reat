@@ -34,8 +34,8 @@ import { toast } from "react-toastify";
 import { openContractCall } from "@stacks/connect-react";
 
 type StackInputTypes = {
+  cycles: string; 
   amount: string;
-  cycles: string;
 };
 
 type ConfrimStackModel = ModelProps & {

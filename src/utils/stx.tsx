@@ -62,7 +62,8 @@ function createConfig(basePath: string, anchored?: boolean) {
     middleware,
   });
 }
-
+// STX Helpers CONSTS
+export const STX_MULTIPLE = 1000000;
 export const TEST_NETWORK = new StacksTestnet();
 export const LIVE_NETWORKD = new StacksMainnet();
 
@@ -76,31 +77,29 @@ export const CONFIG_BC_S = createConfig(DEFAULT_MAINNET_SERVER);
 
 export const blocksAPI = new BlocksApi(CONFIG_BC_S);
 
-export const MONKEY_COIN_ADDRESS = "SPNWZ5V2TPWGQGVDR6T7B6RQ4XMGZ4PXTEE0VQ0S";
-export const MONKEY_COIN_NAME = "monkey-coin";
-export const MONKEY_COIN_ID = "monkey-coin";
-export const MONKEY_COIN_NFT_ID = `${MONKEY_COIN_ADDRESS}.${MONKEY_COIN_NAME}::${MONKEY_COIN_ID}`;
-
-export const MINING_STAKING_ADDRESS =
-  "SP3TRA756H9TDMBQEPWC3WAKCBHQFTJ24VY8PAYQ2";
-export const MINING_STAKING_NAME = "tear-mining-staking";
-
-export const POOL_ADDRESS = "SP3TRA756H9TDMBQEPWC3WAKCBHQFTJ24VY8PAYQ2";
-export const POOL_NAME = "tear-pool";
-
+// All pools hardcoded
 export const TOTAL_POOLS = [1, 2, 3, 4, 5, 6, 7, 8];
 
-export const TOKEN_ADDRESS = "SP3TRA756H9TDMBQEPWC3WAKCBHQFTJ24VY8PAYQ2";
+// Pool Contract
+export const POOL_ADDRESS = "SP2621PMN8Y7HK4CF1GT5KZYH6D97H83Z3362WMNY";
+export const POOL_NAME = "tear-pool";
+
+// Token Contract
+export const TOKEN_ADDRESS = "SP2621PMN8Y7HK4CF1GT5KZYH6D97H83Z3362WMNY";
 export const TOKEN_NAME = "tear-token";
 export const TOKEN_ID = "uTEAR";
 
-export const STX_MULTIPLE = 1000000;
+// Mining Staking Contract
+export const MINING_STAKING_ADDRESS =
+  "SP2621PMN8Y7HK4CF1GT5KZYH6D97H83Z3362WMNY";
+export const MINING_STAKING_NAME = "tear-mining-staking";
+
 export const fetchPool = async (poolId: number) => {
   try {
     const readOnlyCall = await callReadOnlyFunction({
       contractName: POOL_NAME,
       contractAddress: POOL_ADDRESS,
-      functionName: "get-pool",
+      functionName: "get-specific-pool",
       functionArgs: [uintCV(poolId)],
       senderAddress: "SP2ZQD9D4VGKJPCK2HD3YC78Q9J6PVK52HF1K1A9F",
       network: new StacksMainnet(),
@@ -116,6 +115,24 @@ export const fetchPool = async (poolId: number) => {
   }
 };
 
+export const fetchCurrentCycleIndex = async () => {
+  try {
+    const readOnlyCall = await callReadOnlyFunction({
+      contractName: MINING_STAKING_NAME,
+      contractAddress: MINING_STAKING_ADDRESS,
+      functionName: "get-current-cycle-index",
+      functionArgs: [],
+      senderAddress: "SP2ZQD9D4VGKJPCK2HD3YC78Q9J6PVK52HF1K1A9F",
+      network: new StacksMainnet(),
+    });
+    const contractCallResult = cvToJSON(readOnlyCall);
+
+    return contractCallResult;
+  } catch (err) {
+    console.log("fetchCurrentCycleIndex err :(", err);
+    return null;
+  }
+};
 export const parseContractPoolData = (
   fetchedPool: any,
   poolId: number

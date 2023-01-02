@@ -69,8 +69,7 @@ const Home = () => {
 
         <div className="max-w-4xl">
           <BodySubText customClass="text-center text-lightGray">
-            Donate STX with others to increase the pool’s chance of winning
-            blocks & help improve housing affordability across America
+            Real equality for all today
           </BodySubText>
         </div>
         <div

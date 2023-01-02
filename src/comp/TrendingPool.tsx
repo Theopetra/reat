@@ -5,10 +5,13 @@ import { TitleHeader } from "./Title";
 import { NAV_HEIGHT, NAV_HEIGHT_OFFSET } from "./Nav";
 
 import { BASIC_HOME_STYLE } from "./Home";
-import { NavButton } from "./Button";
+import { NavButton, TileButton } from "./Button";
 import { Tile } from "./donate";
 
-const TrendingPool = () => {
+type TrendingPoolsType = {
+  totalStx: number | null;
+};
+const TrendingPool = ({ totalStx }: TrendingPoolsType) => {
   const { pools, currentBlockHeight } = useAppState();
   if (pools.length === 0) {
     return (
@@ -65,6 +68,11 @@ const TrendingPool = () => {
       <div className="flex w-full flex-col items-center gap-6">
         <div className="flex w-full flex-row items-center justify-between gap-10">
           <TextHeader>{`Trending Pools - ${pool.name}`}</TextHeader>
+          {totalStx && (
+            <TextHeader customClass="text-lightYellow">
+              {`${totalStx} Available STX`}
+            </TextHeader>
+          )}
         </div>
         <div
           style={{
@@ -75,7 +83,7 @@ const TrendingPool = () => {
         />
       </div>
       <div className="flex w-full flex-col md:flex-row justify-between items-center gap-6">
-        <div className="flex flex-col  min-h-[300px] h-[1000px] max-h-[456px] min-w-[300px] max-w-[380px] bg-lightBlack rounded-[28px] p-9 gap-5">
+        <div className="flex flex-col  min-h-[300px] h-[1000px] max-h-[480px] min-w-[300px] max-w-[380px] bg-lightBlack rounded-[28px] p-9 gap-5">
           <div className="w-full flex-col flex gap-2.5">
             <div className="flex flex-row items-center justify-between ">
               <Text customClass="text-lightGray" type={TextTypes.SubText}>
@@ -85,7 +93,7 @@ const TrendingPool = () => {
                 customClass="text-darkGreen font-large text-lg"
                 type={TextTypes.SubText}
               >
-                {pool.poolStatus === POOL_STATUS.OPEN ? "OPEN" : "CLOSED"}
+                {pool.poolStatus}
               </Text>
             </div>
             <Text
@@ -109,7 +117,8 @@ const TrendingPool = () => {
             </Text>
           </div>
           <div />
-          <NavButton customClass="px-12">Join Mining Pool</NavButton>
+
+          <TileButton customClass="px-12 ">Join Mining Pool</TileButton>
         </div>
         <div className="flex flex-col items-center justify-center gap-5">
           <div className="flex flex-col md:flex-row flex-wrap gap-10">

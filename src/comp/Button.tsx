@@ -30,6 +30,7 @@ const ButtonColorMaps: Record<ButtonColors, string> = {
   [ButtonColors.Gray]: "bg-gray",
 };
 
+// type interface
 type ButtonProps = TemplateButton & {
   type: ButtonTypes;
   color: ButtonColors;
@@ -59,6 +60,29 @@ const Button = (props: ButtonProps) => {
   );
 };
 
+type CustomNavButtonProps = TemplateButton & {
+  route?: string;
+};
+export const CustomNavButton = ({
+  onClick,
+  customClass,
+  children,
+  route,
+}: CustomNavButtonProps) => {
+  const handleButtonClick = () => {
+    window.open(route, "_blank");
+  };
+  return (
+    <Button
+      type={ButtonTypes.Nav}
+      color={ButtonColors.GreenGradient}
+      onClick={handleButtonClick}
+      customClass={customClass}
+    >
+      {children}
+    </Button>
+  );
+};
 type ButtonIconProps = TemplateButton & {
   type: ButtonTypes;
   color: ButtonColors;
@@ -126,6 +150,36 @@ export const TileButton = ({
       {children}
     </Button>
   );
+};
+
+export const FilterButton = ({
+  children,
+  customClass,
+  onClick,
+  active,
+}: TemplateButton & { active: boolean }) => {
+  if (active) {
+    return (
+      <Button
+        type={ButtonTypes.Nav}
+        color={ButtonColors.YelloGradient}
+        onClick={onClick}
+        customClass={customClass + " !m-0"}
+      >
+        {children}
+      </Button>
+    );
+  } else {
+    return (
+      <Text
+        onClick={onClick}
+        customClass="!font-bold"
+        type={TextTypes.ButtonText}
+      >
+        {children}
+      </Text>
+    );
+  }
 };
 
 export const ModelButton = (props: ButtonProps) => {

@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { useConnect } from "@stacks/connect-react";
 import { useAppState } from "../state";
 import { isMobile } from "react-device-detect";
+import BlockDate from "./BlockDate";
 
 export const NAV_HEIGHT = "130PX";
 export const NAV_HEIGHT_OFFSET = "230PX";
@@ -50,8 +51,9 @@ const Nav = () => {
           height={129}
           width={129}
         />
-        {currentBlockHeight && (
-          <div className="flex flex-row items-center gap-2.5">
+
+        <div className="flex flex-row items-center gap-2.5">
+          {currentBlockHeight && (
             <div
               style={{
                 borderRadius: "2px",
@@ -60,11 +62,11 @@ const Nav = () => {
                 backgroundColor: "#54930E",
               }}
             />
-            <NavText customClass="text-lightGreen">
-              {currentBlockHeight + ""}
-            </NavText>
-          </div>
-        )}
+          )}
+          <NavText customClass="text-lightGreen">
+            {BlockDate(currentBlockHeight)}
+          </NavText>
+        </div>
       </div>
 
       <div className="flex flex-col md:flex-row items-center gap-1 md:gap-10">
@@ -81,12 +83,12 @@ const Nav = () => {
           >
             STACK
           </NavText>
-          {/* <NavText
+          <NavText
             onClick={() => router.push("/claim")}
             customClass="text-white cursor-pointer"
           >
             CLAIM
-          </NavText> */}
+          </NavText>
         </div>
 
         {authenticated && (
@@ -116,7 +118,9 @@ const Nav = () => {
 };
 
 export const Footer = () => {
-  const hanldeTwitter = () => {};
+  const hanldeTwitter = () => {
+    window.open("https://twitter.com/REATprotocol", "_blank");
+  };
   return (
     <div className="w-screen  relative z-10  bg-white ">
       <div className="w-full flex flex-row items-center justify-between max-w-[1800px] m-auto p-4 2xl:px-48 gap-10">

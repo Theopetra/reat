@@ -7,6 +7,10 @@ import { TitleHeader } from "./Title";
 import { isMobile } from "react-device-detect";
 
 import StackReat from "./Models/StackReat";
+import StakingHistory from "./StakingHisotry";
+import { useEffect, useState } from "react";
+import { useAppState } from "../state";
+import { fetchPrincipalTokenBalance } from "../utils/stxHelperFuncs";
 export const StackingHisotryInfo = ({ title, text }: ModelInfoProps) => {
   return (
     <div className="flex flex-col flex-1  items-start">
@@ -20,14 +24,22 @@ export const StackingHisotryInfo = ({ title, text }: ModelInfoProps) => {
   );
 };
 
-export const StackingHistoryTile = () => {
+export type StackingType = {
+  cycle: number;
+  reatStacked: number;
+  startDate: string;
+  stxEarned: number;
+  completion: number;
+};
+export const StackingHistoryTile = (props: StackingType) => {
+  const { cycle, reatStacked, startDate, stxEarned, completion } = props;
   return (
     <div className="flex flex-row w-full  bg-lightBlack rounded-[20px] p-8">
-      <StackingHisotryInfo title="Cycle" text="10" />
-      <StackingHisotryInfo title="REAT Stacked" text="1,000,000" />
-      <StackingHisotryInfo title="Start Date" text="11-11-2022" />
-      <StackingHisotryInfo title="STX Earned" text="1,000,000" />
-      <StackingHisotryInfo title="Completion" text="12%" />
+      <StackingHisotryInfo title="Cycle" text={cycle} />
+      <StackingHisotryInfo title="REAT Stacked" text={reatStacked} />
+      <StackingHisotryInfo title="Start Date" text={startDate} />
+      <StackingHisotryInfo title="STX Earned" text={stxEarned} />
+      <StackingHisotryInfo title="Completion" text={completion} />
       <ModelButton
         customClass="px-10"
         type={ButtonTypes.Nav}
@@ -39,6 +51,23 @@ export const StackingHistoryTile = () => {
   );
 };
 const Stack = () => {
+  const { senderAddress } = useAppState();
+  const [totalToken, setTotalToken] = useState<null | number>(null);
+
+  useEffect(() => {
+    fetchPrincipalTotalToken();
+  }, [senderAddress]);
+
+  const fetchPrincipalTotalToken = async () => {
+    try {
+      if (senderAddress) {
+        const totalBalance = await fetchPrincipalTokenBalance(senderAddress);
+        console.log("totalBalance", totalBalance);
+      }
+    } catch (err) {
+      console.log("fetchPrincipalTotalToken", err);
+    }
+  };
   return (
     <div className="bg-black">
       <div className="homeLanding" />
@@ -65,26 +94,7 @@ const Stack = () => {
             />
           </div>
           <StackReat />
-          {/* {isMobile && (
-            <div className="flex flex-col w-full max-w-[1140px] items-center gap-20">
-              <div className="flex w-full flex-col items-center gap-6">
-                <div className="flex w-full flex-row items-center justify-between gap-10">
-                  <TextHeader>Stacking History</TextHeader>
-                </div>
-                <div
-                  style={{
-                    border: "1px solid #F5F5F5",
-                    width: "100%",
-                    height: "0px",
-                  }}
-                />
-
-                <div className="flex flex-col w-full gap-5 mt-6">
-                  <StackingHistoryTile />
-                </div>
-              </div>
-            </div>
-          )} */}
+          <StakingHistory />
         </div>
       </div>
       <div
