@@ -27,6 +27,7 @@ export const getStaticProps: GetStaticProps = async () => {
     props: {
       pools: pools,
     },
+    revalidate: 300,
   };
 };
 
