@@ -103,9 +103,34 @@ const Donate = () => {
 
   const renderPools = () => {
     //console.log("render pools", pools);
-    return pools.map((pool) => {
-      return <PoolTile key={pool.name} {...pool} />;
-    });
+    const filterPools = pools
+      .filter((pool) => {
+        if (selectedPoolFilter === POOL_FILTER.ALL) {
+          return true;
+        } else if (
+          selectedPoolFilter === POOL_FILTER.OPEN &&
+          pool.poolStatus === POOL_STATUS.OPEN
+        ) {
+          return true;
+        } else if (
+          selectedPoolFilter === POOL_FILTER.CURRENTLY_MINING &&
+          pool.poolStatus === POOL_STATUS.MINING
+        ) {
+          return true;
+        } else if (
+          selectedPoolFilter === POOL_FILTER.COMPLETED &&
+          pool.poolStatus === POOL_STATUS.COMPLETE
+        ) {
+          return true;
+        } else {
+          return false;
+        }
+      })
+      .map((pool) => {
+        return <PoolTile key={pool.name} {...pool} />;
+      });
+
+    return filterPools;
   };
 
   const handleFilterButtons = (filter: POOL_FILTER) => {
