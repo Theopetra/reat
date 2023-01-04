@@ -140,7 +140,6 @@ const Donate = () => {
   const renderPoolFilterButtons = () => {
     // loop through each item in POOL_FILTER and return a component
     return Object.values(POOL_FILTER).map((filter) => {
-      console.log("fitle", filter);
       return (
         <FilterButton
           onClick={() => handleFilterButtons(filter)}
@@ -152,6 +151,7 @@ const Donate = () => {
       );
     });
   };
+  console.log("pools", pools);
   return (
     <div className="bg-black">
       <div className="donateLanding" />
