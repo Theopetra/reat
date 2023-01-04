@@ -18,6 +18,7 @@ import { POOL_TYPE, useAppState } from "../../state";
 import { POOL_ADDRESS, POOL_NAME, STX_MULTIPLE } from "../../utils/stx";
 import { ModelButton, TileButton, ButtonColors, ButtonTypes } from "../Button";
 import {
+  BLOCKS_AFTER_START_TO_COMPLETE_MINE,
   ModelInfo,
   ModelProps,
   MODEL_BASIC_STYLES,
@@ -204,9 +205,17 @@ const PoolOpen = ({ closeToast, pool }: PoolOpenType) => {
       <div className="flex flex-col gap-4">
         <ModelInfo
           title="Donation Closes"
-          text={pool.contributionEndHeight + ""}
+          text={"#" + pool.contributionEndHeight}
         />
-        <ModelInfo title="Claim Block" text={pool.startedMineHeight || "N/A"} />
+        <ModelInfo
+          title="Claim Block"
+          text={
+            pool.startedMineHeight
+              ? "#" +
+                (pool.startedMineHeight + BLOCKS_AFTER_START_TO_COMPLETE_MINE)
+              : "N/A"
+          }
+        />
         <ModelInfo title="Contributors" text={pool.totalContributions} />
         <ModelInfo
           title="STX Committed"

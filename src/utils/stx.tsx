@@ -159,7 +159,17 @@ export const parseContractPoolData = (
 
     const poolOwner = fetchedPool.value.value.poolOwner.value;
     const ownerFee = fetchedPool.value.value.ownerFee.value;
-    const poolMembers = fetchedPool.value.value.poolMembers.value;
+
+    const poolMembers = fetchedPool.value.value.poolMembers.value
+      .filter((d: any, i: number) => {
+        if (d.value) {
+          return d.value;
+        }
+      })
+      .map((d: any, i: number) => {
+        return d.value;
+      });
+
     const poolMinMembers = fetchedPool.value.value.poolMinMembers.value;
     const claimHeights = fetchedPool.value.value.claimHeights.value;
     const totalContributions = fetchedPool.value.value.totalContributions.value;

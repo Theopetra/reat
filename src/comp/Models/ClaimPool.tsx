@@ -1,34 +1,28 @@
-import { openContractCall } from "@stacks/connect-react";
-import { StacksMainnet } from "@stacks/network";
-import {
-  AnchorMode,
-  uintCV,
-  stringAsciiCV,
-  standardPrincipalCV,
-  contractPrincipalCV,
-  bufferCVFromString,
-  someCV,
-} from "@stacks/transactions";
-
-import { useState } from "react";
-import { toast } from "react-toastify";
-import { POOL_TYPE, useAppState } from "../../state";
-import { POOL_ADDRESS, POOL_NAME, STX_MULTIPLE } from "../../utils/stx";
-import { ModelButton, TileButton, ButtonColors, ButtonTypes } from "../Button";
-import {
-  ModelInfo,
-  ModelProps,
-  MODEL_BASIC_STYLES,
-  MODEL_INPUT_STYLE,
-  TransactionSubmitted,
-} from "../Models";
-import Text, { BodySubText, NavText, TextTypes } from "../Text";
 import { ModelTitle } from "../Title";
 import { PoolOpenType } from "./PoolOpen";
 
-const StartPool = ({ closeToast, pool }: PoolOpenType) => {
-  const { senderAddress } = useAppState();
+import { openContractCall } from "@stacks/connect-react";
+import { StacksMainnet } from "@stacks/network";
 
+import { useState } from "react";
+import { toast } from "react-toastify";
+import { useAppState } from "../../state";
+import { POOL_ADDRESS, POOL_NAME, STX_MULTIPLE } from "../../utils/stx";
+import { ModelButton, TileButton, ButtonColors, ButtonTypes } from "../Button";
+import {
+  ModelProps,
+  MODEL_INPUT_STYLE,
+  TransactionSubmitted,
+  MODEL_BASIC_STYLES,
+  ModelInfo,
+  calculatCompletionProgress,
+} from "../Models";
+
+import Text, { BodySubText, NavText, TextTypes } from "../Text";
+import { AnchorMode, uintCV } from "@stacks/transactions";
+
+const ClaimPool = ({ closeToast, pool }: PoolOpenType) => {
+  const { currentBlockHeight, senderAddress } = useAppState();
   const handleSuccessModel = (txId: string) => {
     toast(
       ({ closeToast }) => (
@@ -52,7 +46,6 @@ const StartPool = ({ closeToast, pool }: PoolOpenType) => {
       }
     );
   };
-
   // handle submit items
   const handleSubmit = async () => {
     try {
@@ -61,7 +54,7 @@ const StartPool = ({ closeToast, pool }: PoolOpenType) => {
       const txOptions: any = {
         contractAddress: POOL_ADDRESS,
         contractName: POOL_NAME,
-        functionName: "start-pool",
+        functionName: "claim-pool",
         functionArgs: args,
         senderKey: senderAddress,
         validateWithAbi: true,
@@ -90,6 +83,7 @@ const StartPool = ({ closeToast, pool }: PoolOpenType) => {
     <div className={MODEL_BASIC_STYLES}>
       <div className="flex flex-row items-center justify-between">
         <ModelTitle>{pool.name}</ModelTitle>
+
         <Text
           customClass="text-white font-large text-lg"
           type={TextTypes.SubText}
@@ -105,27 +99,53 @@ const StartPool = ({ closeToast, pool }: PoolOpenType) => {
         }}
       />
       <div className="flex flex-col gap-4">
-        <Text type={TextTypes.BoldSubText}>Pool Details</Text>
+        <div className="flex flex-row justify-between items-center">
+          <Text type={TextTypes.BoldSubText}>Pool Details</Text>
+          <div className="text-xs text-lightGray ">
+            {"Block #" + currentBlockHeight}
+          </div>
+        </div>
         <ModelInfo
           title="Donation Start"
           text={"#" + pool.contributionStartHeight}
         />
+
         <ModelInfo
           title="Donation Closed"
           text={"#" + pool.contributionEndHeight}
         />
         <ModelInfo
-          title="Claim Date"
-          text={pool.startedMineHeight ? pool.startedMineHeight + 200 : "N/A"}
+          title="Mine Start"
+          text={pool.startedMineHeight ? "#" + pool.startedMineHeight : "N/A"}
         />
-        <ModelInfo title="Contributors" text={pool.poolMembers.length + ""} />
+
+        <ModelInfo
+          title="Claim Date"
+          text={
+            pool.startedMineHeight
+              ? "#" + (pool.startedMineHeight + 200)
+              : "N/A"
+          }
+        />
+        <ModelInfo title="Contributors" text={pool.poolMembers.length} />
         <ModelInfo
           title="STX Committed"
           text={pool.totalContributions / STX_MULTIPLE}
         />
         <ModelInfo title="Fee" text={pool.ownerFee + "%"} />
+        <ModelInfo title="REAT Won" text={pool.totalCoinsWon} />
+        <ModelInfo
+          title="Completion"
+          text={
+            pool.startedMineHeight
+              ? calculatCompletionProgress(
+                  currentBlockHeight,
+                  pool.startedMineHeight
+                )
+              : "N/A"
+          }
+        />
       </div>
-      <div></div>
       <div className="flex flex-row jusitfy-between items-center">
         <ModelButton
           onClick={() => (closeToast ? closeToast() : null)}
@@ -135,16 +155,15 @@ const StartPool = ({ closeToast, pool }: PoolOpenType) => {
           BACK
         </ModelButton>
         <ModelButton
-          customClass="px-12"
           type={ButtonTypes.Nav}
+          customClass="px-10"
           color={ButtonColors.YelloGradient}
           onClick={() => handleSubmit()}
         >
-          START POOL
+          CLAIM REAT
         </ModelButton>
       </div>
     </div>
   );
 };
-
-export default StartPool;
+export default ClaimPool;

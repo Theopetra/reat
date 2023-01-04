@@ -29,7 +29,7 @@ export type ModelProps = {
 };
 
 export const TOAST_CONFIG: any = {
-  autoClose: 10000,
+  autoClose: false,
   hideProgressBar: true,
   style: {
     backgroundColor: "transparent",
@@ -254,7 +254,26 @@ export const UnStackReat = ({ closeToast }: ModelProps) => {
     </div>
   );
 };
+export const BLOCKS_AFTER_START_TO_COMPLETE_MINE = 300;
 
+export const calculatCompletionProgress = (
+  currentBlock: number,
+  mineStartBlock: number
+): string => {
+  const completionBlock = mineStartBlock + BLOCKS_AFTER_START_TO_COMPLETE_MINE;
+  const completionProgress = completionBlock - currentBlock;
+
+  if (completionProgress < 0) {
+    return "100%";
+  } else {
+    // get the percentage of completionProgress being equal to completionBlock
+    const percentage = (
+      (1 - completionProgress / BLOCKS_AFTER_START_TO_COMPLETE_MINE) *
+      100
+    ).toFixed(1);
+    return `${percentage}%`;
+  }
+};
 export const PoolInfo = ({ closeToast, pool }: PoolOpenType) => {
   const { currentBlockHeight } = useAppState();
   return (
@@ -295,18 +314,21 @@ export const PoolInfo = ({ closeToast, pool }: PoolOpenType) => {
           title="Claim Date"
           text={pool.startedMineHeight ? pool.startedMineHeight + 200 : "N/A"}
         />
-        <ModelInfo title="Contributors" text={pool.totalContributions} />
+        <ModelInfo title="Contributors" text={pool.poolMembers.length} />
         <ModelInfo
           title="STX Committed"
           text={pool.totalContributions / STX_MULTIPLE}
         />
-        <ModelInfo title="Fee" text={pool.ownerFee} />
+        <ModelInfo title="Fee" text={pool.ownerFee + "%"} />
         <ModelInfo title="REAT Won" text={pool.totalCoinsWon} />
         <ModelInfo
           title="Completion"
           text={
             pool.startedMineHeight
-              ? (pool.startedMineHeight + 200) / currentBlockHeight
+              ? calculatCompletionProgress(
+                  currentBlockHeight,
+                  pool.startedMineHeight
+                )
               : "N/A"
           }
         />
@@ -317,6 +339,7 @@ export const PoolInfo = ({ closeToast, pool }: PoolOpenType) => {
           onClick={() => (closeToast ? closeToast() : null)}
           type={ButtonTypes.Nav}
           color={ButtonColors.Gray}
+          customClass="!w-[400px]"
         >
           BACK
         </ModelButton>

@@ -103,34 +103,34 @@ const Donate = () => {
 
   const renderPools = () => {
     //console.log("render pools", pools);
-    const filterPools = pools
-      .filter((pool) => {
-        if (selectedPoolFilter === POOL_FILTER.ALL) {
-          return true;
-        } else if (
-          selectedPoolFilter === POOL_FILTER.OPEN &&
-          pool.poolStatus === POOL_STATUS.OPEN
-        ) {
-          return true;
-        } else if (
-          selectedPoolFilter === POOL_FILTER.CURRENTLY_MINING &&
-          pool.poolStatus === POOL_STATUS.MINING
-        ) {
-          return true;
-        } else if (
-          selectedPoolFilter === POOL_FILTER.COMPLETED &&
-          pool.poolStatus === POOL_STATUS.COMPLETE
-        ) {
-          return true;
-        } else {
-          return false;
-        }
-      })
-      .map((pool) => {
-        return <PoolTile key={pool.name} {...pool} />;
-      });
+    const filterPools = pools.filter((pool) => {
+      if (selectedPoolFilter === POOL_FILTER.ALL) {
+        return true;
+      } else if (
+        selectedPoolFilter === POOL_FILTER.OPEN &&
+        pool.poolStatus === POOL_STATUS.OPEN
+      ) {
+        return true;
+      } else if (
+        selectedPoolFilter === POOL_FILTER.CURRENTLY_MINING &&
+        pool.poolStatus === POOL_STATUS.MINING
+      ) {
+        return true;
+      } else if (
+        selectedPoolFilter === POOL_FILTER.COMPLETED &&
+        pool.poolStatus === POOL_STATUS.COMPLETE
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    });
 
-    return filterPools;
+    console.log("filterPools", filterPools);
+    return filterPools.map((pool) => {
+      //console.log("pool", pool);
+      return <PoolTile key={pool.id} {...pool} />;
+    });
   };
 
   const handleFilterButtons = (filter: POOL_FILTER) => {
@@ -151,7 +151,7 @@ const Donate = () => {
       );
     });
   };
-  console.log("pools", pools);
+  //console.log("pools", pools);
   return (
     <div className="bg-black">
       <div className="donateLanding" />
@@ -185,73 +185,6 @@ const Donate = () => {
 
               <div className="flex px-10 flex-1 flex-row items-center justify-between gap-3 ">
                 {renderPoolFilterButtons()}
-                {/* <Text
-                  customClass="text-gray font-large text-lg"
-                  type={TextTypes.SubText}
-                  onClick={() =>
-                    handleToast({
-                      ToastComp: FinancialDisclaimer,
-                    })
-                  }
-                >
-                  Financial Disclaimer
-                </Text> */}
-
-                {/* <Text
-                  customClass="text-gray font-large text-lg"
-                  type={TextTypes.SubText}
-                  onClick={() =>
-                    handleToast({
-                      ToastComp: PoolMining,
-                    })
-                  }
-                >
-                  Pool Mining
-                </Text>
-                <Text
-                  customClass="text-gray font-large text-lg"
-                  type={TextTypes.SubText}
-                  onClick={() =>
-                    handleToast({
-                      ToastComp: PoolCompleted,
-                    })
-                  }
-                >
-                  Pool Completed
-                </Text>
-                <Text
-                  customClass="text-gray font-large text-lg"
-                  type={TextTypes.SubText}
-                  onClick={() =>
-                    handleToast({
-                      ToastComp: CreatePool,
-                    })
-                  }
-                >
-                  Create Pool
-                </Text>
-                <Text
-                  customClass="text-gray font-large text-lg"
-                  type={TextTypes.SubText}
-                  onClick={() =>
-                    handleToast({
-                      ToastComp: PoolOpen,
-                    })
-                  }
-                >
-                  Pool Open
-                </Text>
-                <Text
-                  customClass="text-gray font-large text-lg"
-                  type={TextTypes.SubText}
-                  onClick={() =>
-                    handleToast({
-                      ToastComp: DonationReceipt,
-                    })
-                  }
-                >
-                  Donation Receipt
-                </Text> */}
               </div>
             </div>
             <div

@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { BLOCKS_AFTER_START_TO_COMPLETE_MINE } from "./comp/Models";
 import { StackingType } from "./comp/Stack";
 
 export type POOL_TYPE = {
@@ -74,7 +75,8 @@ const StateLogic = (props: React.PropsWithChildren<{}>) => {
 
         if (
           pool.startedMineHeight &&
-          currentBlockHeight <= pool.startedMineHeight + 200
+          currentBlockHeight <=
+            pool.startedMineHeight + BLOCKS_AFTER_START_TO_COMPLETE_MINE
         ) {
           return {
             ...pool,
@@ -99,7 +101,8 @@ const StateLogic = (props: React.PropsWithChildren<{}>) => {
           };
         } else if (
           pool.startedMineHeight &&
-          currentBlockHeight > pool.startedMineHeight + 200
+          currentBlockHeight >
+            pool.startedMineHeight + BLOCKS_AFTER_START_TO_COMPLETE_MINE
         ) {
           //completed
           return {
@@ -107,18 +110,15 @@ const StateLogic = (props: React.PropsWithChildren<{}>) => {
             poolStatus: POOL_STATUS.COMPLETE,
           };
         } else if (pool.contributionStartHeight > currentBlockHeight) {
-          console.log("nada");
           return {
             ...pool,
             poolStatus: POOL_STATUS.PENDING,
           };
         } else {
-          console.log("wtf", pool);
-          console.log("pool,", pool.contributionStartHeight);
           return pool;
         }
       });
-      console.log("does this run");
+
       _pools(updatedPools);
     }
   }, [currentBlockHeight]);
