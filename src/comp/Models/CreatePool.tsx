@@ -209,7 +209,7 @@ const CreatePool = ({ closeToast }: ModelProps) => {
         start: "start must be an integer",
       });
       return;
-    } else if (start > 90000 || start < 87178) {
+    } else if (start > 100000 || start < 87178) {
       setPoolInputErrors({
         ...poolInputErrors,
         start: "start must be between 87178 and 90000",
