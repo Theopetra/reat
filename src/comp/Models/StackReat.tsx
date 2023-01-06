@@ -34,7 +34,7 @@ import { toast } from "react-toastify";
 import { openContractCall } from "@stacks/connect-react";
 
 type StackInputTypes = {
-  cycles: string; 
+  cycles: string;
   amount: string;
 };
 
@@ -311,7 +311,7 @@ const StackReat = () => {
           text={currentBlockHeight ? currentBlockHeight + 5 : "N/A"}
         />
       </div>
-      <div className="flex flex-row jusitfy-between items-center">
+      <div className="flex flex-col md:flex-row jusitfy-between items-center gap-y-2">
         <ModelButton
           type={ButtonTypes.Nav}
           customClass="px-16"

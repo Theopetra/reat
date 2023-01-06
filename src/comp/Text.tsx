@@ -21,13 +21,14 @@ const TextTypesMap: Record<TextTypes, string> = {
     "text-2xl md:text-4xl lg:text-4xl xl:text-5xl xxl:text-6xl	 text-green",
   [TextTypes.ButtonText]:
     "font-light   md:text-[24px] md:leading-[36px] text-white",
-  [TextTypes.SubText]: "font-textRegular text-lg ",
+  [TextTypes.SubText]: "font-textRegular text-base",
   [TextTypes.TriText]: "font-textRegular text-sm text-lightGray",
 
   [TextTypes.BoldSubText]: "font-textRegular text-2xl font-medium ",
   [TextTypes.NavText]: "text-xl  font-textRegular font-medium",
   [TextTypes.BodySubText]: "text-3xl font-normal font-textRegular",
-  [TextTypes.TextHeader]: "text-3xl font-medium font-textRegular",
+  [TextTypes.TextHeader]:
+    "text-2xl font-sm md:text-3xl md:font-medium font-textRegular",
   // [TextTypes.BoldBody]: "font-bold md:text-[24px] md:leading-[36px] ",
 };
 

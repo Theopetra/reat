@@ -7,7 +7,7 @@ import { NAV_HEIGHT_OFFSET } from "./Nav";
 import { BASIC_HOME_STYLE } from "./Home";
 import { FilterButton, TileButton } from "./Button";
 import TrendingPool from "./TrendingPool";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { TaxDisclaimer, PoolInfo, TOAST_CONFIG } from "./Models";
 
 import CreatePool from "./Models/CreatePool";
@@ -17,6 +17,8 @@ import PoolTile from "./PoolTile";
 import { useEffect, useState } from "react";
 import { fetchPrincipalStxBalance } from "../utils/stxHelperFuncs";
 import { STX_MULTIPLE } from "../utils/stx";
+import { isMobile } from "react-device-detect";
+import MineNextBlock from "./Models/MineBlocks";
 type Tile = {
   icon: any;
   title: string;
@@ -25,8 +27,8 @@ type Tile = {
 
 export const Tile = ({ icon, title, text }: Tile) => {
   return (
-    <div className="flex flex-col justify-between min-h-[218px] w-[218px] bg-lightBlack rounded-[28px] p-7 gap-1">
-      <div className="flex flex-col items-start gap-5">
+    <div className="flex flex-col justify-between h-[188px] w-[158px] md:min-h-[218px] md:w-[218px] bg-lightBlack rounded-[28px] p-5  md:p-7 gap-1">
+      <div className="flex flex-col items-start gap-4 md:gap-5">
         <Image src={icon} alt="Icon" width={40} height={40} />
         <Text customClass="text-lightGray" type={TextTypes.SubText}>
           {title}
@@ -87,6 +89,21 @@ const Donate = () => {
     });
   };
   */
+
+  const mineNextBlock = () => {
+    toast(({ closeToast }) => <MineNextBlock closeToast={closeToast} />, {
+      autoClose: false,
+      hideProgressBar: true,
+      style: {
+        backgroundColor: "transparent",
+      },
+      draggable: false,
+      closeOnClick: false,
+      closeButton: true,
+      position: "top-center",
+    });
+  };
+
   const createPool = () => {
     toast(({ closeToast }) => <CreatePool closeToast={closeToast} />, {
       autoClose: false,
@@ -154,6 +171,14 @@ const Donate = () => {
   //console.log("pools", pools);
   return (
     <div className="bg-black">
+      <ToastContainer
+        style={{
+          minWidth: isMobile ? "300px" : "450px",
+          backgroundColor: "transparent",
+          boxShadow: "none",
+        }}
+        enableMultiContainer={false}
+      />
       <div className="donateLanding" />
       <div className="landingOverlay" />
       <div
@@ -167,10 +192,13 @@ const Donate = () => {
         <TileButton onClick={() => createPool()} customClass="px-12">
           Admin Create Pool
         </TileButton>
+        <TileButton onClick={() => mineNextBlock()} customClass="px-12">
+          Admin Mine Blocks
+        </TileButton>
         <TrendingPool totalStx={stxBalance} />
         <div className="flex flex-col w-full max-w-[1140px] items-center gap-20">
           <div className="flex w-full flex-col items-center gap-6">
-            <div className="flex w-full flex-row items-center justify-between gap-10">
+            <div className="flex w-full flex-col md:flex-row items-center justify-between gap-10">
               <div className="flex flex-row w-80 items-center justify-between ">
                 <TextHeader>Mining Pools</TextHeader>
                 <div
@@ -183,7 +211,7 @@ const Donate = () => {
                 />
               </div>
 
-              <div className="flex px-10 flex-1 flex-row items-center justify-between gap-3 ">
+              <div className="flex md:px-10 flex-1 flex-row items-center  text-center justify-between gap-3 ">
                 {renderPoolFilterButtons()}
               </div>
             </div>
@@ -196,7 +224,7 @@ const Donate = () => {
             />
           </div>
           <div className="flex flex-col justify-center gap-12">
-            <div className="flex w-full flex-col lg:flex-row flex-wrap justify-center items-center gap-y-6 gap-x-8">
+            <div className="flex w-full flex-col lg:flex-row flex-wrap justify-center items-center gap-y-6 gap-x-5">
               {renderPools()}
               {pools.length === 0 && (
                 <div className="flex flex-col w-full items-center text-center gap-5">

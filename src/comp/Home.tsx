@@ -50,10 +50,6 @@ export const ValidTransactionToast = ({ txId }: ValidTransactionToastProps) => {
 const Home = () => {
   const { senderAddress } = useAppState();
 
-  const handleValidTrans = (txId: string) => {
-    toast.success("Valid Transaction");
-  };
-
   return (
     <div className="bg-black">
       <div className="homeLanding" />

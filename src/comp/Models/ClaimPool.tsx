@@ -16,6 +16,7 @@ import {
   MODEL_BASIC_STYLES,
   ModelInfo,
   calculatCompletionProgress,
+  BLOCKS_AFTER_START_TO_COMPLETE_MINE,
 } from "../Models";
 
 import Text, { BodySubText, NavText, TextTypes } from "../Text";
@@ -123,7 +124,8 @@ const ClaimPool = ({ closeToast, pool }: PoolOpenType) => {
           title="Claim Date"
           text={
             pool.startedMineHeight
-              ? "#" + (pool.startedMineHeight + 200)
+              ? "#" +
+                (pool.startedMineHeight + BLOCKS_AFTER_START_TO_COMPLETE_MINE)
               : "N/A"
           }
         />
@@ -133,7 +135,7 @@ const ClaimPool = ({ closeToast, pool }: PoolOpenType) => {
           text={pool.totalContributions / STX_MULTIPLE}
         />
         <ModelInfo title="Fee" text={pool.ownerFee + "%"} />
-        <ModelInfo title="REAT Won" text={pool.totalCoinsWon} />
+        <ModelInfo title="REAT Won" text={pool.totalCoinsWon || "N/A"} />
         <ModelInfo
           title="Completion"
           text={
@@ -146,7 +148,7 @@ const ClaimPool = ({ closeToast, pool }: PoolOpenType) => {
           }
         />
       </div>
-      <div className="flex flex-row jusitfy-between items-center">
+      <div className="flex flex-col md:flex-row jusitfy-between items-center gap-y-2">
         <ModelButton
           onClick={() => (closeToast ? closeToast() : null)}
           type={ButtonTypes.Nav}

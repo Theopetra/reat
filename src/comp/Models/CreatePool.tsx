@@ -299,7 +299,7 @@ const CreatePool = ({ closeToast }: ModelProps) => {
         </div>
       </div>
 
-      <div className="flex flex-row mt-4 jusitfy-between items-center">
+      <div className="flex flex-col md:flex-row jusitfy-between items-center gap-y-2">
         <ModelButton
           onClick={() => (closeToast ? closeToast() : null)}
           type={ButtonTypes.Nav}

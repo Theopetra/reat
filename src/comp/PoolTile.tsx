@@ -11,18 +11,11 @@ import {
   ModelButton,
   NavButton,
   TileButton,
+  TileButtonGray,
 } from "./Button";
 import TrendingPool from "./TrendingPool";
 import { toast } from "react-toastify";
-import {
-  TaxDisclaimer,
-  DonationReceipt,
-  PoolMining,
-  FinancialDisclaimer,
-  PoolInfo,
-  TOAST_CONFIG,
-  BLOCKS_AFTER_START_TO_COMPLETE_MINE,
-} from "./Models";
+import { PoolInfo, TOAST_CONFIG } from "./Models";
 
 import CreatePool from "./Models/CreatePool";
 import PoolOpen from "./Models/PoolOpen";
@@ -79,14 +72,14 @@ const PoolTile = (pool: POOL_TYPE) => {
   };
 
   return (
-    <div className="flex flex-col  min-h-[300px]  max-h-[auto] min-w-[320px] md:min-w-[380px] max-w-[380px] bg-lightBlack rounded-[28px] p-5 md:p-9 gap-5">
+    <div className="flex flex-col w-[300px] md:w-[360px]  bg-lightBlack rounded-[28px] p-5 md:p-9 gap-5">
       <div className="flex w-full items-center flex-row justify-between">
         <div className="flex flex-row items-center gap-3">
           <Text customClass="text-lightGray" type={TextTypes.SubText}>
             Pool
           </Text>
           <Text
-            customClass="text-white  text-2xl "
+            customClass="text-white  text-2xl !font-black "
             type={TextTypes.BoldSubText}
           >
             {pool.name}
@@ -109,36 +102,60 @@ const PoolTile = (pool: POOL_TYPE) => {
       <div className="flex flex-col gap-6">
         <div className="flex flex-row">
           <div className="flex flex-1 flex-col items-start">
-            <Text customClass="text-lightGray" type={TextTypes.SubText}>
+            <Text
+              customClass="text-lightGray font-bold"
+              type={TextTypes.SubText}
+            >
               Donation Start
             </Text>
-            <Text customClass="text-lightGray" type={TextTypes.SubText}>
+            <Text
+              customClass="text-lightGray font-light"
+              type={TextTypes.SubText}
+            >
               {"#" + pool.contributionStartHeight}
             </Text>
           </div>
           <div className="flex flex-1 flex-col pl-16 items-start">
-            <Text customClass="text-lightGray" type={TextTypes.SubText}>
+            <Text
+              customClass="text-lightGray font-bold"
+              type={TextTypes.SubText}
+            >
               Donation End
             </Text>
-            <Text customClass="text-lightGray" type={TextTypes.SubText}>
+            <Text
+              customClass="text-lightGray font-light"
+              type={TextTypes.SubText}
+            >
               {"#" + pool.contributionEndHeight}
             </Text>
           </div>
         </div>
         <div className="flex flex-row">
           <div className="flex flex-1 flex-col items-start">
-            <Text customClass="text-lightGray" type={TextTypes.SubText}>
+            <Text
+              customClass="text-lightGray font-bold"
+              type={TextTypes.SubText}
+            >
               Contributors
             </Text>
-            <Text customClass="text-lightGray" type={TextTypes.SubText}>
+            <Text
+              customClass="text-lightGray font-light"
+              type={TextTypes.SubText}
+            >
               {pool.poolMembers.length}
             </Text>
           </div>
           <div className="flex flex-1 flex-col pl-16 items-start">
-            <Text customClass="text-lightGray" type={TextTypes.SubText}>
+            <Text
+              customClass="text-lightGray font-bold"
+              type={TextTypes.SubText}
+            >
               Fee
             </Text>
-            <Text customClass="text-lightGray" type={TextTypes.SubText}>
+            <Text
+              customClass="text-lightGray font-light"
+              type={TextTypes.SubText}
+            >
               {`${pool.ownerFee}%`}
             </Text>
           </div>
@@ -152,17 +169,19 @@ const PoolTile = (pool: POOL_TYPE) => {
               {pool.totalContributions / STX_MULTIPLE}
             </Text>
           </div>
+
           <div className="flex flex-1 flex-col pl-16 items-start">
             <Text customClass="text-lightGray" type={TextTypes.SubText}>
               REAT Won
             </Text>
             <Text customClass="text-lightGray" type={TextTypes.SubText}>
-              {pool.totalCoinsWon}
+              {pool.totalCoinsWon || "N/A"}
             </Text>
           </div>
         </div>
 
-        {pool.startedMineHeight && (
+        {/*
+        pool.startedMineHeight && (
           <div className="flex flex-row">
             <div className="flex flex-1    flex-col items-start">
               <Text customClass="text-lightGray" type={TextTypes.SubText}>
@@ -184,7 +203,8 @@ const PoolTile = (pool: POOL_TYPE) => {
               </Text>
             </div>
           </div>
-        )}
+        )
+                  */}
       </div>
       {authenticated ? (
         <>
@@ -217,14 +237,14 @@ const PoolTile = (pool: POOL_TYPE) => {
 
           {(pool.poolStatus === POOL_STATUS.UNKNOWN ||
             pool.poolStatus === POOL_STATUS.MINING ||
-            pool.poolStatus === POOL_STATUS.PENDING) && (
-            <ModelButton
+            pool.poolStatus === POOL_STATUS.PENDING ||
+            (pool.poolStatus === POOL_STATUS.READY && !isOwner)) && (
+            <TileButtonGray
               onClick={() => handleTileClick(pool)}
-              type={ButtonTypes.Nav}
-              color={ButtonColors.Gray}
+              customClass=""
             >
               View Details
-            </ModelButton>
+            </TileButtonGray>
           )}
         </>
       ) : (

@@ -11,6 +11,7 @@ import StakingHistory from "./StakingHisotry";
 import { useEffect, useState } from "react";
 import { useAppState } from "../state";
 import { fetchPrincipalTokenBalance } from "../utils/stxHelperFuncs";
+import { ToastContainer } from "react-toastify";
 export const StackingHisotryInfo = ({ title, text }: ModelInfoProps) => {
   return (
     <div className="flex flex-col flex-1  items-start">
@@ -70,6 +71,14 @@ const Stack = () => {
   };
   return (
     <div className="bg-black">
+      <ToastContainer
+        style={{
+          minWidth: isMobile ? "300px" : "450px",
+          backgroundColor: "transparent",
+          boxShadow: "none",
+        }}
+        enableMultiContainer={false}
+      />
       <div className="homeLanding" />
       <div className="landingOverlay" />
       <div

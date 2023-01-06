@@ -40,7 +40,7 @@ export const TOAST_CONFIG: any = {
   position: "top-center",
 };
 export const MODEL_BASIC_STYLES =
-  "flex flex-col h-auto  min-w-[320px] w-[4000px] max-w-[380px] bg-lightBlack rounded-[20px] p-9 gap-5";
+  "m-auto flex flex-col h-auto  md:min-w-[320px] w-[4000px] max-w-[300px] md:max-w-[380px] bg-lightBlack rounded-[20px] p-9 gap-5";
 export const TaxDisclaimer = ({ closeToast }: ModelProps) => {
   return (
     <div className={MODEL_BASIC_STYLES}>
@@ -74,7 +74,7 @@ export const TaxDisclaimer = ({ closeToast }: ModelProps) => {
         />
         <Text type={TextTypes.TriText}>I have read the Tax Disclaimer</Text>
       </div>
-      <div className="flex flex-row jusitfy-between items-center">
+      <div className="flex flex-col md:flex-row jusitfy-between items-center gap-y-2">
         <ModelButton
           onClick={() => (closeToast ? closeToast() : null)}
           type={ButtonTypes.Nav}
@@ -120,7 +120,7 @@ export const FinancialDisclaimer = ({ closeToast }: ModelProps) => {
         />
         <Text type={TextTypes.TriText}>I have read the Tax Disclaimer</Text>
       </div>
-      <div className="flex flex-row jusitfy-between items-center">
+      <div className="flex flex-col md:flex-row jusitfy-between items-center gap-y-2">
         <ModelButton
           onClick={() => (closeToast ? closeToast() : null)}
           type={ButtonTypes.Nav}
@@ -136,86 +136,7 @@ export const FinancialDisclaimer = ({ closeToast }: ModelProps) => {
   );
 };
 
-export const PoolMining = ({ closeToast }: ModelProps) => {
-  return (
-    <div className={MODEL_BASIC_STYLES}>
-      <div className="flex flex-row items-center justify-between">
-        <ModelTitle>San Jose</ModelTitle>
-        <Text
-          customClass="text-darkYellow font-large text-lg"
-          type={TextTypes.SubText}
-        >
-          MINING
-        </Text>
-      </div>
-      <div
-        style={{
-          border: "1px solid #F5F5F5",
-          width: "100%",
-          height: "0px",
-        }}
-      />
-      <div className="flex flex-col gap-4">
-        <Text type={TextTypes.BoldSubText}>Pool Details</Text>
-        <ModelInfo title="Donation Closed" text="11-15-2022" />
-        <ModelInfo title="Claim Date" text="01-01-2023" />
-        <ModelInfo title="Contributors" text="12" />
-        <ModelInfo title="STX Committed" text="800" />
-        <ModelInfo title="REAT Won" text="15,000" />
-        <ModelInfo title="Completion" text="72%" />
-        <ModelInfo title="Fee" text="1.5%" />
-      </div>
-      <ModelButton
-        onClick={() => (closeToast ? closeToast() : null)}
-        type={ButtonTypes.Nav}
-        color={ButtonColors.Gray}
-        customClass="px-20"
-      >
-        BACK
-      </ModelButton>
-    </div>
-  );
-};
-
-export const StackReat = ({ closeToast }: ModelProps) => {
-  return (
-    <div className={MODEL_BASIC_STYLES}>
-      <div className="flex flex-row items-center justify-between">
-        <ModelTitle>Stack REAT</ModelTitle>
-      </div>
-      <div
-        style={{
-          border: "1px solid #F5F5F5",
-          width: "100%",
-          height: "0px",
-        }}
-      />
-      <div className="flex flex-col gap-4">
-        <Text type={TextTypes.BoldSubText}>CONFIRM DETAILS</Text>
-        <ModelInfo title="REAT to Stack" text="10,000" />
-        <ModelInfo title="Stacking Start" text="11-15-2022" />
-        <ModelInfo title="Claim Date" text="01-01-2023" />
-      </div>
-      <div className="flex flex-row jusitfy-between items-center">
-        <ModelButton
-          onClick={() => (closeToast ? closeToast() : null)}
-          type={ButtonTypes.Nav}
-          color={ButtonColors.Gray}
-        >
-          BACK
-        </ModelButton>
-        <ModelButton
-          customClass="px-12"
-          type={ButtonTypes.Nav}
-          color={ButtonColors.GreenGradient}
-        >
-          CONFIRM STACK
-        </ModelButton>
-      </div>
-    </div>
-  );
-};
-
+/*
 export const UnStackReat = ({ closeToast }: ModelProps) => {
   return (
     <div className={MODEL_BASIC_STYLES}>
@@ -254,6 +175,8 @@ export const UnStackReat = ({ closeToast }: ModelProps) => {
     </div>
   );
 };
+*/
+
 export const BLOCKS_AFTER_START_TO_COMPLETE_MINE = 300;
 
 export const calculatCompletionProgress = (
@@ -302,17 +225,28 @@ export const PoolInfo = ({ closeToast, pool }: PoolOpenType) => {
             {"Block #" + currentBlockHeight}
           </div>
         </div>
-        <ModelInfo title="Donation Start" text={pool.contributionStartHeight} />
+        <ModelInfo
+          title="Donation Start"
+          text={"#" + pool.contributionStartHeight}
+        />
 
-        <ModelInfo title="Donation Closed" text={pool.contributionEndHeight} />
+        <ModelInfo
+          title="Donation Closed"
+          text={"#" + pool.contributionEndHeight}
+        />
         <ModelInfo
           title="Mine Start"
-          text={pool.startedMineHeight ? pool.startedMineHeight : "N/A"}
+          text={pool.startedMineHeight ? "#" + pool.startedMineHeight : "N/A"}
         />
 
         <ModelInfo
           title="Claim Date"
-          text={pool.startedMineHeight ? pool.startedMineHeight + 200 : "N/A"}
+          text={
+            pool.startedMineHeight
+              ? "#" +
+                (pool.startedMineHeight + BLOCKS_AFTER_START_TO_COMPLETE_MINE)
+              : "N/A"
+          }
         />
         <ModelInfo title="Contributors" text={pool.poolMembers.length} />
         <ModelInfo
@@ -339,7 +273,7 @@ export const PoolInfo = ({ closeToast, pool }: PoolOpenType) => {
           onClick={() => (closeToast ? closeToast() : null)}
           type={ButtonTypes.Nav}
           color={ButtonColors.Gray}
-          customClass="!w-[400px]"
+          customClass="!w-[200px] md:!w-[400px]"
         >
           BACK
         </ModelButton>
@@ -386,7 +320,7 @@ export const DonationReceipt = ({ closeToast }: ModelProps) => {
         </Text>
       </div>
 
-      <div className="flex flex-row jusitfy-between items-center">
+      <div className="flex flex-col md:flex-row jusitfy-between items-center gap-y-2">
         <ModelButton
           onClick={() => (closeToast ? closeToast() : null)}
           type={ButtonTypes.Nav}

@@ -8,10 +8,63 @@ import { ModelInfo, ModelInfoProps, MODEL_INPUT_STYLE } from "./Models";
 import { StackingHistoryTile } from "./Stack";
 import PoolTile from "./PoolTile";
 import StakingHistory from "./StakingHisotry";
+import { useEffect } from "react";
+import { POOL_STATUS, useAppState } from "../state";
+import { fetchPools } from "../../pages/donate";
+import { ToastContainer } from "react-toastify";
+import { isMobile } from "react-device-detect";
 
 const Claim = () => {
+  const { pools, _pools, senderAddress } = useAppState();
+  useEffect(() => {
+    fetchPoolsHelper();
+  }, []);
+  const fetchPoolsHelper = async () => {
+    try {
+      const pools = await fetchPools();
+      console.log("fetchPoolsHelper", pools);
+
+      _pools(pools);
+    } catch (err) {
+      console.log("err", err);
+      return [];
+    }
+  };
+
+  const renderClaimPoolTiles = () => {
+    return pools
+      .filter((pool) => {
+        if (senderAddress) {
+          const isOwner = pool.poolOwner === senderAddress;
+
+          // check senderAddress can be found in pool.poolMembers
+          const isMember = pool.poolMembers.find(
+            (member) => member === senderAddress
+          );
+
+          if (
+            pool.poolStatus === POOL_STATUS.COMPLETE &&
+            (isMember || isOwner)
+          ) {
+            return true;
+          } else return false;
+        } else return false;
+      })
+      .map((pool) => {
+        return <PoolTile key={pool.id} {...pool} />;
+      });
+  };
+
   return (
     <div className="bg-black">
+      <ToastContainer
+        style={{
+          minWidth: isMobile ? "300px" : "450px",
+          backgroundColor: "transparent",
+          boxShadow: "none",
+        }}
+        enableMultiContainer={false}
+      />
       <div className="homeLanding" />
       <div className="landingOverlay" />
       <div
@@ -37,6 +90,9 @@ const Claim = () => {
                 height: "0px",
               }}
             />
+            <div className="flex px-10 flex-1 flex-row items-center justify-between gap-3 ">
+              {renderClaimPoolTiles()}
+            </div>
           </div>
           <div className="flex flex-col gap-12">
             <div className="flex w-full flex-row justify-between items-center gap-6">
@@ -46,9 +102,9 @@ const Claim = () => {
             </div>
           </div>
           <div className="flex self-start flex-row items-start">
-            <BodySubText customClass="text-left curosr-pointer underline text-lightGray">
+            <NavText customClass="text-left cursor-pointer underline text-lightGray">
               View my Donation Receipts
-            </BodySubText>
+            </NavText>
           </div>
           <div className="flex flex-col w-full max-w-[1140px] items-center gap-20">
             <div className="flex w-full flex-col items-center gap-6">

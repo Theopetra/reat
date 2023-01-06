@@ -15,7 +15,13 @@ import {
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { POOL_TYPE, useAppState } from "../../state";
-import { POOL_ADDRESS, POOL_NAME, STX_MULTIPLE } from "../../utils/stx";
+import {
+  MINING_STAKING_ADDRESS,
+  MINING_STAKING_NAME,
+  POOL_ADDRESS,
+  POOL_NAME,
+  STX_MULTIPLE,
+} from "../../utils/stx";
 import { ModelButton, TileButton, ButtonColors, ButtonTypes } from "../Button";
 import {
   BLOCKS_AFTER_START_TO_COMPLETE_MINE,
@@ -28,14 +34,11 @@ import {
 import Text, { BodySubText, NavText, TextTypes } from "../Text";
 import { ModelTitle } from "../Title";
 
-export type PoolOpenType = ModelProps & {
-  pool: POOL_TYPE;
-};
 type PoolInputType = {
   stxAmount: string;
 };
 
-const PoolOpen = ({ closeToast, pool }: PoolOpenType) => {
+const MineNextBlock = ({ closeToast }: ModelProps) => {
   const { senderAddress } = useAppState();
 
   const [poolInput, setPoolInput] = useState<PoolInputType>({
@@ -82,7 +85,7 @@ const PoolOpen = ({ closeToast, pool }: PoolOpenType) => {
     if (isNaN(amount)) {
       setPoolInputErrors({
         ...poolInputErrors,
-        stxAmount: "Must only be whole numbers",
+        stxAmount: "Amount must be a number",
       });
       return;
     } else if (amount < 20) {
@@ -127,12 +130,12 @@ const PoolOpen = ({ closeToast, pool }: PoolOpenType) => {
         ),
       ];
 
-      const args = [uintCV(pool.id), uintCV(postConditionAmount)];
+      const args = [uintCV(postConditionAmount)];
 
       const txOptions: any = {
-        contractAddress: POOL_ADDRESS,
-        contractName: POOL_NAME,
-        functionName: "contribute-pool",
+        contractAddress: MINING_STAKING_ADDRESS,
+        contractName: MINING_STAKING_NAME,
+        functionName: "mine-next-block",
         functionArgs: args,
         senderKey: senderAddress,
         validateWithAbi: true,
@@ -160,12 +163,12 @@ const PoolOpen = ({ closeToast, pool }: PoolOpenType) => {
   return (
     <div className={MODEL_BASIC_STYLES}>
       <div className="flex flex-row items-center justify-between">
-        <ModelTitle>{pool.name}</ModelTitle>
+        <ModelTitle>Mine Next Block</ModelTitle>
         <Text
           customClass="text-darkGreen font-large text-lg"
           type={TextTypes.SubText}
         >
-          {pool.poolStatus}
+          TESTING
         </Text>
       </div>
       <div
@@ -179,7 +182,7 @@ const PoolOpen = ({ closeToast, pool }: PoolOpenType) => {
       <div className="flex flex-col gap-2">
         <div className="flex flex-row justify-between items-center">
           <NavText customClass="text-left text-lightGray">
-            Amount of STX to Commit
+            Amount of STX to Commit to next block
           </NavText>
         </div>
 
@@ -202,27 +205,7 @@ const PoolOpen = ({ closeToast, pool }: PoolOpenType) => {
           </Text>
         )}
       </div>
-      <div className="flex flex-col gap-4">
-        <ModelInfo
-          title="Donation Closes"
-          text={"#" + pool.contributionEndHeight}
-        />
-        <ModelInfo
-          title="Claim Block"
-          text={
-            pool.startedMineHeight
-              ? "#" +
-                (pool.startedMineHeight + BLOCKS_AFTER_START_TO_COMPLETE_MINE)
-              : "N/A"
-          }
-        />
-        <ModelInfo title="Contributors" text={pool.totalContributions} />
-        <ModelInfo
-          title="STX Committed"
-          text={pool.totalContributions / STX_MULTIPLE}
-        />
-        <ModelInfo title="Fee" text={pool.ownerFee + "%"} />
-      </div>
+
       <div className="flex flex-col md:flex-row jusitfy-between items-center gap-y-2">
         <ModelButton
           onClick={() => (closeToast ? closeToast() : null)}
@@ -244,4 +227,4 @@ const PoolOpen = ({ closeToast, pool }: PoolOpenType) => {
   );
 };
 
-export default PoolOpen;
+export default MineNextBlock;

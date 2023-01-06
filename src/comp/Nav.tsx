@@ -143,26 +143,25 @@ export const Footer = () => {
             Real Equity for America Today
           </NavText>
         </div>
-        {!isMobile && (
-          <div className="flex flex-col md:flex-row space-between items-center gap-10">
-            <IconButton
-              type={ButtonTypes.Nav}
-              color={ButtonColors.GreenGradient}
-              onClick={() => hanldeTwitter()}
-              icon={"/images/twitter.svg"}
-            >
-              Follow Us on Twitter
-            </IconButton>
-            <IconButton
-              type={ButtonTypes.Nav}
-              color={ButtonColors.GreenGradient}
-              onClick={() => hanldeTwitter()}
-              icon={"/images/document.svg"}
-            >
-              Read Our White Paper
-            </IconButton>
-          </div>
-        )}
+
+        <div className=" hidden md:flex flex-col md:flex-row space-between items-center gap-10">
+          <IconButton
+            type={ButtonTypes.Nav}
+            color={ButtonColors.GreenGradient}
+            onClick={() => hanldeTwitter()}
+            icon={"/images/twitter.svg"}
+          >
+            Follow Us on Twitter
+          </IconButton>
+          <IconButton
+            type={ButtonTypes.Nav}
+            color={ButtonColors.GreenGradient}
+            onClick={() => hanldeTwitter()}
+            icon={"/images/document.svg"}
+          >
+            Read Our White Paper
+          </IconButton>
+        </div>
       </div>
     </div>
   );

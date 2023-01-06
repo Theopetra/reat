@@ -19,6 +19,7 @@ export enum ButtonColors {
   GreenGradient,
   YelloGradient,
   Gray,
+  DarkGray,
 }
 
 const ButtonColorMaps: Record<ButtonColors, string> = {
@@ -28,6 +29,7 @@ const ButtonColorMaps: Record<ButtonColors, string> = {
   [ButtonColors.YelloGradient]:
     "bg-gradient-to-r from-lightYellow to-darkYellow",
   [ButtonColors.Gray]: "bg-gray",
+  [ButtonColors.DarkGray]: "bg-darkGray",
 };
 
 // type interface
@@ -48,11 +50,11 @@ const Button = (props: ButtonProps) => {
       )}
     >
       {props.type === ButtonTypes.Primary ? (
-        <Text customClass="font-bold" type={TextTypes.LargeButton}>
+        <Text customClass="!font-bold" type={TextTypes.LargeButton}>
           {props.children}
         </Text>
       ) : (
-        <Text customClass="font-bold" type={TextTypes.ButtonText}>
+        <Text customClass="!font-bold" type={TextTypes.ButtonText}>
           {props.children}
         </Text>
       )}
@@ -145,7 +147,24 @@ export const TileButton = ({
       type={ButtonTypes.Nav}
       color={ButtonColors.YelloGradient}
       onClick={onClick}
-      customClass={customClass}
+      customClass={customClass + " min-w-[240px]"}
+    >
+      {children}
+    </Button>
+  );
+};
+
+export const TileButtonGray = ({
+  children,
+  customClass,
+  onClick,
+}: TemplateButton) => {
+  return (
+    <Button
+      type={ButtonTypes.Nav}
+      color={ButtonColors.DarkGray}
+      onClick={onClick}
+      customClass={customClass + "w-[260px]"}
     >
       {children}
     </Button>
