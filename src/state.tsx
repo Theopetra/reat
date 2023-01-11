@@ -1,6 +1,31 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { BLOCKS_AFTER_START_TO_COMPLETE_MINE } from "./comp/Models";
-import { StackingType } from "./comp/Stack";
+import { START_CYCLE_BLOCK } from "./utils/stx";
+
+export type StackingType = {
+  cycle: number;
+  stacked: number;
+  startBlock: number | null;
+  completionBlock: number | null;
+  stxEarned: number | null;
+};
+
+const MOCKED_STACKING_HISTORY: StackingType[] = [
+  {
+    cycle: 1,
+    stacked: 100,
+    startBlock: null,
+    completionBlock: null,
+    stxEarned: null,
+  },
+  {
+    cycle: 2,
+    stacked: 300,
+    startBlock: null,
+    completionBlock: null,
+    stxEarned: null,
+  },
+];
 
 export type POOL_TYPE = {
   name: string;
@@ -66,7 +91,28 @@ const StateLogic = (props: React.PropsWithChildren<{}>) => {
 
   const [totalStx, _totalStx] = useState<number>(0);
 
-  const [stakingHistory, _stakingHistory] = useState<StackingType[]>([]);
+  const [stakingHistory, _stakingHistory] = useState<StackingType[]>(
+    MOCKED_STACKING_HISTORY
+  );
+
+  useEffect(() => {
+    if (stakingHistory.length > 0 && currentBlockHeight !== 0) {
+      const stackingInfo = stakingHistory.map((d, i) => {
+        // get the start block
+        // start block is the cycle index * 2100 + START_CYCLE_BLOCK
+        const startBlock = d.cycle * 2100 + START_CYCLE_BLOCK;
+        const completionBlock = (d.cycle + 1) * 2100 + START_CYCLE_BLOCK;
+        console.log("does this run");
+        return {
+          ...d,
+          startBlock: startBlock,
+          completionBlock: completionBlock,
+        };
+      });
+
+      _stakingHistory(stackingInfo);
+    }
+  }, [currentBlockHeight]);
 
   useEffect(() => {
     if (currentBlockHeight) {

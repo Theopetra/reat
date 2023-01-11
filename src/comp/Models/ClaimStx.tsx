@@ -12,7 +12,7 @@ import {
 
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { POOL_TYPE, useAppState } from "../../state";
+import { POOL_TYPE, StackingType, useAppState } from "../../state";
 import {
   MINING_STAKING_ADDRESS,
   MINING_STAKING_NAME,
@@ -28,7 +28,6 @@ import {
   MODEL_INPUT_STYLE,
   TransactionSubmitted,
 } from "../Models";
-import { StackingType } from "../Stack";
 import Text, { BodySubText, NavText, TextTypes } from "../Text";
 import { ModelTitle } from "../Title";
 
@@ -37,10 +36,10 @@ export type ClaimStxType = ModelProps & StackingType & {};
 const ClaimStx = ({
   closeToast,
   cycle,
-  reatStacked,
-  startDate,
+  stacked,
+  startBlock,
   stxEarned,
-  completion,
+  completionBlock,
 }: ClaimStxType) => {
   const { senderAddress } = useAppState();
   const handleSuccessModel = (txId: string) => {
@@ -97,7 +96,7 @@ const ClaimStx = ({
 
   return (
     <div className={MODEL_BASIC_STYLES}>
-      <ModelTitle>Stack REAT</ModelTitle>
+      <ModelTitle>Claim STX</ModelTitle>
 
       <div
         style={{
@@ -108,11 +107,10 @@ const ClaimStx = ({
       />
       <Text type={TextTypes.BoldSubText}>CONFIRM DETAILS</Text>
       <div className="flex flex-col gap-4">
-        <ModelInfo title="REAT Stacked" text={reatStacked} />
-        <ModelInfo title="STX Earned" text={stxEarned} />
-        <ModelInfo title="Stacking Start" text={cycle} />
-        <ModelInfo title="Stacking Start" text={"DEV:TODO"} />
-        <ModelInfo title="Stacking Start" text={"DEV:TODO"} />
+        <ModelInfo title="REAT Stacked" text={stacked} />
+        <ModelInfo title="STX Earned" text={stxEarned || "N/A"} />
+        <ModelInfo title="Stacking Start" text={cycle * 2100} />
+        <ModelInfo title="Stacking Start" text={"#" + startBlock} />
       </div>
 
       <div></div>

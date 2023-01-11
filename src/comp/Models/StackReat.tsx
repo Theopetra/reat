@@ -1,4 +1,9 @@
-import { ButtonColors, ButtonTypes, ModelButton } from "../Button";
+import {
+  ButtonColors,
+  ButtonTypes,
+  ModelButton,
+  StakingHistoryButton,
+} from "../Button";
 import { BASIC_HOME_STYLE } from "../Home";
 import {
   ModelInfo,
@@ -312,14 +317,9 @@ const StackReat = () => {
         />
       </div>
       <div className="flex flex-col md:flex-row jusitfy-between items-center gap-y-2">
-        <ModelButton
-          type={ButtonTypes.Nav}
-          customClass="px-16"
-          color={ButtonColors.GreenGradient}
-          onClick={handleSubmit}
-        >
+        <StakingHistoryButton onClick={handleSubmit} customClass="px-4">
           STACK REAT
-        </ModelButton>
+        </StakingHistoryButton>
       </div>
       {submitError !== "" && (
         <Text

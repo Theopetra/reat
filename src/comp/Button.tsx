@@ -137,6 +137,23 @@ export const NavButton = ({
   );
 };
 
+export const StakingHistoryButton = ({
+  children,
+  customClass,
+  onClick,
+}: TemplateButton) => {
+  return (
+    <Button
+      type={ButtonTypes.Nav}
+      color={ButtonColors.GreenGradient}
+      onClick={onClick}
+      customClass={customClass + ""}
+    >
+      {children}
+    </Button>
+  );
+};
+
 export const TileButton = ({
   children,
   customClass,

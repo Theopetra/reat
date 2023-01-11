@@ -54,10 +54,10 @@ const StakingHistory = () => {
         <StackingHistoryTile
           key={index}
           cycle={item.cycle}
-          reatStacked={item.reatStacked}
-          startDate={"N/A"}
+          stacked={item.stacked}
+          startBlock={item.startBlock}
           stxEarned={item.stxEarned}
-          completion={0}
+          completionBlock={item.completionBlock}
         />
       );
     });
@@ -65,7 +65,7 @@ const StakingHistory = () => {
   return (
     <>
       {!isMobile && (
-        <div className="flex flex-col w-full max-w-[1140px] items-center gap-20">
+        <div className="flex flex-col w-full max-w-[1240px] items-center gap-20">
           <div className="flex w-full flex-col items-center gap-6">
             <div className="flex w-full flex-row items-center justify-between gap-10">
               <TextHeader>Stacking History</TextHeader>

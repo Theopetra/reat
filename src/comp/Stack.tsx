@@ -1,4 +1,10 @@
-import { ButtonColors, ButtonTypes, ModelButton } from "./Button";
+import {
+  ButtonColors,
+  ButtonTypes,
+  ModelButton,
+  StakingHistoryButton,
+  TileButton,
+} from "./Button";
 import { BASIC_HOME_STYLE } from "./Home";
 import { ModelInfo, ModelInfoProps, MODEL_INPUT_STYLE } from "./Models";
 import { NAV_HEIGHT_OFFSET } from "./Nav";
@@ -9,45 +15,115 @@ import { isMobile } from "react-device-detect";
 import StackReat from "./Models/StackReat";
 import StakingHistory from "./StakingHisotry";
 import { useEffect, useState } from "react";
-import { useAppState } from "../state";
+import { StackingType, useAppState } from "../state";
 import { fetchPrincipalTokenBalance } from "../utils/stxHelperFuncs";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import ClaimStx from "./Models/ClaimStx";
+
 export const StackingHisotryInfo = ({ title, text }: ModelInfoProps) => {
   return (
     <div className="flex flex-col flex-1  items-start">
-      <Text customClass="text-lightGray" type={TextTypes.SubText}>
+      <Text
+        customClass="text-lightGray !text-xl !font-bold"
+        type={TextTypes.SubText}
+      >
         {title}
       </Text>
-      <Text customClass="text-lightGray" type={TextTypes.SubText}>
+      <Text
+        customClass="text-lightGray !text-xl  !font-medium"
+        type={TextTypes.SubText}
+      >
         {text}
       </Text>
     </div>
   );
 };
 
-export type StackingType = {
-  cycle: number;
-  reatStacked: number;
-  startDate: string;
-  stxEarned: number;
-  completion: number;
+const calculatStackingCompletionProgress = (
+  startBlock: number,
+  completionBlock: number,
+  currentBlockHeight: number
+): string => {
+  let completion = 0;
+
+  if (startBlock && completionBlock && currentBlockHeight) {
+    if (completionBlock <= currentBlockHeight) {
+      completion = 100;
+    } else {
+      completion = Math.floor(
+        ((currentBlockHeight - startBlock) / (completionBlock - startBlock)) *
+          100
+      );
+    }
+  }
+  return `${completion}%`;
 };
+
 export const StackingHistoryTile = (props: StackingType) => {
-  const { cycle, reatStacked, startDate, stxEarned, completion } = props;
+  const { currentBlockHeight } = useAppState();
+  console.log("StackingHistoryTile", props);
+  const { cycle, stacked, startBlock, stxEarned, completionBlock } = props;
+
+  const renderCompletion = () => {
+    if (startBlock && completionBlock && currentBlockHeight) {
+      return calculatStackingCompletionProgress(
+        startBlock,
+        completionBlock,
+        currentBlockHeight
+      );
+    } else {
+      return "N/A";
+    }
+  };
+
+  const handleClaimButton = () => {
+    toast(({ closeToast }) => <ClaimStx closeToast={closeToast} {...props} />, {
+      autoClose: false,
+      hideProgressBar: true,
+      style: {
+        backgroundColor: "transparent",
+      },
+      draggable: false,
+      closeOnClick: false,
+      closeButton: true,
+      position: "top-center",
+    });
+  };
   return (
     <div className="flex flex-row w-full  bg-lightBlack rounded-[20px] p-8">
       <StackingHisotryInfo title="Cycle" text={cycle} />
-      <StackingHisotryInfo title="REAT Stacked" text={reatStacked} />
-      <StackingHisotryInfo title="Start Date" text={startDate} />
-      <StackingHisotryInfo title="STX Earned" text={stxEarned} />
-      <StackingHisotryInfo title="Completion" text={completion} />
-      <ModelButton
-        customClass="px-10"
-        type={ButtonTypes.Nav}
-        color={ButtonColors.GreenGradient}
+      <StackingHisotryInfo title="REAT Stacked" text={stacked} />
+      <StackingHisotryInfo
+        title="Start Block"
+        text={"#" + startBlock || "N/A"}
+      />
+      <StackingHisotryInfo
+        title="End Block"
+        text={startBlock ? "#" + (startBlock + 2100) : "N/A"}
+      />
+      <StackingHisotryInfo title="Completion" text={renderCompletion()} />
+      <div
+        className="flex flex-row items-center justify-center"
+        style={{
+          width: "180px",
+        }}
       >
-        Claim STX
-      </ModelButton>
+        {completionBlock && completionBlock < currentBlockHeight ? (
+          <Text
+            customClass="!font-bold text-center"
+            type={TextTypes.LargeButton}
+          >
+            Stacking In Progress
+          </Text>
+        ) : (
+          <StakingHistoryButton
+            onClick={() => handleClaimButton()}
+            customClass="px-4"
+          >
+            Claim STX
+          </StakingHistoryButton>
+        )}
+      </div>
     </div>
   );
 };
@@ -56,7 +132,7 @@ const Stack = () => {
   const [totalToken, setTotalToken] = useState<null | number>(null);
 
   useEffect(() => {
-    fetchPrincipalTotalToken();
+    //fetchPrincipalTotalToken();
   }, [senderAddress]);
 
   const fetchPrincipalTotalToken = async () => {
