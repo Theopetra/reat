@@ -92,7 +92,8 @@ export const StackingHistoryTile = (props: StackingType) => {
   return (
     <div className="flex flex-row w-full  bg-lightBlack rounded-[20px] p-8">
       <StackingHisotryInfo title="Cycle" text={cycle} />
-      <StackingHisotryInfo title="REAT Stacked" text={stacked} />
+      {!isMobile && <StackingHisotryInfo title="REAT Stacked" text={stacked} />}
+
       {!isMobile && (
         <StackingHisotryInfo
           title="Start Block"
