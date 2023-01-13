@@ -18,6 +18,7 @@ import {
   MINING_STAKING_NAME,
   POOL_ADDRESS,
   POOL_NAME,
+  START_CYCLE_BLOCK,
   STX_MULTIPLE,
 } from "../../utils/stx";
 import { ModelButton, TileButton, ButtonColors, ButtonTypes } from "../Button";
@@ -109,8 +110,12 @@ const ClaimStx = ({
       <div className="flex flex-col gap-4">
         <ModelInfo title="REAT Stacked" text={stacked} />
         <ModelInfo title="STX Earned" text={stxEarned || "N/A"} />
-        <ModelInfo title="Stacking Start" text={cycle * 2100} />
+
         <ModelInfo title="Stacking Start" text={"#" + startBlock} />
+        <ModelInfo
+          title="Stacking End"
+          text={"#" + (startBlock ? startBlock + 2100 : 0)}
+        />
       </div>
 
       <div></div>

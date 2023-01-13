@@ -18,7 +18,7 @@ import {
 
 import { StacksMainnet } from "@stacks/network";
 import { RaxHeader } from "./Title";
-import { NAV_HEIGHT } from "./Nav";
+import { NAV_HEIGHT, NAV_HEIGHT_OFFSET } from "./Nav";
 
 type ValidTransactionToastProps = {
   txId: string;
@@ -57,7 +57,7 @@ const Home = () => {
       <div
         style={{
           zIndex: 22,
-          paddingTop: NAV_HEIGHT,
+          paddingTop: NAV_HEIGHT_OFFSET,
         }}
         className={`${BASIC_HOME_STYLE}`}
       >
@@ -72,7 +72,7 @@ const Home = () => {
           style={{ marginBottom: "140px" }}
           className="flex flex-col md:flex-row items-center gap-10 "
         >
-          <div className="border flex border-warmGray-300 p-6 justify-center rounded-lg relative gap-2.5">
+          <div className="border flex border-warmGray-300 max-w-[280px] p-6 justify-center rounded-lg relative gap-2.5">
             <div className="flex flex-row">
               <Image
                 src={"/images/StxLogo.png"}
@@ -89,20 +89,20 @@ const Home = () => {
 
             <div className="flex gap-2 items-center">
               <div className=" bg-[#727272] w-1 h-full"></div>
-              <h1 className="h-[42px]  text-lightYellow text-2xl font-regular font-bold leading-[42px] leading-[-0.025em]">
+              <h1 className="h-[42px]  text-lightYellow text-lg  md:text-2xl font-regular font-bold leading-[-0.015em]">
                 10.3 MILLION
               </h1>
             </div>
           </div>
-          <div className="border flex border-[#504E4E] bg-gradient-to-b from-lightGreen to-darkGreen h-[88px] w-[354px] rounded-lg relative">
+          <div className="border flex border-[#504E4E] bg-gradient-to-b from-lightGreen to-darkGreen h-[88px] w-[310px] rounded-lg relative">
             <div className="flex items-center ">
               <h2 className="flex pl-[25px] h-[42px] w-[110px] items-center text-trueGray-50 text-[14px] font-regular">
                 Total REAT <br></br>Tokens Won
               </h2>
             </div>
-            <div className="flex items-center">
+            <div className="flex row items-center justify-center">
               <div className="border border-trueGray-500 pl-[13px] w-[65px] left-[413px] top-[911px] rotate-90"></div>
-              <h1 className="w-[187px] h-[42px] left-[428px] top-[858px] text-2xl font-regular font-bold leading-[42px] leading-[-0.025em]">
+              <h1 className="w-[120px] md:w-[200px] text-xl md:text-2xl font-regular font-bold leading-[-0.025em]">
                 150 MILLION
               </h1>
             </div>

@@ -1,4 +1,4 @@
-import { TitleHeader } from "./Title";
+import { ModelTitle, TitleHeader } from "./Title";
 import Text, { BodySubText, NavText, TextHeader, TextTypes } from "./Text";
 import { NAV_HEIGHT_OFFSET } from "./Nav";
 import { BASIC_HOME_STYLE } from "./Home";
@@ -15,7 +15,7 @@ import { ToastContainer } from "react-toastify";
 import { isMobile } from "react-device-detect";
 
 const Claim = () => {
-  const { pools, _pools, senderAddress } = useAppState();
+  const { pools, _pools, senderAddress, stakingHistory } = useAppState();
   useEffect(() => {
     fetchPoolsHelper();
   }, []);
@@ -53,6 +53,21 @@ const Claim = () => {
       .map((pool) => {
         return <PoolTile key={pool.id} {...pool} />;
       });
+  };
+
+  const renderStakingHistory = () => {
+    return stakingHistory.map((item, index) => {
+      return (
+        <StackingHistoryTile
+          key={index}
+          cycle={item.cycle}
+          stacked={item.stacked}
+          startBlock={item.startBlock}
+          stxEarned={item.stxEarned}
+          completionBlock={item.completionBlock}
+        />
+      );
+    });
   };
 
   return (
@@ -122,7 +137,17 @@ const Claim = () => {
                   height: "0px",
                 }}
               />
-              <StakingHistory />
+              <div className="flex flex-col w-full gap-5 mt-6">
+                <>
+                  {renderStakingHistory()}
+                  {stakingHistory.length === 0 && (
+                    <div className="flex flex-col w-full items-center text-center gap-5">
+                      <ModelTitle>No Stacking History</ModelTitle>
+                      <ModelTitle>Stack some REAT to get started</ModelTitle>
+                    </div>
+                  )}
+                </>
+              </div>
             </div>
           </div>
         </div>

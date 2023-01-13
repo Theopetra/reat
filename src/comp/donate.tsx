@@ -16,7 +16,7 @@ import StartPool from "./Models/StartPool";
 import PoolTile from "./PoolTile";
 import { useEffect, useState } from "react";
 import { fetchPrincipalStxBalance } from "../utils/stxHelperFuncs";
-import { STX_MULTIPLE } from "../utils/stx";
+import { blocksAPI, STX_MULTIPLE } from "../utils/stx";
 import { isMobile } from "react-device-detect";
 import MineNextBlock from "./Models/MineBlocks";
 type Tile = {
@@ -49,7 +49,7 @@ enum POOL_FILTER {
   COMPLETED = "Completed",
 }
 const Donate = () => {
-  const { pools, senderAddress } = useAppState();
+  const { pools, senderAddress, _currentBlockHeight } = useAppState();
 
   const [stxBalance, setStxBalance] = useState<null | number>(null);
 
@@ -60,8 +60,19 @@ const Donate = () => {
   console.log("selectedPoolFilter", selectedPoolFilter);
   useEffect(() => {
     handleFetchingPrincipalBalance();
+    fetchLatestBlock();
   }, [senderAddress]);
 
+  const fetchLatestBlock = async () => {
+    try {
+      const blockList = await blocksAPI.getBlockList({});
+      if (blockList.results.length > 0) {
+        _currentBlockHeight(blockList.results[0].height);
+      }
+    } catch (err) {
+      console.log("err", err);
+    }
+  };
   const handleFetchingPrincipalBalance = async () => {
     try {
       if (senderAddress) {

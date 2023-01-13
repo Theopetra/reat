@@ -110,7 +110,9 @@ const Nav = () => {
         )}
 
         {!authenticated && (
-          <NavButton onClick={() => handleAuth()}>Connect</NavButton>
+          <NavButton customClass="mt-4 md:mt-0" onClick={() => handleAuth()}>
+            Connect
+          </NavButton>
         )}
       </div>
     </div>

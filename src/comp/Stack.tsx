@@ -93,15 +93,23 @@ export const StackingHistoryTile = (props: StackingType) => {
     <div className="flex flex-row w-full  bg-lightBlack rounded-[20px] p-8">
       <StackingHisotryInfo title="Cycle" text={cycle} />
       <StackingHisotryInfo title="REAT Stacked" text={stacked} />
-      <StackingHisotryInfo
-        title="Start Block"
-        text={"#" + startBlock || "N/A"}
-      />
-      <StackingHisotryInfo
-        title="End Block"
-        text={startBlock ? "#" + (startBlock + 2100) : "N/A"}
-      />
-      <StackingHisotryInfo title="Completion" text={renderCompletion()} />
+      {!isMobile && (
+        <StackingHisotryInfo
+          title="Start Block"
+          text={"#" + startBlock || "N/A"}
+        />
+      )}
+      {!isMobile && (
+        <StackingHisotryInfo
+          title="End Block"
+          text={startBlock ? "#" + (startBlock + 2100) : "N/A"}
+        />
+      )}
+
+      {!isMobile && (
+        <StackingHisotryInfo title="Completion" text={renderCompletion()} />
+      )}
+
       <div
         className="flex flex-row items-center justify-center"
         style={{

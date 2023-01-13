@@ -64,34 +64,32 @@ const StakingHistory = () => {
   };
   return (
     <>
-      {!isMobile && (
-        <div className="flex flex-col w-full max-w-[1240px] items-center gap-20">
-          <div className="flex w-full flex-col items-center gap-6">
-            <div className="flex w-full flex-row items-center justify-between gap-10">
-              <TextHeader>Stacking History</TextHeader>
-            </div>
-            <div
-              style={{
-                border: "1px solid #F5F5F5",
-                width: "100%",
-                height: "0px",
-              }}
-            />
+      <div className="flex flex-col w-full max-w-[1240px] items-center gap-20">
+        <div className="flex w-full flex-col items-center gap-6">
+          <div className="flex w-full flex-row items-center justify-between gap-10">
+            <TextHeader>Stacking History</TextHeader>
+          </div>
+          <div
+            style={{
+              border: "1px solid #F5F5F5",
+              width: "100%",
+              height: "0px",
+            }}
+          />
 
-            <div className="flex flex-col w-full gap-5 mt-6">
-              <>
-                {renderStakingHistory()}
-                {stakingHistory.length === 0 && (
-                  <div className="flex flex-col w-full items-center text-center gap-5">
-                    <ModelTitle>No Stacking History</ModelTitle>
-                    <ModelTitle>Stack some REAT to get started</ModelTitle>
-                  </div>
-                )}
-              </>
-            </div>
+          <div className="flex flex-col w-full gap-5 mt-6">
+            <>
+              {renderStakingHistory()}
+              {stakingHistory.length === 0 && (
+                <div className="flex flex-col w-full items-center text-center gap-5">
+                  <ModelTitle>No Stacking History</ModelTitle>
+                  <ModelTitle>Stack some REAT to get started</ModelTitle>
+                </div>
+              )}
+            </>
           </div>
         </div>
-      )}
+      </div>
     </>
   );
 };
