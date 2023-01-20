@@ -31,7 +31,7 @@ type PoolInputType = {
 };
 
 const CreatePool = ({ closeToast }: ModelProps) => {
-  const { senderAddress, currentBlockHeight } = useAppState();
+  const { senderAddress, currentBlockHeight, authenticated } = useAppState();
 
   const [poolInput, setPoolInput] = useState<PoolInputType>({
     name: "",
@@ -79,6 +79,11 @@ const CreatePool = ({ closeToast }: ModelProps) => {
     setSubmitError("");
 
     // ensure that there are not errors in poolInputErrors before submitting
+    // ensure user is logged in
+    if (!authenticated) {
+      toast.error("Please log in to create a pool");
+      return;
+    }
     if (
       poolInputErrors.name !== "" ||
       poolInputErrors.fee !== "" ||

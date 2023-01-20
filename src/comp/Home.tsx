@@ -72,7 +72,7 @@ const Home = () => {
           style={{ marginBottom: "140px" }}
           className="flex flex-col md:flex-row items-center gap-10 "
         >
-          <div className="border flex border-warmGray-300 max-w-[280px] p-6 justify-center rounded-lg relative gap-2.5">
+          <div className="border flex border-warmGray-300 sm:max-w-[280px] md:max-w-[400px] p-6 justify-center rounded-lg relative gap-2.5">
             <div className="flex flex-row">
               <Image
                 src={"/images/StxLogo.png"}
@@ -94,7 +94,7 @@ const Home = () => {
               </h1>
             </div>
           </div>
-          <div className="border flex border-[#504E4E] bg-gradient-to-b from-lightGreen to-darkGreen h-[88px] w-[310px] rounded-lg relative">
+          <div className="border flex border-[#504E4E] bg-gradient-to-b from-lightGreen to-darkGreen h-[88px] sm:w-[310px] md:w-[360px] rounded-lg relative">
             <div className="flex items-center ">
               <h2 className="flex pl-[25px] h-[42px] w-[110px] items-center text-trueGray-50 text-[14px] font-regular">
                 Total REAT <br></br>Tokens Won
