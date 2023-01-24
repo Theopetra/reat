@@ -102,7 +102,7 @@ const StateLogic = (props: React.PropsWithChildren<{}>) => {
         // start block is the cycle index * 2100 + START_CYCLE_BLOCK
         const startBlock = d.cycle * 2100 + START_CYCLE_BLOCK;
         const completionBlock = (d.cycle + 1) * 2100 + START_CYCLE_BLOCK;
-        console.log("does this run");
+
         return {
           ...d,
           startBlock: startBlock,

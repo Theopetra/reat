@@ -15,7 +15,7 @@ const StakingHistory = () => {
   useEffect(() => {
     if (authenticated) {
       fetchStakingHistory();
-      fetchDonationHistory();
+      fetchUserDonationHistory();
     }
   }, []);
 
@@ -25,6 +25,7 @@ const StakingHistory = () => {
         const stakingHistory = await fetchPrincipalStakingHistory(
           senderAddress
         );
+        console.log("stakingHistory", stakingHistory);
       } else {
         console.log("No Princiapl Address");
       }
@@ -34,7 +35,7 @@ const StakingHistory = () => {
     }
   };
 
-  const fetchDonationHistory = async () => {
+  const fetchUserDonationHistory = async () => {
     try {
       if (senderAddress) {
         const donationHistory = await fetchUserPoolsData(senderAddress);

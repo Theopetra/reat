@@ -19,6 +19,7 @@ import { StackingType, useAppState } from "../state";
 import { fetchPrincipalTokenBalance } from "../utils/stxHelperFuncs";
 import { toast, ToastContainer } from "react-toastify";
 import ClaimStx from "./Models/ClaimStx";
+import { STX_MULTIPLE } from "../utils/stx";
 
 export const StackingHisotryInfo = ({ title, text }: ModelInfoProps) => {
   return (
@@ -61,7 +62,7 @@ const calculatStackingCompletionProgress = (
 
 export const StackingHistoryTile = (props: StackingType) => {
   const { currentBlockHeight } = useAppState();
-  console.log("StackingHistoryTile", props);
+
   const { cycle, stacked, startBlock, stxEarned, completionBlock } = props;
 
   const renderCompletion = () => {
@@ -141,14 +142,18 @@ const Stack = () => {
   const [totalToken, setTotalToken] = useState<null | number>(null);
 
   useEffect(() => {
-    //fetchPrincipalTotalToken();
+    fetchPrincipalTotalToken();
   }, [senderAddress]);
 
   const fetchPrincipalTotalToken = async () => {
     try {
       if (senderAddress) {
         const totalBalance = await fetchPrincipalTokenBalance(senderAddress);
-        console.log("totalBalance", totalBalance);
+
+        if (totalBalance && totalBalance.success) {
+          const balance = +totalBalance.value.value;
+          setTotalToken(Math.trunc(balance / STX_MULTIPLE));
+        }
       }
     } catch (err) {
       console.log("fetchPrincipalTotalToken", err);
@@ -173,11 +178,19 @@ const Stack = () => {
         }}
         className={`${BASIC_HOME_STYLE}`}
       >
-        <TitleHeader customClass="text-center">STACK</TitleHeader>
+        <div className="flex w-full flex-row items-center justify-between gap-10">
+          <TitleHeader customClass="text-center">STACK</TitleHeader>
+        </div>
+
         <div className="flex flex-col w-full max-w-[1140px] items-center gap-20">
           <div className="flex w-full flex-col items-center gap-6">
             <div className="flex w-full flex-row items-center justify-between gap-10">
               <TextHeader>Stack REAT. Earn STX.</TextHeader>
+              {totalToken && (
+                <TextHeader customClass="text-darkGreen">
+                  {`${totalToken} Available STX`}
+                </TextHeader>
+              )}
             </div>
             <div
               style={{

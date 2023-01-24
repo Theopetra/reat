@@ -98,12 +98,13 @@ Fetch the amount of Reat in the user wallet
 */
 export const fetchPrincipalTokenBalance = async (principal: string) => {
   try {
+    console.log("principal", principal);
     const readOnlyCall = await callReadOnlyFunction({
       contractName: TOKEN_NAME,
       contractAddress: TOKEN_ADDRESS,
       functionName: "get-balance-of",
       functionArgs: [standardPrincipalCV(principal)],
-      senderAddress: "principal",
+      senderAddress: principal,
       network: NETWORK,
     });
 

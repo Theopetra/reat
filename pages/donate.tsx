@@ -34,7 +34,6 @@ export const getStaticProps: GetStaticProps = async () => {
 export const fetchPools = async () => {
   try {
     const fetchLatestPoolRes = await fetchLatestPool();
-    console.log("fetchLatestPoolRes", fetchLatestPoolRes);
 
     let totalPools = [];
     if (fetchLatestPoolRes.value && fetchLatestPoolRes.value.poolIndex) {
@@ -44,7 +43,7 @@ export const fetchPools = async () => {
         totalPools.push(i);
       }
     }
-    console.log("totalPools", totalPools);
+
     const pools: POOL_TYPE[] = [];
 
     for (const pool of totalPools) {

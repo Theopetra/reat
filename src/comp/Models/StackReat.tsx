@@ -109,6 +109,9 @@ export const StackReatModel = ({
         onFinish: (data: any) => {
           //handleValidTrans();
           handleSuccessModel(data.txId);
+          if (closeToast) {
+            closeToast();
+          }
 
           return;
         },

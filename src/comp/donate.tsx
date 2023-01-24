@@ -3,6 +3,7 @@ import Text, { TextHeader, TextTypes } from "./Text";
 import Image from "next/image";
 import { ModelTitle, TitleHeader } from "./Title";
 import { NAV_HEIGHT_OFFSET } from "./Nav";
+import { io } from "socket.io-client";
 
 import { BASIC_HOME_STYLE } from "./Home";
 import { FilterButton, TileButton } from "./Button";
@@ -19,6 +20,7 @@ import { fetchPrincipalStxBalance } from "../utils/stxHelperFuncs";
 import { blocksAPI, STX_MULTIPLE } from "../utils/stx";
 import { isMobile } from "react-device-detect";
 import MineNextBlock from "./Models/MineBlocks";
+import SubComp from "./BlockSub";
 type Tile = {
   icon: any;
   title: string;
@@ -57,7 +59,6 @@ const Donate = () => {
     POOL_FILTER.ALL
   );
 
-  console.log("selectedPoolFilter", selectedPoolFilter);
   useEffect(() => {
     handleFetchingPrincipalBalance();
     fetchLatestBlock();
@@ -77,7 +78,7 @@ const Donate = () => {
     try {
       if (senderAddress) {
         const totalStx = await fetchPrincipalStxBalance(senderAddress);
-        console.log("totalStx", totalStx);
+
         const stx = Math.trunc(totalStx / STX_MULTIPLE);
         setStxBalance(stx);
       }
@@ -85,6 +86,7 @@ const Donate = () => {
       console.log("err", err);
     }
   };
+
   /*
   const handleToast = (props: ToastShowProp) => {
     toast(({ closeToast }) => <props.ToastComp closeToast={closeToast} />, {
@@ -154,7 +156,6 @@ const Donate = () => {
       }
     });
 
-    console.log("filterPools", filterPools);
     return filterPools.map((pool) => {
       //console.log("pool", pool);
       return <PoolTile key={pool.id} {...pool} />;
@@ -181,82 +182,86 @@ const Donate = () => {
   };
   //console.log("pools", pools);
   return (
-    <div className="bg-black">
-      <ToastContainer
-        style={{
-          minWidth: isMobile ? "300px" : "450px",
-          backgroundColor: "transparent",
-          boxShadow: "none",
-        }}
-        enableMultiContainer={false}
-      />
-      <div className="donateLanding" />
-      <div className="landingOverlay" />
-      <div
-        style={{
-          zIndex: 22,
-          paddingTop: NAV_HEIGHT_OFFSET,
-        }}
-        className={`${BASIC_HOME_STYLE}`}
-      >
-        <TitleHeader customClass="text-center">DONATE</TitleHeader>
-        <TileButton onClick={() => createPool()} customClass="px-12">
-          Admin Create Pool
-        </TileButton>
-        <TileButton onClick={() => mineNextBlock()} customClass="px-12">
-          Admin Mine Blocks
-        </TileButton>
-        <TrendingPool totalStx={stxBalance} />
-        <div className="flex flex-col w-full max-w-[1140px] items-center gap-20">
-          <div className="flex w-full flex-col items-center gap-6">
-            <div className="flex w-full flex-col md:flex-row items-center justify-between gap-10">
-              <div className="flex flex-row w-80 items-center justify-between ">
-                <TextHeader>Mining Pools</TextHeader>
-                <div
-                  style={{
-                    height: "40px",
-                    width: "1px",
-                    borderRadius: "8px",
-                    backgroundColor: "#fff",
-                  }}
-                />
-              </div>
+    <>
+      <SubComp />
 
-              <div className="flex md:px-10 flex-1 flex-row items-center  text-center justify-between gap-3 ">
-                {renderPoolFilterButtons()}
-              </div>
-            </div>
-            <div
-              style={{
-                border: "1px solid #F5F5F5",
-                width: "100%",
-                height: "0px",
-              }}
-            />
-          </div>
-          <div className="flex flex-col justify-center gap-12">
-            <div className="flex w-full flex-col lg:flex-row flex-wrap justify-center items-center gap-y-6 gap-x-5">
-              {renderPools()}
-              {pools.length === 0 && (
-                <div className="flex flex-col w-full items-center text-center gap-5">
-                  <ModelTitle>No Pools Created</ModelTitle>
-                  <ModelTitle>Create a Pool above</ModelTitle>
+      <div className="bg-black">
+        <ToastContainer
+          style={{
+            minWidth: isMobile ? "300px" : "450px",
+            backgroundColor: "transparent",
+            boxShadow: "none",
+          }}
+          enableMultiContainer={false}
+        />
+        <div className="donateLanding" />
+        <div className="landingOverlay" />
+        <div
+          style={{
+            zIndex: 22,
+            paddingTop: NAV_HEIGHT_OFFSET,
+          }}
+          className={`${BASIC_HOME_STYLE}`}
+        >
+          <TitleHeader customClass="text-center">DONATE</TitleHeader>
+          <TileButton onClick={() => createPool()} customClass="px-12">
+            Admin Create Pool
+          </TileButton>
+          <TileButton onClick={() => mineNextBlock()} customClass="px-12">
+            Admin Mine Blocks
+          </TileButton>
+          <TrendingPool totalStx={stxBalance} />
+          <div className="flex flex-col w-full max-w-[1140px] items-center gap-20">
+            <div className="flex w-full flex-col items-center gap-6">
+              <div className="flex w-full flex-col md:flex-row items-center justify-between gap-10">
+                <div className="flex flex-row w-80 items-center justify-between ">
+                  <TextHeader>Mining Pools</TextHeader>
+                  <div
+                    style={{
+                      height: "40px",
+                      width: "1px",
+                      borderRadius: "8px",
+                      backgroundColor: "#fff",
+                    }}
+                  />
                 </div>
-              )}
+
+                <div className="flex md:px-10 flex-1 flex-row items-center  text-center justify-between gap-3 ">
+                  {renderPoolFilterButtons()}
+                </div>
+              </div>
+              <div
+                style={{
+                  border: "1px solid #F5F5F5",
+                  width: "100%",
+                  height: "0px",
+                }}
+              />
+            </div>
+            <div className="flex flex-col justify-center gap-12">
+              <div className="flex w-full flex-col lg:flex-row flex-wrap justify-center items-center gap-y-6 gap-x-5">
+                {renderPools()}
+                {pools.length === 0 && (
+                  <div className="flex flex-col w-full items-center text-center gap-5">
+                    <ModelTitle>No Pools Created</ModelTitle>
+                    <ModelTitle>Create a Pool above</ModelTitle>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
+        <div
+          style={{
+            height: "80vh",
+            width: "100vw",
+          }}
+        >
+          <div className="donateLanding" />
+          <div className="landingOverlayFlip" />
+        </div>
       </div>
-      <div
-        style={{
-          height: "80vh",
-          width: "100vw",
-        }}
-      >
-        <div className="donateLanding" />
-        <div className="landingOverlayFlip" />
-      </div>
-    </div>
+    </>
   );
 };
 

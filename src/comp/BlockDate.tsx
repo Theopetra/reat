@@ -12,10 +12,10 @@ const BlockDate = function (block: number): string {
     if (block === 0) return null;
 
     const date = await fetchBlockDate(block);
-    console.log("date", date);
+
     if (date) {
       const local = new Date(date).toLocaleDateString();
-      console.log("local", local);
+
       setBlockDate(local);
     }
   };

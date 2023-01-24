@@ -31,9 +31,7 @@ const ConnectWallet = ({ children }: ConnectWalletType) => {
   useEffect(() => {
     const senderAddy = localStorage.getItem("principal");
     //const senderAddy = "SP329G766AV8Z01X9EEAHPDQ4WDJXT2A0XB383MGP";
-    console.log("senderAddy", senderAddy);
     if (senderAddy) {
-      console.log("does this run");
       _authenticated(true);
       _senderAddress(senderAddy);
     }
@@ -51,7 +49,6 @@ const ConnectWallet = ({ children }: ConnectWalletType) => {
         _Loading(true);
         let userData = STACKS_USER_SESSION.loadUserData();
 
-        console.log("userData", userData);
         const senderAddress = userData.profile.stxAddress.mainnet;
         //const senderAddress = "SP31WTJ415SNJM9H6202S3WK9AFQXQZMT48PESBQE";
         _authenticated(true);

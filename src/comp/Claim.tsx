@@ -11,14 +11,57 @@ import StakingHistory from "./StakingHisotry";
 import { useEffect } from "react";
 import { POOL_STATUS, useAppState } from "../state";
 import { fetchPools } from "../../pages/donate";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { isMobile } from "react-device-detect";
+import {
+  fetchPrincipalStakingHistory,
+  fetchUserPoolsData,
+} from "../utils/stxHelperFuncs";
 
 const Claim = () => {
-  const { pools, _pools, senderAddress, stakingHistory } = useAppState();
+  const { pools, _pools, senderAddress, stakingHistory, authenticated } =
+    useAppState();
   useEffect(() => {
-    fetchPoolsHelper();
+    //fetchPoolsHelper();
   }, []);
+
+  useEffect(() => {
+    if (authenticated) {
+      fetchStakingHistory();
+      fetchUserDonationHistory();
+    }
+  }, []);
+
+  const fetchStakingHistory = async () => {
+    try {
+      if (senderAddress) {
+        const stakingHistory = await fetchPrincipalStakingHistory(
+          senderAddress
+        );
+        console.log("stakingHistory", stakingHistory);
+      } else {
+        console.log("No Princiapl Address");
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error("Could not fetch Staking Hisotry");
+    }
+  };
+
+  const fetchUserDonationHistory = async () => {
+    try {
+      if (senderAddress) {
+        const donationHistory = await fetchUserPoolsData(senderAddress);
+        console.log("donationHistory", donationHistory);
+      } else {
+        console.log("No Princiapl Address");
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error("Could not fetch Donation Hisotry");
+    }
+  };
+
   const fetchPoolsHelper = async () => {
     try {
       const pools = await fetchPools();
