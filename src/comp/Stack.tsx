@@ -178,7 +178,7 @@ const Stack = () => {
         }}
         className={`${BASIC_HOME_STYLE}`}
       >
-        <div className="flex w-full flex-row items-center justify-between gap-10">
+        <div className="flex w-full flex-row items-center justify-center gap-10">
           <TitleHeader customClass="text-center">STACK</TitleHeader>
         </div>
 
