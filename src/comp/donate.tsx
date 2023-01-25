@@ -51,7 +51,8 @@ enum POOL_FILTER {
   COMPLETED = "Completed",
 }
 const Donate = () => {
-  const { pools, senderAddress, _currentBlockHeight } = useAppState();
+  const { pools, senderAddress, _currentBlockHeight, currentBlockHeight } =
+    useAppState();
 
   const [stxBalance, setStxBalance] = useState<null | number>(null);
 
@@ -180,7 +181,8 @@ const Donate = () => {
       );
     });
   };
-  //console.log("pools", pools);
+  console.log("pools", pools);
+  console.log("current block height", currentBlockHeight);
   return (
     <>
       <SubComp />

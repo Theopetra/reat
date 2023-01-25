@@ -82,7 +82,7 @@ const StateLogic = (props: React.PropsWithChildren<{}>) => {
   );
   const [authenticated, _authenticated] = useState<boolean>(false);
 
-  const [pools, _pools] = useState<POOL_TYPE[]>(INIT_STATE.pools);
+  const [pools, _poolsHelper] = useState<POOL_TYPE[]>(INIT_STATE.pools);
 
   const [currentBlockHeight, _currentBlockHeight] = useState<number>(0);
   const [currentBlockHeightIsoDate, _currentBlockHeightIsoDate] = useState<
@@ -114,58 +114,70 @@ const StateLogic = (props: React.PropsWithChildren<{}>) => {
     }
   }, [currentBlockHeight]);
 
+  const _pools = (pools: POOL_TYPE[]) => {
+    if (currentBlockHeight !== 0) {
+      const updatedPools = poolBlockStatusHelper(pools);
+      _poolsHelper(updatedPools);
+    } else {
+      _poolsHelper(pools);
+    }
+  };
+  const poolBlockStatusHelper = (poolsPre: POOL_TYPE[]): POOL_TYPE[] => {
+    const updatedPools = poolsPre.map((pool) => {
+      // started mining
+
+      if (
+        pool.startedMineHeight &&
+        currentBlockHeight <=
+          pool.startedMineHeight + BLOCKS_AFTER_START_TO_COMPLETE_MINE
+      ) {
+        return {
+          ...pool,
+          poolStatus: POOL_STATUS.MINING,
+        };
+      } else if (
+        pool.contributionStartHeight < currentBlockHeight &&
+        currentBlockHeight < pool.contributionEndHeight
+      ) {
+        // collecting
+        return {
+          ...pool,
+          poolStatus: POOL_STATUS.OPEN,
+        };
+      } else if (
+        currentBlockHeight > pool.contributionEndHeight &&
+        pool.startedMineHeight === null
+      ) {
+        return {
+          ...pool,
+          poolStatus: POOL_STATUS.READY,
+        };
+      } else if (
+        pool.startedMineHeight &&
+        currentBlockHeight >
+          pool.startedMineHeight + BLOCKS_AFTER_START_TO_COMPLETE_MINE
+      ) {
+        //completed
+        return {
+          ...pool,
+          poolStatus: POOL_STATUS.COMPLETE,
+        };
+      } else if (pool.contributionStartHeight > currentBlockHeight) {
+        return {
+          ...pool,
+          poolStatus: POOL_STATUS.PENDING,
+        };
+      } else {
+        return pool;
+      }
+    });
+
+    return updatedPools;
+  };
   useEffect(() => {
     if (currentBlockHeight) {
-      const updatedPools = pools.map((pool) => {
-        // started mining
-
-        if (
-          pool.startedMineHeight &&
-          currentBlockHeight <=
-            pool.startedMineHeight + BLOCKS_AFTER_START_TO_COMPLETE_MINE
-        ) {
-          return {
-            ...pool,
-            poolStatus: POOL_STATUS.MINING,
-          };
-        } else if (
-          pool.contributionStartHeight < currentBlockHeight &&
-          currentBlockHeight < pool.contributionEndHeight
-        ) {
-          // collecting
-          return {
-            ...pool,
-            poolStatus: POOL_STATUS.OPEN,
-          };
-        } else if (
-          currentBlockHeight > pool.contributionEndHeight &&
-          pool.startedMineHeight === null
-        ) {
-          return {
-            ...pool,
-            poolStatus: POOL_STATUS.READY,
-          };
-        } else if (
-          pool.startedMineHeight &&
-          currentBlockHeight >
-            pool.startedMineHeight + BLOCKS_AFTER_START_TO_COMPLETE_MINE
-        ) {
-          //completed
-          return {
-            ...pool,
-            poolStatus: POOL_STATUS.COMPLETE,
-          };
-        } else if (pool.contributionStartHeight > currentBlockHeight) {
-          return {
-            ...pool,
-            poolStatus: POOL_STATUS.PENDING,
-          };
-        } else {
-          return pool;
-        }
-      });
-
-      _pools(updatedPools);
+      const updatedPools = poolBlockStatusHelper(pools);
+      _poolsHelper(updatedPools);
     }
   }, [currentBlockHeight]);
 
