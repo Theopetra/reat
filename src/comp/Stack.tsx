@@ -188,7 +188,7 @@ const Stack = () => {
               <TextHeader>Stack REAT. Earn STX.</TextHeader>
               {totalToken && (
                 <TextHeader customClass="text-darkGreen">
-                  {`${totalToken} Available STX`}
+                  {`${totalToken} Available Tear`}
                 </TextHeader>
               )}
             </div>

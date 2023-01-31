@@ -91,9 +91,7 @@ const StateLogic = (props: React.PropsWithChildren<{}>) => {
 
   const [totalStx, _totalStx] = useState<number>(0);
 
-  const [stakingHistory, _stakingHistory] = useState<StackingType[]>(
-    MOCKED_STACKING_HISTORY
-  );
+  const [stakingHistory, _stakingHistory] = useState<StackingType[]>([]);
 
   useEffect(() => {
     if (stakingHistory.length > 0 && currentBlockHeight !== 0) {

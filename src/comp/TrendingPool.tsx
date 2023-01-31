@@ -13,6 +13,7 @@ import PoolOpen from "./Models/PoolOpen";
 import { PoolInfo, TOAST_CONFIG } from "./Models";
 import StartPool from "./Models/StartPool";
 import ClaimPool from "./Models/ClaimPool";
+import { STX_MULTIPLE } from "../utils/stx";
 
 type TrendingPoolsType = {
   totalStx: number | null;
@@ -232,22 +233,22 @@ const TrendingPool = ({ totalStx }: TrendingPoolsType) => {
             <Tile
               icon="/images/padlock.svg"
               title="Contributions Close"
-              text={pool.contributionEndHeight}
+              text={"#" + pool.contributionEndHeight}
             />
             <Tile
               icon="/images/block.svg"
               title="Starting Block"
-              text={pool.contributionStartHeight}
+              text={"#" + pool.contributionStartHeight}
             />
             <Tile
               icon="/images/StxLogo.png"
               title="Total STX Raised"
-              text={`${pool.totalContributions} STX`}
+              text={`${pool.totalContributions / STX_MULTIPLE} STX`}
             />
             <Tile
               icon="/images/user.svg"
               title="Your Contribution"
-              text={`${pool.totalContributions} STX`}
+              text={`0 STX`}
             />
             <Tile
               icon="/images/tags.svg"

@@ -37,8 +37,8 @@ export const fetchPrincipalStakingHistory = async (principal: string) => {
     const cleanAddy = `${principal.substring(0, 4)}...${principal.substring(
       principal.length - 4
     )}`;
-
-    toast.error(` ${cleanAddy} has no Staking history`);
+    console.log(` ${cleanAddy} has no Staking history`);
+    //toast.error(` ${cleanAddy} has no Staking history`);
     return null;
   }
 };
