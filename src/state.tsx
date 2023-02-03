@@ -134,8 +134,8 @@ const StateLogic = (props: React.PropsWithChildren<{}>) => {
           poolStatus: POOL_STATUS.MINING,
         };
       } else if (
-        pool.contributionStartHeight < currentBlockHeight &&
-        currentBlockHeight < pool.contributionEndHeight
+        pool.contributionStartHeight <= currentBlockHeight &&
+        currentBlockHeight <= pool.contributionEndHeight
       ) {
         // collecting
         return {
