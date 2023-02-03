@@ -1,28 +1,17 @@
 import { POOL_STATUS, POOL_TYPE, useAppState } from "../state";
-import Text, { BodySubText, TextHeader, TextTypes } from "./Text";
-import Image from "next/image";
-import { TitleHeader } from "./Title";
-import { NAV_HEIGHT, NAV_HEIGHT_OFFSET } from "./Nav";
+import Text, { TextTypes } from "./Text";
 
-import { BASIC_HOME_STYLE } from "./Home";
-import {
-  ButtonColors,
-  ButtonTypes,
-  ModelButton,
-  NavButton,
-  TileButton,
-  TileButtonGray,
-} from "./Button";
-import TrendingPool from "./TrendingPool";
+import { TileButton, TileButtonGray } from "./Button";
+
 import { toast } from "react-toastify";
 import { PoolInfo, TOAST_CONFIG } from "./Models";
 
-import CreatePool from "./Models/CreatePool";
 import PoolOpen from "./Models/PoolOpen";
 import StartPool from "./Models/StartPool";
 import { useConnect } from "@stacks/connect-react";
 import { STX_MULTIPLE } from "../utils/stx";
 import ClaimPool from "./Models/ClaimPool";
+import CancelPool from "./Models/CancelPool";
 
 const PoolTile = (pool: POOL_TYPE) => {
   const { senderAddress, authenticated } = useAppState();
@@ -69,6 +58,13 @@ const PoolTile = (pool: POOL_TYPE) => {
         TOAST_CONFIG
       );
     }
+  };
+
+  const handleDeletePool = (pool: POOL_TYPE) => {
+    toast(
+      ({ closeToast }) => <CancelPool pool={pool} closeToast={closeToast} />,
+      TOAST_CONFIG
+    );
   };
 
   return (
@@ -179,32 +175,6 @@ const PoolTile = (pool: POOL_TYPE) => {
             </Text>
           </div>
         </div>
-
-        {/*
-        pool.startedMineHeight && (
-          <div className="flex flex-row">
-            <div className="flex flex-1    flex-col items-start">
-              <Text customClass="text-lightGray" type={TextTypes.SubText}>
-                Mine Start
-              </Text>
-              <Text customClass="text-lightGray" type={TextTypes.SubText}>
-                {"#" + pool.startedMineHeight}
-              </Text>
-            </div>
-
-            <div className="flex flex-1 flex-col pl-16 items-start">
-              <Text customClass="text-lightGray" type={TextTypes.SubText}>
-                Claim Block
-              </Text>
-              <Text customClass="text-lightGray" type={TextTypes.SubText}>
-                {"#" +
-                  (pool.startedMineHeight +
-                    BLOCKS_AFTER_START_TO_COMPLETE_MINE)}
-              </Text>
-            </div>
-          </div>
-        )
-                  */}
       </div>
       {authenticated ? (
         <>
@@ -223,6 +193,14 @@ const PoolTile = (pool: POOL_TYPE) => {
               customClass="px-12"
             >
               Join Mining Pool
+            </TileButton>
+          )}
+          {pool.poolStatus === POOL_STATUS.OPEN && isOwner && (
+            <TileButton
+              onClick={() => handleDeletePool(pool)}
+              customClass="px-12"
+            >
+              CANCEL POOL
             </TileButton>
           )}
 

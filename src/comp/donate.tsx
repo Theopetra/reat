@@ -50,10 +50,13 @@ enum POOL_FILTER {
   CURRENTLY_MINING = "Currently Mining",
   COMPLETED = "Completed",
 }
-const Donate = () => {
+type DonateType = {
+  control: boolean;
+};
+const Donate = (props: DonateType) => {
   const { pools, senderAddress, _currentBlockHeight, currentBlockHeight } =
     useAppState();
-
+  const { control } = props;
   const [stxBalance, setStxBalance] = useState<null | number>(null);
 
   const [selectedPoolFilter, setSelectedPoolFilter] = useState<POOL_FILTER>(
@@ -183,6 +186,8 @@ const Donate = () => {
   };
   console.log("pools", pools);
   console.log("current block height", currentBlockHeight);
+  const [isAdmin, setIsAdmin] = useState(props.control);
+
   return (
     <>
       <SubComp />
@@ -206,13 +211,18 @@ const Donate = () => {
           className={`${BASIC_HOME_STYLE}`}
         >
           <TitleHeader customClass="text-center">DONATE</TitleHeader>
-          <TileButton onClick={() => createPool()} customClass="px-12">
-            Admin Create Pool
-          </TileButton>
-          <TileButton onClick={() => mineNextBlock()} customClass="px-12">
-            Admin Mine Blocks
-          </TileButton>
-          <TrendingPool totalStx={stxBalance} />
+          {control && isAdmin && (
+            <div className="flex flex-col gap-6">
+              <TileButton onClick={() => createPool()} customClass="px-12">
+                Admin Create Pool
+              </TileButton>
+              <TileButton onClick={() => mineNextBlock()} customClass="px-12">
+                Admin Mine Blocks
+              </TileButton>
+            </div>
+          )}
+
+          {/* <TrendingPool totalStx={stxBalance} /> */}
           <div className="flex flex-col w-full max-w-[1140px] items-center gap-20">
             <div className="flex w-full flex-col items-center gap-6">
               <div className="flex w-full flex-col md:flex-row items-center justify-between gap-10">

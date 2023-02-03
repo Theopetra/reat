@@ -17,6 +17,7 @@ import {
   fetchPrincipalStakingHistory,
   fetchUserPoolsData,
 } from "../utils/stxHelperFuncs";
+import { STX_MULTIPLE } from "../utils/stx";
 
 type DonationHisotry = {
   amountStx: number;
@@ -69,7 +70,7 @@ const Claim = () => {
 
               return {
                 amountStx: amountStx,
-                blockHeight: blockHeight,
+                blockHeight: blockHeight / STX_MULTIPLE,
               };
             }
           );
@@ -80,7 +81,7 @@ const Claim = () => {
             return [senderAddress, item.amountStx, item.blockHeight];
           });
           const csvHeaders = [
-            ["Principal", "Amount Micro Stx", "Block Height"],
+            ["Principal", "Amount Stx", "Block Height"],
             ...csvData,
           ];
           setCsvData(csvHeaders);

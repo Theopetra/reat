@@ -64,7 +64,7 @@ export const fetchPools = async () => {
     return [];
   }
 };
-const Donate: NextPage = ({
+const Control: NextPage = ({
   pools,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const { _pools } = useAppState();
@@ -82,10 +82,10 @@ const Donate: NextPage = ({
       </Head>
 
       <main>
-        <DonateHome control={false} />
+        <DonateHome control={true} />
       </main>
     </div>
   );
 };
 
-export default Donate;
+export default Control;

@@ -142,7 +142,7 @@ export const Footer = () => {
             }}
           />
           <NavText customClass="text-black">
-            Real Equity for America Today
+            Real Equality for America Today
           </NavText>
         </div>
 
