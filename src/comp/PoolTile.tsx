@@ -18,6 +18,7 @@ const PoolTile = (pool: POOL_TYPE) => {
   const { doOpenAuth } = useConnect();
 
   const isOwner = pool.poolOwner === senderAddress;
+  const isMember = pool.poolMembers.find((member) => member === senderAddress);
 
   const handleAuth = () => {
     doOpenAuth();
@@ -27,9 +28,6 @@ const PoolTile = (pool: POOL_TYPE) => {
     const isOwner = pool.poolOwner === senderAddress;
 
     // check senderAddress can be found in pool.poolMembers
-    const isMember = pool.poolMembers.find(
-      (member) => member === senderAddress
-    );
 
     if (pool.poolStatus === POOL_STATUS.OPEN) {
       toast(
@@ -37,7 +35,7 @@ const PoolTile = (pool: POOL_TYPE) => {
         TOAST_CONFIG
       );
       return null;
-    } else if (pool.poolStatus === POOL_STATUS.READY && isOwner) {
+    } else if (pool.poolStatus === POOL_STATUS.READY) {
       toast(
         ({ closeToast }) => <StartPool pool={pool} closeToast={closeToast} />,
         TOAST_CONFIG
@@ -195,16 +193,17 @@ const PoolTile = (pool: POOL_TYPE) => {
               Join Mining Pool
             </TileButton>
           )}
-          {pool.poolStatus === POOL_STATUS.OPEN && isOwner && (
-            <TileButton
-              onClick={() => handleDeletePool(pool)}
-              customClass="px-12"
-            >
-              CANCEL POOL
-            </TileButton>
-          )}
+          {pool.poolStatus === POOL_STATUS.OPEN ||
+            (pool.poolStatus === POOL_STATUS.READY && isOwner && (
+              <TileButton
+                onClick={() => handleDeletePool(pool)}
+                customClass="px-12"
+              >
+                CANCEL POOL
+              </TileButton>
+            ))}
 
-          {pool.poolStatus === POOL_STATUS.COMPLETE && (
+          {pool.poolStatus === POOL_STATUS.COMPLETE && isMember && (
             <TileButton
               onClick={() => handleTileClick(pool)}
               customClass="px-12"
@@ -213,7 +212,9 @@ const PoolTile = (pool: POOL_TYPE) => {
             </TileButton>
           )}
 
-          {(pool.poolStatus === POOL_STATUS.UNKNOWN ||
+          {((pool.poolStatus === POOL_STATUS.COMPLETE &&
+            isMember === undefined) ||
+            pool.poolStatus === POOL_STATUS.UNKNOWN ||
             pool.poolStatus === POOL_STATUS.MINING ||
             pool.poolStatus === POOL_STATUS.PENDING ||
             (pool.poolStatus === POOL_STATUS.READY && !isOwner)) && (

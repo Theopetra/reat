@@ -20,7 +20,6 @@ import { fetchPrincipalStxBalance } from "../utils/stxHelperFuncs";
 import { blocksAPI, STX_MULTIPLE } from "../utils/stx";
 import { isMobile } from "react-device-detect";
 import MineNextBlock from "./Models/MineBlocks";
-import SubComp from "./BlockSub";
 type Tile = {
   icon: any;
   title: string;
@@ -63,6 +62,8 @@ const Donate = (props: DonateType) => {
     POOL_FILTER.ALL
   );
 
+  const [isAdmin, setIsAdmin] = useState(props.control);
+
   useEffect(() => {
     handleFetchingPrincipalBalance();
     fetchLatestBlock();
@@ -90,22 +91,6 @@ const Donate = (props: DonateType) => {
       console.log("err", err);
     }
   };
-
-  /*
-  const handleToast = (props: ToastShowProp) => {
-    toast(({ closeToast }) => <props.ToastComp closeToast={closeToast} />, {
-      autoClose: false,
-      hideProgressBar: true,
-      style: {
-        backgroundColor: "transparent",
-      },
-      draggable: false,
-      closeOnClick: false,
-      closeButton: true,
-      position: "top-center",
-    });
-  };
-  */
 
   const mineNextBlock = () => {
     toast(({ closeToast }) => <MineNextBlock closeToast={closeToast} />, {
@@ -184,14 +169,9 @@ const Donate = (props: DonateType) => {
       );
     });
   };
-  console.log("pools", pools);
-  console.log("current block height", currentBlockHeight);
-  const [isAdmin, setIsAdmin] = useState(props.control);
 
   return (
     <>
-      <SubComp />
-
       <div className="bg-black">
         <ToastContainer
           style={{

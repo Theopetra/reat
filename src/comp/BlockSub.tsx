@@ -1,4 +1,5 @@
 import * as stacks from "@stacks/blockchain-api-client";
+import { StacksApiSocket } from "@stacks/blockchain-api-client";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 
@@ -17,13 +18,14 @@ const socket = io(socketUrl, {
 const SubComp = () => {
   const { _currentBlockHeight } = useAppState();
   useEffect(() => {
-    //handleSubscibeWeb();
+    handleSubscibeWeb();
     fetchLatestBlock();
   }, []);
 
-  /*
   const handleSubscibeWeb = async () => {
-    const sc = new stacks.StacksApiSocketClient(socket);
+    const sc = new stacks.StacksApiSocketClient(
+      socket as unknown as StacksApiSocket
+    );
     // //const wtf = new stacks.StacksApiWebSocketClient(socket);
 
     // const wsUrl = new URL('ws://stacks-node-api.mainnet.stacks.co/');
@@ -38,12 +40,15 @@ const SubComp = () => {
     //void run();
 
     sc.socket.on("connect", () => {
+      console.log("connected");
       const engine = socket.io.engine;
 
-      engine.on("packet", ({ type, data }) => {
+      engine.on("packet", (thing) => {
         // called for each packet received
-        console.log("type", type);
-        if (type !== "ping") {
+
+        console.log("type", thing.type);
+        console.log("data", thing);
+        if (thing.type !== "ping") {
           // console.log("data", data);
           // console.log("data thigns", data[1]);
           // console.log("data[1].height", data[1].height);
@@ -62,7 +67,6 @@ const SubComp = () => {
       });
     });
   };
-  */
 
   const fetchLatestBlock = async () => {
     try {

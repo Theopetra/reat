@@ -13,7 +13,12 @@ import {
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { POOL_TYPE, useAppState } from "../../state";
-import { POOL_ADDRESS, POOL_NAME, STX_MULTIPLE } from "../../utils/stx";
+import {
+  MIN_BLOCK_CONFIRMS_TO_CLAIM_REWARD,
+  POOL_ADDRESS,
+  POOL_NAME,
+  STX_MULTIPLE,
+} from "../../utils/stx";
 import { ModelButton, TileButton, ButtonColors, ButtonTypes } from "../Button";
 import {
   ModelInfo,
@@ -116,7 +121,11 @@ const StartPool = ({ closeToast, pool }: PoolOpenType) => {
         />
         <ModelInfo
           title="Claim Date"
-          text={pool.startedMineHeight ? pool.startedMineHeight + 200 : "N/A"}
+          text={
+            pool.startedMineHeight
+              ? pool.startedMineHeight + MIN_BLOCK_CONFIRMS_TO_CLAIM_REWARD
+              : "N/A"
+          }
         />
         <ModelInfo title="Contributors" text={pool.poolMembers.length + ""} />
         <ModelInfo

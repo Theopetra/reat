@@ -1,6 +1,6 @@
 import { ColorRing } from "react-loader-spinner";
 import { useAppState } from "../state";
-import { STX_MULTIPLE } from "../utils/stx";
+import { MIN_BLOCK_CONFIRMS_TO_CLAIM_REWARD, STX_MULTIPLE } from "../utils/stx";
 import { ModelButton, TileButton, ButtonColors, ButtonTypes } from "./Button";
 import { PoolOpenType } from "./Models/PoolOpen";
 import Text, { BodySubText, NavText, TextTypes } from "./Text";
@@ -177,7 +177,8 @@ export const UnStackReat = ({ closeToast }: ModelProps) => {
 };
 */
 
-export const BLOCKS_AFTER_START_TO_COMPLETE_MINE = 300;
+export const BLOCKS_AFTER_START_TO_COMPLETE_MINE =
+  MIN_BLOCK_CONFIRMS_TO_CLAIM_REWARD;
 
 export const calculatCompletionProgress = (
   currentBlock: number,

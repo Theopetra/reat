@@ -66,6 +66,7 @@ export enum POOL_STATUS {
   COMPLETE = "COMPLETE",
   UNKNOWN = "UNKNOWN",
   PENDING = "PENDING",
+  CLAIMED = "CLAIMED",
 }
 const INIT_STATE = {
   senderAddress: undefined,
@@ -149,6 +150,17 @@ const StateLogic = (props: React.PropsWithChildren<{}>) => {
         return {
           ...pool,
           poolStatus: POOL_STATUS.READY,
+        };
+      } else if (
+        pool.startedMineHeight &&
+        pool.totalCoinsWon !== null &&
+        currentBlockHeight >
+          pool.startedMineHeight + BLOCKS_AFTER_START_TO_COMPLETE_MINE
+      ) {
+        //CLAIMED
+        return {
+          ...pool,
+          poolStatus: POOL_STATUS.CLAIMED,
         };
       } else if (
         pool.startedMineHeight &&
