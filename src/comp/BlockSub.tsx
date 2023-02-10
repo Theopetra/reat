@@ -46,9 +46,9 @@ const SubComp = () => {
       engine.on("packet", (thing) => {
         // called for each packet received
 
-        console.log("type", thing.type);
-        console.log("data", thing);
         if (thing.type !== "ping") {
+          console.log("type", thing.type);
+          console.log("data", thing);
           // console.log("data", data);
           // console.log("data thigns", data[1]);
           // console.log("data[1].height", data[1].height);

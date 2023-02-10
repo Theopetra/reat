@@ -79,18 +79,18 @@ export const CONFIG_BC_S = createConfig(DEFAULT_MAINNET_SERVER);
 export const blocksAPI = new BlocksApi(CONFIG_BC_S);
 
 // Pool Contract
-export const POOL_ADDRESS = "SP3D03X5BHMNSAAW71NN7BQRMV4DW2G4JB3MZAGJ8";
-export const POOL_NAME = "Tear-Pool-1";
+export const POOL_ADDRESS = "SP2DXSZE1J86N6K9RAN24KVZ1FTB35CBEX2CNHKWD";
+export const POOL_NAME = "tear-pool";
 
 // Token Contract
-export const TOKEN_ADDRESS = "SP3D03X5BHMNSAAW71NN7BQRMV4DW2G4JB3MZAGJ8";
-export const TOKEN_NAME = "Tear-Token-1";
+export const TOKEN_ADDRESS = "SP2DXSZE1J86N6K9RAN24KVZ1FTB35CBEX2CNHKWD";
+export const TOKEN_NAME = "tear-token";
 export const TOKEN_ID = "uTEAR";
 
 // Mining Staking Contract
 export const MINING_STAKING_ADDRESS =
-  "SP3D03X5BHMNSAAW71NN7BQRMV4DW2G4JB3MZAGJ8";
-export const MINING_STAKING_NAME = "Tear-Mining-Staking-1";
+  "SP2DXSZE1J86N6K9RAN24KVZ1FTB35CBEX2CNHKWD";
+export const MINING_STAKING_NAME = "tear-mining-staking";
 
 export const fetchPool = async (poolId: number) => {
   try {

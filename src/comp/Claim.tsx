@@ -65,12 +65,14 @@ const Claim = () => {
           const unparsedHistory = donationHistory.value.value as any[];
           const parsedHistory: DonationHisotry[] = unparsedHistory.map(
             (item) => {
+              console.log("itme", item);
               const amountStx = parseInt(item.value.amountUstx.value, 10);
-              const blockHeight = parseInt(item.value.block.value, 10);
+              console.log("item.value.block.value", item.value.block.value);
+              const blockHeight = +item.value.block.value;
 
               return {
-                amountStx: amountStx,
-                blockHeight: blockHeight / STX_MULTIPLE,
+                amountStx: amountStx / STX_MULTIPLE,
+                blockHeight: blockHeight,
               };
             }
           );
