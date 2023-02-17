@@ -195,6 +195,7 @@ const MineNextBlock = ({ closeToast }: ModelProps) => {
           <ModelButton
             type={ButtonTypes.Nav}
             color={ButtonColors.YelloGradient}
+            customClass="max-w-[74px]"
           >
             MAX
           </ModelButton>

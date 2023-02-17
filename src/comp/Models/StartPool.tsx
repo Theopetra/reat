@@ -61,6 +61,10 @@ const StartPool = ({ closeToast, pool }: PoolOpenType) => {
   // handle submit items
   const handleSubmit = async () => {
     try {
+      if (pool.totalContributions <= 0) {
+        toast.error("Pool must have at least one contribution to start");
+        return;
+      }
       const args = [uintCV(pool.id)];
 
       const txOptions: any = {

@@ -194,11 +194,7 @@ const Claim = () => {
             </div>
           </div>
           <div className="flex flex-col gap-12">
-            <div className="flex w-full flex-row justify-between items-center gap-6">
-              {/* <PoolTile />
-              <PoolTile />
-              <PoolTile /> */}
-            </div>
+            <div className="flex w-full flex-row justify-between items-center gap-6"></div>
           </div>
           <div className="flex self-start flex-row items-start">
             {donationHistory.length > 0 && (

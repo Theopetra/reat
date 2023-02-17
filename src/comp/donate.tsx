@@ -44,7 +44,6 @@ export const Tile = ({ icon, title, text }: Tile) => {
 };
 
 enum POOL_FILTER {
-  ALL = "All",
   OPEN = "Open",
   CURRENTLY_MINING = "Currently Mining",
   COMPLETED = "Completed",
@@ -59,7 +58,7 @@ const Donate = (props: DonateType) => {
   const [stxBalance, setStxBalance] = useState<null | number>(null);
 
   const [selectedPoolFilter, setSelectedPoolFilter] = useState<POOL_FILTER>(
-    POOL_FILTER.ALL
+    POOL_FILTER.OPEN
   );
 
   const [isAdmin, setIsAdmin] = useState(props.control);
@@ -123,9 +122,7 @@ const Donate = (props: DonateType) => {
   const renderPools = () => {
     //console.log("render pools", pools);
     const filterPools = pools.filter((pool) => {
-      if (selectedPoolFilter === POOL_FILTER.ALL) {
-        return true;
-      } else if (
+      if (
         selectedPoolFilter === POOL_FILTER.OPEN &&
         pool.poolStatus === POOL_STATUS.OPEN
       ) {

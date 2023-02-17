@@ -120,7 +120,7 @@ const CancelPool = ({ closeToast, pool }: PoolOpenType) => {
           color={ButtonColors.YelloGradient}
           onClick={() => handleSubmit()}
         >
-          {`CANCEL ${pool.name}`}
+          CANCEL POOL
         </ModelButton>
       </div>
     </div>

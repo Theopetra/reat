@@ -302,6 +302,7 @@ const StackReat = () => {
           <ModelButton
             type={ButtonTypes.Nav}
             color={ButtonColors.GreenGradient}
+            customClass="max-w-[74px]"
           >
             MAX
           </ModelButton>
