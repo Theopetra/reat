@@ -6,14 +6,15 @@ import { BASIC_HOME_STYLE } from "./Home";
 import { CSVLink, CSVDownload } from "react-csv";
 
 import { StackingHistoryTile } from "./Stack";
-import PoolTile from "./PoolTile";
+import PoolTile, { DonateHistoryTile } from "./PoolTile";
 import StakingHistory from "./StakingHisotry";
 import { useEffect, useState } from "react";
-import { POOL_STATUS, useAppState } from "../state";
+import { POOL_STATUS, POOL_TYPE, useAppState } from "../state";
 import { fetchPools } from "../../pages/donate";
 import { toast, ToastContainer } from "react-toastify";
 import { isMobile } from "react-device-detect";
 import {
+  fetchPoolHisotry,
   fetchPrincipalStakingHistory,
   fetchUserPoolsData,
 } from "../utils/stxHelperFuncs";
@@ -23,30 +24,61 @@ type DonationHisotry = {
   amountStx: number;
   blockHeight: number;
 };
+
+export type MINING_HISTORY = {
+  poolId: number;
+  date: string;
+  amount: number;
+};
+
+export type MINING_HISTORY_TYPE = MINING_HISTORY & {
+  pool: POOL_TYPE;
+};
 const Claim = () => {
   const [donationHistory, setDonationHistory] = useState<DonationHisotry[]>([]);
   const [csvData, setCsvData] = useState<any[]>([]);
 
   const { pools, _pools, senderAddress, stakingHistory, authenticated } =
     useAppState();
-  useEffect(() => {
-    //fetchPoolsHelper();
-  }, []);
+
+  const [userMiningHistory, _userMiningHistory] = useState<MINING_HISTORY[]>(
+    []
+  );
 
   useEffect(() => {
     if (authenticated) {
-      fetchStakingHistory();
-      fetchUserDonationHistory();
+      //fetchStakingHistory();
+      //fetchUserDonationHistory();
     }
   }, []);
 
+  useEffect(() => {
+    if (senderAddress) {
+      if (userMiningHistory.length === 0 && pools.length > 0) {
+        hanldeFetchingTHings();
+      }
+    }
+  }, [senderAddress]);
+
+  const hanldeFetchingTHings = async () => {
+    try {
+      if (senderAddress) {
+        const shems = await fetchPoolHisotry(senderAddress);
+
+        _userMiningHistory(shems);
+      } else {
+        console.log("No Princiapl Address");
+      }
+    } catch (err) {
+      console.log("hanldeFetchingTHings - err", err);
+    }
+  };
   const fetchStakingHistory = async () => {
     try {
       if (senderAddress) {
         const stakingHistory = await fetchPrincipalStakingHistory(
           senderAddress
         );
-        console.log("stakingHistory", stakingHistory);
       } else {
         console.log("No Princiapl Address");
       }
@@ -65,7 +97,6 @@ const Claim = () => {
           const unparsedHistory = donationHistory.value.value as any[];
           const parsedHistory: DonationHisotry[] = unparsedHistory.map(
             (item) => {
-              console.log("itme", item);
               const amountStx = parseInt(item.value.amountUstx.value, 10);
               console.log("item.value.block.value", item.value.block.value);
               const blockHeight = +item.value.block.value;
@@ -76,7 +107,7 @@ const Claim = () => {
               };
             }
           );
-          console.log("parsedHistory", parsedHistory);
+          //console.log("parsedHistory", parsedHistory);
           setDonationHistory(parsedHistory);
 
           const csvData = parsedHistory.map((item) => {
@@ -110,27 +141,18 @@ const Claim = () => {
   };
 
   const renderClaimPoolTiles = () => {
-    return pools
-      .filter((pool) => {
-        if (senderAddress) {
-          const isOwner = pool.poolOwner === senderAddress;
-
-          // check senderAddress can be found in pool.poolMembers
-          const isMember = pool.poolMembers.find(
-            (member) => member === senderAddress
-          );
-
-          if (
-            pool.poolStatus === POOL_STATUS.COMPLETE &&
-            (isMember || isOwner)
-          ) {
-            return true;
-          } else return false;
-        } else return false;
-      })
-      .map((pool) => {
-        return <PoolTile key={pool.id} {...pool} />;
-      });
+    return userMiningHistory.map((item, index) => {
+      const pool = pools.find((pool) => pool.id === item.poolId);
+      if (pool) {
+        const dataForComp = {
+          ...item,
+          pool: pool,
+        };
+        return <DonateHistoryTile key={index} {...dataForComp} />;
+      } else {
+        return null;
+      }
+    });
   };
 
   const renderStakingHistory = () => {
@@ -183,7 +205,7 @@ const Claim = () => {
                 height: "0px",
               }}
             />
-            <div className="flex px-10 flex-1 flex-row items-center justify-between gap-3 ">
+            <div className="flex w-full flex-col lg:flex-row flex-wrap justify-center items-center gap-y-6 gap-x-5 ">
               {renderClaimPoolTiles()}
               {pools.length === 0 && (
                 <div className="flex flex-col w-full items-center text-center gap-5">
