@@ -47,6 +47,7 @@ enum POOL_FILTER {
   OPEN = "Open",
   CURRENTLY_MINING = "Currently Mining",
   COMPLETED = "Completed",
+  READY = "Ready",
 }
 type DonateType = {
   control: boolean;
@@ -137,6 +138,11 @@ const Donate = (props: DonateType) => {
         pool.poolStatus === POOL_STATUS.COMPLETE
       ) {
         return true;
+      } else if (
+        selectedPoolFilter === POOL_FILTER.READY &&
+        pool.poolStatus === POOL_STATUS.READY
+      ) {
+        return true;
       } else {
         return false;
       }
@@ -167,6 +173,7 @@ const Donate = (props: DonateType) => {
     });
   };
 
+  console.log("pools", pools);
   return (
     <>
       <div className="bg-black">
