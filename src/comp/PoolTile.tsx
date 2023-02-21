@@ -36,7 +36,7 @@ const PoolTile = (pool: POOL_TYPE) => {
         TOAST_CONFIG
       );
       return null;
-    } else if (pool.poolStatus === POOL_STATUS.READY) {
+    } else if (pool.poolStatus === POOL_STATUS.READY && isOwner) {
       toast(
         ({ closeToast }) => <StartPool pool={pool} closeToast={closeToast} />,
         TOAST_CONFIG
