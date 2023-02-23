@@ -20,6 +20,7 @@ type BasicNFTHoldingResType = {
 
 const STACKS_API = "https://stacks-node-api.mainnet.stacks.co/";
 
+type what = {};
 type ConnectWalletType = {
   children: React.ReactNode;
 };
