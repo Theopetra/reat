@@ -29,8 +29,8 @@ const ConnectWallet = ({ children }: ConnectWalletType) => {
   const [loading, _Loading] = useState<boolean>(false);
 
   useEffect(() => {
-    const senderAddy = localStorage.getItem("principal");
-    //const senderAddy = "SP329G766AV8Z01X9EEAHPDQ4WDJXT2A0XB383MGP";
+    //const senderAddy = localStorage.getItem("principal");
+    const senderAddy = "SP45EDJKSKGCZVDPN14210Y5RBRWV4MYKT3K6NVX";
     if (senderAddy) {
       _authenticated(true);
       _senderAddress(senderAddy);
