@@ -1,4 +1,9 @@
-import { POOL_STATUS, POOL_TYPE, useAppState } from "../state";
+import {
+  MINING_HISTORY_TYPE,
+  POOL_STATUS,
+  POOL_TYPE,
+  useAppState,
+} from "../state";
 import Text, { TextTypes } from "./Text";
 
 import { TileButton, TileButtonGray } from "./Button";
@@ -12,7 +17,6 @@ import { useConnect } from "@stacks/connect-react";
 import { STX_MULTIPLE } from "../utils/stx";
 import ClaimPool from "./Models/ClaimPool";
 import CancelPool from "./Models/CancelPool";
-import { MINING_HISTORY_TYPE } from "./Claim";
 
 const PoolTile = (pool: POOL_TYPE) => {
   const { senderAddress, authenticated } = useAppState();
@@ -194,7 +198,7 @@ const PoolTile = (pool: POOL_TYPE) => {
               Join Mining Pool
             </TileButton>
           )}
-          {pool.poolStatus === POOL_STATUS.OPEN ||
+          {/* {pool.poolStatus === POOL_STATUS.OPEN ||
             (pool.poolStatus === POOL_STATUS.READY && isOwner && (
               <TileButton
                 onClick={() => handleDeletePool(pool)}
@@ -202,7 +206,14 @@ const PoolTile = (pool: POOL_TYPE) => {
               >
                 CANCEL POOL
               </TileButton>
-            ))}
+            ))} */}
+
+          <TileButton
+            onClick={() => handleDeletePool(pool)}
+            customClass="px-12"
+          >
+            CANCEL POOL
+          </TileButton>
 
           {pool.poolStatus === POOL_STATUS.COMPLETE && isMember && (
             <TileButton

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { BLOCKS_AFTER_START_TO_COMPLETE_MINE } from "./comp/Models";
 import { START_CYCLE_BLOCK } from "./utils/stx";
+import { fetchPoolHisotry } from "./utils/stxHelperFuncs";
 
 export type StackingType = {
   cycle: number;
@@ -51,6 +52,7 @@ type INIT_STATE_TYPE = {
   currentBlockHeight: number;
   stakingHistory: StackingType[];
   currentBlockHeightIsoDate: string | null;
+  userMiningHistory: MINING_HISTORY[];
 
   _senderAddress: (address: string | undefined) => void;
   _authenticated: (authenticated: boolean) => void;
@@ -58,6 +60,7 @@ type INIT_STATE_TYPE = {
   _pools: (pool: POOL_TYPE[]) => void;
   _currentBlockHeight: (currentBlockHeight: number) => void;
   _currentBlockHeightIsoDate: (currentBlockHeightIsoDate: string) => void;
+  _userMiningHistory: (userMiningHistory: MINING_HISTORY[]) => void;
 };
 export enum POOL_STATUS {
   MINING = "MINING",
@@ -73,6 +76,16 @@ const INIT_STATE = {
   authenticated: false,
   pools: [],
   stakingHistory: [],
+};
+
+export type MINING_HISTORY = {
+  poolId: number;
+  date: string;
+  amount: number;
+};
+
+export type MINING_HISTORY_TYPE = MINING_HISTORY & {
+  pool: POOL_TYPE;
 };
 
 export const StateContext = createContext<INIT_STATE_TYPE>(null!);
@@ -94,6 +107,10 @@ const StateLogic = (props: React.PropsWithChildren<{}>) => {
 
   const [stakingHistory, _stakingHistory] = useState<StackingType[]>([]);
 
+  const [userMiningHistory, _userMiningHistory] = useState<MINING_HISTORY[]>(
+    []
+  );
+
   useEffect(() => {
     if (stakingHistory.length > 0 && currentBlockHeight !== 0) {
       const stackingInfo = stakingHistory.map((d, i) => {
@@ -112,6 +129,29 @@ const StateLogic = (props: React.PropsWithChildren<{}>) => {
       _stakingHistory(stackingInfo);
     }
   }, [currentBlockHeight]);
+
+  useEffect(() => {
+    if (senderAddress) {
+      if (userMiningHistory.length === 0 && pools.length > 0) {
+        hanldeFetchingTHings();
+      }
+    }
+  }, [senderAddress, pools, userMiningHistory]);
+
+  const hanldeFetchingTHings = async () => {
+    try {
+      if (senderAddress) {
+        const shems = await fetchPoolHisotry(senderAddress);
+        console.log("shems", shems);
+
+        _userMiningHistory(shems);
+      } else {
+        console.log("No Princiapl Address");
+      }
+    } catch (err) {
+      console.log("hanldeFetchingTHings - err", err);
+    }
+  };
 
   const _pools = (pools: POOL_TYPE[]) => {
     if (currentBlockHeight !== 0) {
@@ -212,6 +252,9 @@ const StateLogic = (props: React.PropsWithChildren<{}>) => {
 
     currentBlockHeightIsoDate,
     _currentBlockHeightIsoDate,
+
+    userMiningHistory,
+    _userMiningHistory,
   };
 
   return (

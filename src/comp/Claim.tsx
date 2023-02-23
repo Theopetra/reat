@@ -25,54 +25,20 @@ type DonationHisotry = {
   blockHeight: number;
 };
 
-export type MINING_HISTORY = {
-  poolId: number;
-  date: string;
-  amount: number;
-};
-
-export type MINING_HISTORY_TYPE = MINING_HISTORY & {
-  pool: POOL_TYPE;
-};
 const Claim = () => {
   const [donationHistory, setDonationHistory] = useState<DonationHisotry[]>([]);
   const [csvData, setCsvData] = useState<any[]>([]);
 
-  const { pools, _pools, senderAddress, stakingHistory, authenticated } =
-    useAppState();
+  const {
+    pools,
+    _pools,
+    senderAddress,
+    stakingHistory,
+    authenticated,
+    userMiningHistory,
+    _userMiningHistory,
+  } = useAppState();
 
-  const [userMiningHistory, _userMiningHistory] = useState<MINING_HISTORY[]>(
-    []
-  );
-
-  useEffect(() => {
-    if (authenticated) {
-      //fetchStakingHistory();
-      //fetchUserDonationHistory();
-    }
-  }, []);
-
-  useEffect(() => {
-    if (senderAddress) {
-      if (userMiningHistory.length === 0 && pools.length > 0) {
-        hanldeFetchingTHings();
-      }
-    }
-  }, [senderAddress]);
-
-  const hanldeFetchingTHings = async () => {
-    try {
-      if (senderAddress) {
-        const shems = await fetchPoolHisotry(senderAddress);
-
-        _userMiningHistory(shems);
-      } else {
-        console.log("No Princiapl Address");
-      }
-    } catch (err) {
-      console.log("hanldeFetchingTHings - err", err);
-    }
-  };
   const fetchStakingHistory = async () => {
     try {
       if (senderAddress) {

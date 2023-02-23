@@ -173,7 +173,6 @@ const Donate = (props: DonateType) => {
     });
   };
 
-  console.log("pools", pools);
   return (
     <>
       <div className="bg-black">

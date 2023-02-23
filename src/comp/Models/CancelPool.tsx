@@ -36,7 +36,7 @@ import { ModelTitle } from "../Title";
 import { PoolOpenType } from "./PoolOpen";
 
 const CancelPool = ({ closeToast, pool }: PoolOpenType) => {
-  const { senderAddress } = useAppState();
+  const { senderAddress, userMiningHistory } = useAppState();
   const handleSuccessModel = (txId: string) => {
     toast(
       ({ closeToast }) => (
@@ -63,6 +63,23 @@ const CancelPool = ({ closeToast, pool }: PoolOpenType) => {
 
   // handle submit items
   const handleSubmit = async () => {
+    const currentHistory = userMiningHistory.find(
+      (history) => history.poolId === pool.id
+    );
+    const pc = [];
+    if (currentHistory) {
+      const stxPostConditionCode = FungibleConditionCode.GreaterEqual;
+      const postConditionAmount = currentHistory.amount;
+
+      pc.push(
+        makeStandardSTXPostCondition(
+          senderAddress || "",
+          stxPostConditionCode,
+          postConditionAmount
+        )
+      );
+    }
+
     try {
       const args = [uintCV(pool.id)];
 
@@ -74,7 +91,7 @@ const CancelPool = ({ closeToast, pool }: PoolOpenType) => {
         senderKey: senderAddress,
         validateWithAbi: true,
         network: new StacksMainnet(),
-        postConditions: [],
+        postConditions: pc,
         anchorMode: AnchorMode.Any,
         onFinish: (data: any) => {
           //handleValidTrans();
@@ -98,6 +115,13 @@ const CancelPool = ({ closeToast, pool }: PoolOpenType) => {
       <div className="flex flex-row items-center justify-between">
         <ModelTitle>Cancel Pool </ModelTitle>
       </div>
+      <Text
+        customClass="text-red font-large text-lg"
+        type={TextTypes.BodySubText}
+      >
+        {pool.name}
+      </Text>
+
       <div
         style={{
           border: "1px solid #F5F5F5",
