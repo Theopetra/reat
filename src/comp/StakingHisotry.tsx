@@ -25,7 +25,6 @@ const StakingHistory = () => {
         const stakingHistory = await fetchPrincipalStakingHistory(
           senderAddress
         );
-        console.log("stakingHistory", stakingHistory);
       } else {
         console.log("No Princiapl Address");
       }

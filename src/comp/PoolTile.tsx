@@ -50,7 +50,6 @@ const PoolTile = (pool: POOL_TYPE) => {
       pool.poolStatus === POOL_STATUS.COMPLETE &&
       (isMember || isOwner)
     ) {
-      console.log("pool.poolStatus", pool);
       toast(
         ({ closeToast }) => <ClaimPool pool={pool} closeToast={closeToast} />,
         TOAST_CONFIG
@@ -198,7 +197,7 @@ const PoolTile = (pool: POOL_TYPE) => {
               Join Mining Pool
             </TileButton>
           )}
-          {/* {pool.poolStatus === POOL_STATUS.OPEN ||
+          {pool.poolStatus === POOL_STATUS.OPEN ||
             (pool.poolStatus === POOL_STATUS.READY && isOwner && (
               <TileButton
                 onClick={() => handleDeletePool(pool)}
@@ -206,14 +205,7 @@ const PoolTile = (pool: POOL_TYPE) => {
               >
                 CANCEL POOL
               </TileButton>
-            ))} */}
-
-          <TileButton
-            onClick={() => handleDeletePool(pool)}
-            customClass="px-12"
-          >
-            CANCEL POOL
-          </TileButton>
+            ))}
 
           {pool.poolStatus === POOL_STATUS.COMPLETE && isMember && (
             <TileButton

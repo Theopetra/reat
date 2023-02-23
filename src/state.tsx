@@ -142,7 +142,6 @@ const StateLogic = (props: React.PropsWithChildren<{}>) => {
     try {
       if (senderAddress) {
         const shems = await fetchPoolHisotry(senderAddress);
-        console.log("shems", shems);
 
         _userMiningHistory(shems);
       } else {
