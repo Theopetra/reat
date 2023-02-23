@@ -10,6 +10,7 @@ import {
   someCV,
   makeStandardSTXPostCondition,
   FungibleConditionCode,
+  PostConditionMode,
 } from "@stacks/transactions";
 
 import { useState } from "react";
@@ -91,8 +92,9 @@ const CancelPool = ({ closeToast, pool }: PoolOpenType) => {
         senderKey: senderAddress,
         validateWithAbi: true,
         network: new StacksMainnet(),
-        postConditions: pc,
+        postConditions: [],
         anchorMode: AnchorMode.Any,
+        postConditionMode: PostConditionMode.Allow,
         onFinish: (data: any) => {
           //handleValidTrans();
           handleSuccessModel(data.txId);
