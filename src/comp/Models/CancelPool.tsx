@@ -66,20 +66,17 @@ const CancelPool = ({ closeToast, pool }: PoolOpenType) => {
     const currentHistory = userMiningHistory.find(
       (history) => history.poolId === pool.id
     );
-    const pc = [];
-    if (currentHistory) {
-      const stxPostConditionCode = FungibleConditionCode.GreaterEqual;
-      const postConditionAmount = currentHistory.amount;
 
-      pc.push(
-        makeStandardSTXPostCondition(
-          senderAddress || "",
-          stxPostConditionCode,
-          postConditionAmount
-        )
-      );
-    }
+    const stxPostConditionCode = FungibleConditionCode.GreaterEqual;
+    const postConditionAmount = currentHistory ? currentHistory.amount : 0;
 
+    const pc = [
+      makeStandardSTXPostCondition(
+        senderAddress || "",
+        stxPostConditionCode,
+        postConditionAmount
+      ),
+    ];
     try {
       const args = [uintCV(pool.id)];
 
