@@ -67,7 +67,7 @@ const CancelPool = ({ closeToast, pool }: PoolOpenType) => {
       (history) => history.poolId === pool.id
     );
 
-    const stxPostConditionCode = FungibleConditionCode.GreaterEqual;
+    const stxPostConditionCode = FungibleConditionCode.Equal;
     //const postConditionAmount = currentHistory ? currentHistory.amount : 0;
     const postConditionAmount = 21 * STX_MULTIPLE;
     console.log("postConditionAmount", postConditionAmount);
