@@ -256,6 +256,8 @@ const StateLogic = (props: React.PropsWithChildren<{}>) => {
     _userMiningHistory,
   };
 
+  console.log("pools", pools);
+
   return (
     <StateContext.Provider value={{ ...contextValue }}>
       {props.children}
