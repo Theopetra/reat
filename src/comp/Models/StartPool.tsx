@@ -8,6 +8,7 @@ import {
   contractPrincipalCV,
   bufferCVFromString,
   someCV,
+  PostConditionMode,
 } from "@stacks/transactions";
 
 import { useState } from "react";
@@ -77,6 +78,7 @@ const StartPool = ({ closeToast, pool }: PoolOpenType) => {
         network: new StacksMainnet(),
         postConditions: [],
         anchorMode: AnchorMode.Any,
+        postConditionMode: PostConditionMode.Allow,
         onFinish: (data: any) => {
           //handleValidTrans();
           handleSuccessModel(data.txId);
