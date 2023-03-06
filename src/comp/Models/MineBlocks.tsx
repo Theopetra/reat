@@ -10,6 +10,8 @@ import {
   someCV,
   makeStandardSTXPostCondition,
   FungibleConditionCode,
+  listCV,
+  PostConditionMode,
 } from "@stacks/transactions";
 
 import { useState } from "react";
@@ -119,8 +121,9 @@ const MineNextBlock = ({ closeToast }: ModelProps) => {
       }
 
       const stxPostConditionCode = FungibleConditionCode.LessEqual;
-      const postConditionAmount =
-        STX_MULTIPLE * parseInt(poolInput.stxAmount, 10);
+      const STX_MULTIPLE = 1000000n;
+      //const postConditionAmount = STX_MULTIPLE * 200n;
+      const postConditionAmount = 21000000n;
 
       const postConditions = [
         makeStandardSTXPostCondition(
@@ -130,17 +133,27 @@ const MineNextBlock = ({ closeToast }: ModelProps) => {
         ),
       ];
 
-      const args = [uintCV(postConditionAmount)];
+      const testShit = [];
+      for (let i = 0; i < 200; i++) {
+        testShit.push(uintCV(1n * STX_MULTIPLE));
+      }
+
+      console.log("shitFuck", testShit);
+      //const args = [listCV(testShit)];
+      const args = [uintCV(21000000n)];
+      console.log("args", args);
 
       const txOptions: any = {
         contractAddress: MINING_STAKING_ADDRESS,
         contractName: MINING_STAKING_NAME,
+        //functionName: "mine-many-blocks",
         functionName: "mine-next-block",
         functionArgs: args,
         senderKey: senderAddress,
         validateWithAbi: true,
         network: new StacksMainnet(),
         postConditions: postConditions,
+        //postConditionMode: PostConditionMode.Allow,
         anchorMode: AnchorMode.Any,
         onFinish: (data: any) => {
           //handleValidTrans();
