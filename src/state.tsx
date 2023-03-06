@@ -133,7 +133,7 @@ const StateLogic = (props: React.PropsWithChildren<{}>) => {
   useEffect(() => {
     if (senderAddress) {
       if (userMiningHistory.length === 0 && pools.length > 0) {
-        hanldeFetchingTHings();
+        // hanldeFetchingTHings();
       }
     }
   }, [senderAddress, pools, userMiningHistory]);
