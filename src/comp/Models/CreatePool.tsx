@@ -105,7 +105,7 @@ const CreatePool = ({ closeToast }: ModelProps) => {
     const args = [
       someCV(stringAsciiCV(poolInput.name)),
       uintCV(poolInput.start),
-      uintCV(30),
+      uintCV(11),
       someCV(uintCV(2)),
       someCV(uintCV(poolInput.fee)),
     ];

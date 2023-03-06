@@ -180,6 +180,12 @@ const PoolTile = (pool: POOL_TYPE) => {
       </div>
       {authenticated ? (
         <>
+          <TileButton
+            onClick={() => handleDeletePool(pool)}
+            customClass="px-12"
+          >
+            CANCEL POOL
+          </TileButton>
           {pool.poolStatus === POOL_STATUS.READY && isOwner && (
             <TileButton
               onClick={() => handleTileClick(pool)}
