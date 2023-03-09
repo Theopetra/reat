@@ -67,7 +67,7 @@ export const START_CYCLE_BLOCK = 68958;
 export const STX_MULTIPLE = 1000000;
 export const TEST_NETWORK = new StacksTestnet();
 export const LIVE_NETWORKD = new StacksMainnet();
-export const MIN_BLOCK_CONFIRMS_TO_CLAIM_REWARD = 300;
+export const MIN_BLOCK_CONFIRMS_TO_CLAIM_REWARD = 400;
 export const NETWORK = true ? LIVE_NETWORKD : TEST_NETWORK;
 
 export const DEFAULT_TESTNET_SERVER =
