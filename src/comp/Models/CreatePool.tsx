@@ -28,6 +28,7 @@ type PoolInputType = {
   name: string;
   fee: string;
   start: string;
+  contributionLength: string;
 };
 
 const CreatePool = ({ closeToast }: ModelProps) => {
@@ -37,6 +38,7 @@ const CreatePool = ({ closeToast }: ModelProps) => {
     name: "",
     fee: "",
     start: "",
+    contributionLength: "",
   });
 
   // create a state of the PoolInputType that handles showing the error message
@@ -44,6 +46,7 @@ const CreatePool = ({ closeToast }: ModelProps) => {
     name: "",
     fee: "",
     start: "",
+    contributionLength: "",
   });
 
   //create a state that keeps track of submit errors
@@ -87,7 +90,8 @@ const CreatePool = ({ closeToast }: ModelProps) => {
     if (
       poolInputErrors.name !== "" ||
       poolInputErrors.fee !== "" ||
-      poolInputErrors.start !== ""
+      poolInputErrors.start !== "" ||
+      poolInputErrors.contributionLength !== ""
     ) {
       setSubmitError("Please fix errors");
       return;
@@ -97,7 +101,8 @@ const CreatePool = ({ closeToast }: ModelProps) => {
     if (
       poolInput.name === "" ||
       poolInput.fee === "" ||
-      poolInput.start === ""
+      poolInput.start === "" ||
+      poolInput.contributionLength === ""
     ) {
       setSubmitError("Please fill out all fields");
       return;
@@ -105,7 +110,7 @@ const CreatePool = ({ closeToast }: ModelProps) => {
     const args = [
       someCV(stringAsciiCV(poolInput.name)),
       uintCV(poolInput.start),
-      uintCV(11),
+      uintCV(poolInput.contributionLength),
       someCV(uintCV(2)),
       someCV(uintCV(poolInput.fee)),
     ];
@@ -228,6 +233,39 @@ const CreatePool = ({ closeToast }: ModelProps) => {
       start: "",
     });
   };
+
+  const handleContributionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // ensure that input string can be converted to a number and that the number is between 10 and 100
+    const contributionLength = Number(e.target.value);
+
+    console.log("contributionLength", contributionLength);
+    if (isNaN(contributionLength)) {
+      setPoolInputErrors({
+        ...poolInputErrors,
+        contributionLength: "Contribution length must be a number",
+      });
+      return;
+    } else if (contributionLength % 1 !== 0) {
+      setPoolInputErrors({
+        ...poolInputErrors,
+        contributionLength: "Contribution length must be an integer",
+      });
+      return;
+    } else if (contributionLength < 10 || contributionLength > 100) {
+      setPoolInputErrors({
+        ...poolInputErrors,
+        contributionLength: "Contribution must be between 10 and 100",
+      });
+      return;
+    }
+    // update the start state
+    setPoolInput({ ...poolInput, contributionLength: e.target.value });
+    setPoolInputErrors({
+      ...poolInputErrors,
+      contributionLength: "",
+    });
+  };
+
   return (
     <div className={MODEL_BASIC_STYLES}>
       <div className="flex flex-row justify-between items-center">
@@ -303,7 +341,25 @@ const CreatePool = ({ closeToast }: ModelProps) => {
           />
         </div>
       </div>
-
+      <div className="flex flex-col gap-2">
+        <div className="flex flex-row justify-between items-center">
+          <NavText customClass="text-left text-lightGray">
+            Set Contriution Blocks Length
+          </NavText>
+          {poolInputErrors.contributionLength !== "" && (
+            <Text customClass="text-red-500 text-sm" type={TextTypes.TriText}>
+              {poolInputErrors.contributionLength}
+            </Text>
+          )}
+        </div>
+        <div className="w-full flex flex-row bg-midGray rounded-xl px-4 py-2 justify-between items-center">
+          <input
+            onChange={handleContributionChange}
+            className={MODEL_INPUT_STYLE}
+            placeholder="Contriution Blocks Length "
+          />
+        </div>
+      </div>
       <div className="flex flex-col md:flex-row jusitfy-between items-center gap-y-2">
         <ModelButton
           onClick={() => (closeToast ? closeToast() : null)}

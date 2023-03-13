@@ -256,7 +256,10 @@ u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0
 
 
         ;; Get rewards...
-        (ok (unwrap! (match (fold map-from-list-of-zeros-to-tear-won empty-mine-list (ok { current-height: current-mining-start-height, blocks-won: u0, tear-won: u0 })) 
+        (ok 
+            (unwrap! 
+                (match 
+                    (fold map-from-list-of-zeros-to-tear-won empty-mine-list (ok { current-height: current-mining-start-height, blocks-won: u0, tear-won: u0 })) 
          returnOk
             (let 
                 (
@@ -507,7 +510,7 @@ u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0
         (var-set helper-uint-pool current-pool-total-contribution-per-block)
 
         ;; Contract-call? the mine-many function from tear-mining-staking, first prepare mine-list
-        (ok (contract-call? .tear-mining-staking mine-many-blocks (map prepare-pool-list empty-mine-list)))
+        (ok (as-contract (contract-call? .tear-mining-staking mine-many-blocks (map prepare-pool-list empty-mine-list))))
 
     )
 )
@@ -641,3 +644,51 @@ u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0
 (define-private (is-not-removeable (admin-principal principal))
   (not (is-eq admin-principal (var-get helper-principal)))
 )
+
+;; Admin function to retrieve STX from the contract
+;; @desc - Function for admins to retrieve STX from the contract
+;; @param - amount (uint)
+(define-public (admin-retrieve-stx (amount uint))
+    (let
+        (
+            (current-admins (var-get admins))
+            (current-user tx-sender)
+        )
+
+        ;; Assert tx-sender is admin
+        (asserts! (is-some (index-of current-admins tx-sender)) (err "ERR-NOT-ADMIN"))
+
+        ;; Send STX to tx-sender
+        (ok (as-contract (unwrap! (stx-transfer? amount tx-sender current-user) (err "ERR-TRANSFER-FAILED"))))
+
+    )
+)
+
+;; Admin function to retrieve TEAR from the contract
+;; @desc - Function for admins to retrieve TEAR from the contract
+;; @param - amount (uint)
+(define-public (admin-retrieve-tear (amount uint))
+    (let
+        (
+            (current-admins (var-get admins))
+            (current-user tx-sender)
+        )
+
+        ;; Assert tx-sender is admin
+        (asserts! (is-some (index-of current-admins tx-sender)) (err "ERR-NOT-ADMIN"))
+
+        ;; Send TEAR to tx-sender
+        (ok (as-contract (unwrap! (contract-call? .tear-token transfer amount tx-sender current-user) (err "ERR-TRANSFER-FAILED"))))
+
+    )
+)
+
+
+;; Open questions
+;; Can *anyone* start a pool? or only TEAR admins?
+;; Fees for TEAR on admin-cteared pools? How about owner-cteared pools?
+;; Minimum members? contributions? do we leave that up to pool operators?
+;; What should be minimum contribution? 20 STX? (.1 STX per block)
+;; Do we *need* them to be able to contribute multiple times?
+
+(some (tuple (claimHeights (list )) (contributionEndHeight u97571) (contributionStartHeight u97560) (name (some "b:pool")) (ownerFee u1) (poolMembers (list SPRQNQ02ETRJWFBSSF2P0FBHQNAHD2X1XZ02V9TV SP3N0QTJVCBMVX3EV11MXSNSBCP97S473EC8BEJ3P)) (poolMinMembers none) (poolOwner SP1S2ZTV7QVAYBRJVB85FHXE7P8PZZHXVCERMEHN9) (startedMineHeight (some u97573)) (totalCoinsWon none) (totalContributions u220000000)))

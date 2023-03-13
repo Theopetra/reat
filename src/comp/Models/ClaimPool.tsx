@@ -20,7 +20,7 @@ import {
 } from "../Models";
 
 import Text, { BodySubText, NavText, TextTypes } from "../Text";
-import { AnchorMode, uintCV } from "@stacks/transactions";
+import { AnchorMode, PostConditionMode, uintCV } from "@stacks/transactions";
 
 const ClaimPool = ({ closeToast, pool }: PoolOpenType) => {
   const { currentBlockHeight, senderAddress } = useAppState();
@@ -62,6 +62,7 @@ const ClaimPool = ({ closeToast, pool }: PoolOpenType) => {
         network: new StacksMainnet(),
         postConditions: [],
         anchorMode: AnchorMode.Any,
+        postConditionMode: PostConditionMode.Allow,
         onFinish: (data: any) => {
           //handleValidTrans();
           handleSuccessModel(data.txId);
