@@ -173,7 +173,7 @@ const PoolTile = (pool: POOL_TYPE) => {
               REAT Won
             </Text>
             <Text customClass="text-lightGray" type={TextTypes.SubText}>
-              {pool.totalCoinsWon / STX_MULTIPLE || "N/A"}
+              {Math.round(pool.totalCoinsWon / STX_MULTIPLE) || "N/A"}
             </Text>
           </div>
         </div>
