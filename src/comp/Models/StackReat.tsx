@@ -99,7 +99,7 @@ export const StackReatModel = ({
       const txOptions: any = {
         contractAddress: MINING_STAKING_ADDRESS,
         contractName: MINING_STAKING_NAME,
-        functionName: "stake-many-cycles",
+        functionName: "stack-many-cycles",
         functionArgs: args,
         senderKey: senderAddress,
         validateWithAbi: true,

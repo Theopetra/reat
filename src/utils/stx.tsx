@@ -78,7 +78,8 @@ export const CONFIG_BC_S = createConfig(DEFAULT_MAINNET_SERVER);
 
 export const blocksAPI = new BlocksApi(CONFIG_BC_S);
 
-export const CORE_CONTRACT_ADDRESS = "SP3VX9FSVCADNMWNJAKRPA803BASX9TW7JDSFS3YQ";
+export const CORE_CONTRACT_ADDRESS =
+  "SP3VX9FSVCADNMWNJAKRPA803BASX9TW7JDSFS3YQ";
 // Pool Contract
 export const POOL_ADDRESS = CORE_CONTRACT_ADDRESS;
 export const POOL_NAME = "tear-pool";
@@ -171,7 +172,9 @@ export const parseContractPoolData = (
     const poolMinMembers = fetchedPool.value.value.poolMinMembers.value;
     const claimHeights = fetchedPool.value.value.claimHeights.value;
     const totalContributions = fetchedPool.value.value.totalContributions.value;
-    const totalCoinsWon = fetchedPool.value.value.totalCoinsWon.value;
+    const totalCoinsWon = fetchedPool.value.value.totalCoinsWon.value
+      ? fetchedPool.value.value.totalCoinsWon.value.value
+      : 0;
 
     return {
       name,

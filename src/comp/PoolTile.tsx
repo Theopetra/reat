@@ -173,7 +173,7 @@ const PoolTile = (pool: POOL_TYPE) => {
               REAT Won
             </Text>
             <Text customClass="text-lightGray" type={TextTypes.SubText}>
-              {pool.totalCoinsWon || "N/A"}
+              {pool.totalCoinsWon / STX_MULTIPLE || "N/A"}
             </Text>
           </div>
         </div>
@@ -221,6 +221,7 @@ const PoolTile = (pool: POOL_TYPE) => {
             pool.poolStatus === POOL_STATUS.UNKNOWN ||
             pool.poolStatus === POOL_STATUS.MINING ||
             pool.poolStatus === POOL_STATUS.PENDING ||
+            pool.poolStatus === POOL_STATUS.CLAIMED ||
             (pool.poolStatus === POOL_STATUS.READY && !isOwner)) && (
             <TileButtonGray
               onClick={() => handleTileClick(pool)}

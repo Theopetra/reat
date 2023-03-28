@@ -48,7 +48,9 @@ enum POOL_FILTER {
   CURRENTLY_MINING = "Currently Mining",
   COMPLETED = "Completed",
   READY = "Ready",
+  CLAIMED = "Claimed",
 }
+
 type DonateType = {
   control: boolean;
 };
@@ -143,15 +145,25 @@ const Donate = (props: DonateType) => {
         pool.poolStatus === POOL_STATUS.READY
       ) {
         return true;
+      } else if (
+        selectedPoolFilter === POOL_FILTER.CLAIMED &&
+        pool.poolStatus === POOL_STATUS.CLAIMED
+      ) {
+        return true;
       } else {
         return false;
       }
     });
 
-    return filterPools.map((pool) => {
+    const testArr = filterPools.map((pool) => {
       //console.log("pool", pool);
-      return <PoolTile key={pool.id} {...pool} />;
+      const testShit = { ...pool };
+      return <PoolTile key={pool.name} {...testShit} />;
     });
+
+    console.log("testArr", testArr);
+
+    return testArr;
   };
 
   const handleFilterButtons = (filter: POOL_FILTER) => {

@@ -166,7 +166,7 @@ const StateLogic = (props: React.PropsWithChildren<{}>) => {
 
       if (
         pool.startedMineHeight &&
-        currentBlockHeight <=
+        currentBlockHeight <
           pool.startedMineHeight + BLOCKS_AFTER_START_TO_COMPLETE_MINE
       ) {
         return {
@@ -193,7 +193,7 @@ const StateLogic = (props: React.PropsWithChildren<{}>) => {
       } else if (
         pool.startedMineHeight &&
         pool.totalCoinsWon !== null &&
-        currentBlockHeight >=
+        currentBlockHeight >
           pool.startedMineHeight + BLOCKS_AFTER_START_TO_COMPLETE_MINE
       ) {
         //CLAIMED
@@ -203,7 +203,7 @@ const StateLogic = (props: React.PropsWithChildren<{}>) => {
         };
       } else if (
         pool.startedMineHeight &&
-        currentBlockHeight >
+        currentBlockHeight >=
           pool.startedMineHeight + BLOCKS_AFTER_START_TO_COMPLETE_MINE
       ) {
         //completed
