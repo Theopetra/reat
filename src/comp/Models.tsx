@@ -40,7 +40,7 @@ export const TOAST_CONFIG: any = {
   position: "top-center",
 };
 export const MODEL_BASIC_STYLES =
-  "m-auto flex flex-col h-auto  md:min-w-[320px] w-[4000px] max-w-[300px] md:max-w-[380px] bg-lightBlack rounded-[20px] p-9 gap-5";
+  "m-auto flex flex-col h-auto  md:min-w-[320px] w-[4000px] max-w-[300px] md:max-w-[380px] bg-lightBlack rounded-[20px] p-9 gap-5 !max-h-[90vh] overflow-y-auto ";
 export const TaxDisclaimer = ({ closeToast }: ModelProps) => {
   return (
     <div className={MODEL_BASIC_STYLES}>
