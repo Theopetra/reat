@@ -83,7 +83,8 @@ const MineNextBlock = ({ closeToast }: ModelProps) => {
     const amount = Number(e.target.value);
 
     console.log("amount: ", amount);
-    // check if start is a number
+    // check if start is a   number
+    /*
     if (isNaN(amount)) {
       setPoolInputErrors({
         ...poolInputErrors,
@@ -97,7 +98,7 @@ const MineNextBlock = ({ closeToast }: ModelProps) => {
       });
       return;
     }
-
+    */
     setPoolInput({ ...poolInput, stxAmount: e.target.value });
     setPoolInputErrors({
       ...poolInputErrors,
@@ -120,10 +121,19 @@ const MineNextBlock = ({ closeToast }: ModelProps) => {
         return;
       }
 
+      // conver string of ints to number
+      const numbArr = poolInput.stxAmount.split(",").map((d, i) => {
+        return parseInt(d, 10);
+      });
+      const uintNumbArr = numbArr.map((num) => uintCV(num * STX_MULTIPLE));
+
+      console.log("numbArr", numbArr);
+
+      const totalStxUsing = numbArr.reduce((a, b) => a + b, 0);
+
       const stxPostConditionCode = FungibleConditionCode.LessEqual;
-      const STX_MULTIPLE = 1000000n;
-      //const postConditionAmount = STX_MULTIPLE * 200n;
-      const postConditionAmount = 21000000n;
+
+      const postConditionAmount = STX_MULTIPLE * totalStxUsing;
 
       const postConditions = [
         makeStandardSTXPostCondition(
@@ -133,22 +143,13 @@ const MineNextBlock = ({ closeToast }: ModelProps) => {
         ),
       ];
 
-      const testShit = [];
-      for (let i = 0; i < 200; i++) {
-        testShit.push(uintCV(1n * STX_MULTIPLE));
-      }
-
-      console.log("shitFuck", testShit);
-      //const args = [listCV(testShit)];
-      const args = [uintCV(21000000n)];
-      console.log("args", args);
-
+      console.log(uintNumbArr);
       const txOptions: any = {
         contractAddress: MINING_STAKING_ADDRESS,
         contractName: MINING_STAKING_NAME,
-        //functionName: "mine-many-blocks",
-        functionName: "mine-next-block",
-        functionArgs: args,
+        functionName: "mine-many-blocks",
+        //functionName: "mine-next-block",
+        functionArgs: [listCV(uintNumbArr)],
         senderKey: senderAddress,
         validateWithAbi: true,
         network: new StacksMainnet(),
@@ -176,7 +177,7 @@ const MineNextBlock = ({ closeToast }: ModelProps) => {
   return (
     <div className={MODEL_BASIC_STYLES}>
       <div className="flex flex-row items-center justify-between">
-        <ModelTitle>Mine Next Block</ModelTitle>
+        <ModelTitle>Mine Many Block</ModelTitle>
         <Text
           customClass="text-darkGreen font-large text-lg"
           type={TextTypes.SubText}
@@ -202,16 +203,9 @@ const MineNextBlock = ({ closeToast }: ModelProps) => {
         <div className="w-full flex flex-row bg-midGray rounded-xl px-4 py-2 justify-between items-center">
           <input
             className={MODEL_INPUT_STYLE}
-            placeholder="Min. 21 STX"
+            placeholder="Min. 21 STX example (21,21,23)"
             onChange={handleStxAmount}
           />
-          <ModelButton
-            type={ButtonTypes.Nav}
-            color={ButtonColors.YelloGradient}
-            customClass="max-w-[74px]"
-          >
-            MAX
-          </ModelButton>
         </div>
         {poolInputErrors.stxAmount !== "" && (
           <Text customClass="text-red-500 text-sm" type={TextTypes.TriText}>
