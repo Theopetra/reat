@@ -194,6 +194,7 @@ const Donate = (props: DonateType) => {
             backgroundColor: "transparent",
             boxShadow: "none",
           }}
+          containerId={"reatToast"}
           enableMultiContainer={false}
         />
         <div className="donateLanding" />

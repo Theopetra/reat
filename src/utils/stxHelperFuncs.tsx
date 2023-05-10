@@ -219,7 +219,6 @@ export const fetchPoolHisotry = async (principal: string) => {
         } else return false;
       });
 
-    console.log("filteredTX", filteredTX);
     const poolHistory = filteredTX.filter((tx: any) => {
       const txContractName = tx.contract_call.contract_id.split(".")[1];
 
@@ -230,6 +229,10 @@ export const fetchPoolHisotry = async (principal: string) => {
 
     const listOfPoolsContributedTo = poolHistory
       .filter((tx: any) => {
+        console.log(
+          "tx.contract_call.function_name-",
+          tx.contract_call.function_name
+        );
         if (
           tx.contract_call.function_name === "contribute-pool" &&
           tx.tx_status === "success"
@@ -252,10 +255,44 @@ export const fetchPoolHisotry = async (principal: string) => {
         };
       });
 
+    const listOfStakingHistory = filteredTX
+      .filter((tx: any) => {
+        if (
+          tx.contract_call.function_name === "stack-many-cycles" &&
+          tx.tx_status === "success"
+        ) {
+          console.log("tx", tx);
+          return true;
+        }
+      })
+      .map((d, i) => {
+        console.log("listOfStakingHistory - d", d);
+
+        const cycles = d.contract_call.function_args[1].repr;
+        const amount = d.contract_call.function_args[0].repr;
+
+        // remove all non number from string and convert to number
+        const cycleClean = parseInt(cycles.replace(/\D/g, ""));
+        const amountWithoutCommas = parseInt(amount.replace(/\D/g, ""));
+
+        return {
+          stackedAmount: amountWithoutCommas,
+          date: d.burn_block_time_iso,
+          blockHeight: d.block_height,
+          cycles: cycleClean,
+        };
+      });
     //console.log("listOfPoolsContributedTo", listOfPoolsContributedTo);
-    return listOfPoolsContributedTo;
+    console.log("listOfStakingHistory", listOfStakingHistory);
+    return {
+      listOfStakingHistory,
+      listOfPoolsContributedTo,
+    };
   } catch (err) {
     console.log("fetchPoolHisotry err :(", err);
-    return [];
+    return {
+      listOfStakingHistory: [],
+      listOfPoolsContributedTo: [],
+    };
   }
 };

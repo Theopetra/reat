@@ -15,11 +15,11 @@ import { isMobile } from "react-device-detect";
 import StackReat from "./Models/StackReat";
 import StakingHistory from "./StakingHisotry";
 import { useEffect, useState } from "react";
-import { StackingType, useAppState } from "../state";
+import { STACKING_HISTORY, useAppState } from "../state";
 import { fetchPrincipalTokenBalance } from "../utils/stxHelperFuncs";
 import { toast, ToastContainer } from "react-toastify";
 import ClaimStx from "./Models/ClaimStx";
-import { STX_MULTIPLE } from "../utils/stx";
+import { CYCLE_LENGTH, START_CYCLE_BLOCK, STX_MULTIPLE } from "../utils/stx";
 
 export const StackingHisotryInfo = ({ title, text }: ModelInfoProps) => {
   return (
@@ -47,28 +47,37 @@ const calculatStackingCompletionProgress = (
 ): string => {
   let completion = 0;
 
-  if (startBlock && completionBlock && currentBlockHeight) {
-    if (completionBlock <= currentBlockHeight) {
-      completion = 100;
-    } else {
-      completion = Math.floor(
-        ((currentBlockHeight - startBlock) / (completionBlock - startBlock)) *
-          100
-      );
-    }
+  if (completionBlock <= currentBlockHeight) {
+    completion = 100;
+  } else {
+    completion = Math.floor(
+      ((currentBlockHeight - startBlock) / (completionBlock - startBlock)) * 100
+    );
   }
+
   return `${completion}%`;
 };
 
-export const StackingHistoryTile = (props: StackingType) => {
+const calculateStakingRewardCycle = (blockHeight: number) => {
+  const calcualteBlockSinceStart = blockHeight - START_CYCLE_BLOCK;
+  const calculateCurrentCycle = calcualteBlockSinceStart / CYCLE_LENGTH;
+  // round down to nearest integer _aaa
+  const stackedCycle = Math.floor(calculateCurrentCycle);
+  const activeCycle = stackedCycle + 1;
+
+  return 3;
+};
+export const StackingHistoryTile = (props: STACKING_HISTORY) => {
   const { currentBlockHeight } = useAppState();
 
-  const { cycle, stacked, startBlock, stxEarned, completionBlock } = props;
+  const { blockHeight, cycles, date, stackedAmount } = props;
+  const completionBlock = START_CYCLE_BLOCK + CYCLE_LENGTH * cycles;
+  const rewardCycle = calculateStakingRewardCycle(blockHeight);
 
   const renderCompletion = () => {
-    if (startBlock && completionBlock && currentBlockHeight) {
+    if (blockHeight && completionBlock && currentBlockHeight) {
       return calculatStackingCompletionProgress(
-        startBlock,
+        blockHeight,
         completionBlock,
         currentBlockHeight
       );
@@ -78,35 +87,47 @@ export const StackingHistoryTile = (props: StackingType) => {
   };
 
   const handleClaimButton = () => {
-    toast(({ closeToast }) => <ClaimStx closeToast={closeToast} {...props} />, {
-      autoClose: false,
-      hideProgressBar: true,
-      style: {
-        backgroundColor: "transparent",
-      },
-      draggable: false,
-      closeOnClick: false,
-      closeButton: true,
-      position: "top-center",
-    });
+    toast(
+      ({ closeToast }) => (
+        <ClaimStx
+          closeToast={closeToast}
+          {...props}
+          rewardCycle={rewardCycle}
+        />
+      ),
+      {
+        autoClose: false,
+        hideProgressBar: true,
+        style: {
+          backgroundColor: "transparent",
+        },
+        draggable: false,
+        closeOnClick: false,
+        closeButton: true,
+        position: "top-center",
+      }
+    );
   };
+
   return (
     <div className="flex flex-row w-full  bg-lightBlack rounded-[20px] p-8">
-      <StackingHisotryInfo title="Cycle" text={cycle} />
-      {!isMobile && <StackingHisotryInfo title="REAT Stacked" text={stacked} />}
+      <StackingHisotryInfo title="Cycle" text={2} />
+      {!isMobile && (
+        <StackingHisotryInfo title="REAT Stacked" text={stackedAmount} />
+      )}
 
       {!isMobile && (
         <StackingHisotryInfo
           title="Start Block"
-          text={"#" + startBlock || "N/A"}
+          text={"#" + blockHeight || "N/A"}
         />
       )}
-      {!isMobile && (
+      {/* {!isMobile && (
         <StackingHisotryInfo
           title="End Block"
-          text={startBlock ? "#" + (startBlock + 2100) : "N/A"}
+          text={START_CYCLE_BLOCK ? "#" + (cycles * 2100) : "N/A"}
         />
-      )}
+      )} */}
 
       {!isMobile && (
         <StackingHisotryInfo title="Completion" text={renderCompletion()} />
@@ -118,7 +139,7 @@ export const StackingHistoryTile = (props: StackingType) => {
           width: "180px",
         }}
       >
-        {completionBlock && completionBlock < currentBlockHeight ? (
+        {false ? (
           <Text
             customClass="!font-bold text-center"
             type={TextTypes.LargeButton}
@@ -167,6 +188,7 @@ const Stack = () => {
           backgroundColor: "transparent",
           boxShadow: "none",
         }}
+        containerId="reatToast"
         enableMultiContainer={false}
       />
       <div className="homeLanding" />

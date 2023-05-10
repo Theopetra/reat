@@ -33,7 +33,7 @@ const Claim = () => {
     pools,
     _pools,
     senderAddress,
-    stakingHistory,
+    userStakingHistory,
     authenticated,
     userMiningHistory,
     _userMiningHistory,
@@ -122,15 +122,14 @@ const Claim = () => {
   };
 
   const renderStakingHistory = () => {
-    return stakingHistory.map((item, index) => {
+    return userStakingHistory.map((item, index) => {
       return (
         <StackingHistoryTile
           key={index}
-          cycle={item.cycle}
-          stacked={item.stacked}
-          startBlock={item.startBlock}
-          stxEarned={item.stxEarned}
-          completionBlock={item.completionBlock}
+          cycles={item.cycles}
+          blockHeight={item.blockHeight}
+          stackedAmount={item.stackedAmount}
+          date={item.date}
         />
       );
     });
@@ -144,6 +143,7 @@ const Claim = () => {
           backgroundColor: "transparent",
           boxShadow: "none",
         }}
+        containerId="reatToast"
         enableMultiContainer={false}
       />
       <div className="homeLanding" />
@@ -216,7 +216,7 @@ const Claim = () => {
               <div className="flex flex-col w-full gap-5 mt-6">
                 <>
                   {renderStakingHistory()}
-                  {stakingHistory.length === 0 && (
+                  {userStakingHistory.length === 0 && (
                     <div className="flex flex-col w-full items-center text-center gap-5">
                       <ModelTitle>No Stacking History</ModelTitle>
                       <ModelTitle>Stack some REAT to get started</ModelTitle>

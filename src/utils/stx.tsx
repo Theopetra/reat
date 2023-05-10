@@ -63,7 +63,8 @@ function createConfig(basePath: string, anchored?: boolean) {
   });
 }
 // STX Helpers CONSTS
-export const START_CYCLE_BLOCK = 68958;
+export const START_CYCLE_BLOCK = 98886;
+export const CYCLE_LENGTH = 2016;
 export const STX_MULTIPLE = 1000000;
 export const TEST_NETWORK = new StacksTestnet();
 export const LIVE_NETWORKD = new StacksMainnet();

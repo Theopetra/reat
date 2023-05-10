@@ -11,53 +11,17 @@ import Text, { NavText, TextHeader, TextTypes } from "./Text";
 import { ModelTitle, TitleHeader } from "./Title";
 
 const StakingHistory = () => {
-  const { authenticated, senderAddress, stakingHistory } = useAppState();
-  useEffect(() => {
-    if (authenticated) {
-      fetchStakingHistory();
-      fetchUserDonationHistory();
-    }
-  }, []);
-
-  const fetchStakingHistory = async () => {
-    try {
-      if (senderAddress) {
-        const stakingHistory = await fetchPrincipalStakingHistory(
-          senderAddress
-        );
-      } else {
-        console.log("No Princiapl Address");
-      }
-    } catch (err) {
-      console.log(err);
-      toast.error("Could not fetch Staking Hisotry");
-    }
-  };
-
-  const fetchUserDonationHistory = async () => {
-    try {
-      if (senderAddress) {
-        const donationHistory = await fetchUserPoolsData(senderAddress);
-        console.log("donationHistory", donationHistory);
-      } else {
-        console.log("No Princiapl Address");
-      }
-    } catch (err) {
-      console.log(err);
-      toast.error("Could not fetch Donation Hisotry");
-    }
-  };
+  const { authenticated, senderAddress, userStakingHistory } = useAppState();
 
   const renderStakingHistory = () => {
-    return stakingHistory.map((item, index) => {
+    return userStakingHistory.map((item, index) => {
       return (
         <StackingHistoryTile
           key={index}
-          cycle={item.cycle}
-          stacked={item.stacked}
-          startBlock={item.startBlock}
-          stxEarned={item.stxEarned}
-          completionBlock={item.completionBlock}
+          cycles={item.cycles}
+          blockHeight={item.blockHeight}
+          stackedAmount={item.stackedAmount}
+          date={item.date}
         />
       );
     });
@@ -80,7 +44,7 @@ const StakingHistory = () => {
           <div className="flex flex-col w-full gap-5 mt-6">
             <>
               {renderStakingHistory()}
-              {stakingHistory.length === 0 && (
+              {userStakingHistory.length === 0 && (
                 <div className="flex flex-col w-full items-center text-center gap-5">
                   <ModelTitle>No Stacking History</ModelTitle>
                   <ModelTitle>Stack some REAT to get started</ModelTitle>

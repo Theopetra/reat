@@ -3,31 +3,6 @@ import { BLOCKS_AFTER_START_TO_COMPLETE_MINE } from "./comp/Models";
 import { START_CYCLE_BLOCK } from "./utils/stx";
 import { fetchPoolHisotry } from "./utils/stxHelperFuncs";
 
-export type StackingType = {
-  cycle: number;
-  stacked: number;
-  startBlock: number | null;
-  completionBlock: number | null;
-  stxEarned: number | null;
-};
-
-const MOCKED_STACKING_HISTORY: StackingType[] = [
-  {
-    cycle: 1,
-    stacked: 100,
-    startBlock: null,
-    completionBlock: null,
-    stxEarned: null,
-  },
-  {
-    cycle: 2,
-    stacked: 300,
-    startBlock: null,
-    completionBlock: null,
-    stxEarned: null,
-  },
-];
-
 export type POOL_TYPE = {
   name: string;
   contributionStartHeight: number;
@@ -50,9 +25,9 @@ type INIT_STATE_TYPE = {
   totalStx: number;
   pools: POOL_TYPE[];
   currentBlockHeight: number;
-  stakingHistory: StackingType[];
   currentBlockHeightIsoDate: string | null;
   userMiningHistory: MINING_HISTORY[];
+  userStakingHistory: STACKING_HISTORY[];
 
   _senderAddress: (address: string | undefined) => void;
   _authenticated: (authenticated: boolean) => void;
@@ -61,6 +36,7 @@ type INIT_STATE_TYPE = {
   _currentBlockHeight: (currentBlockHeight: number) => void;
   _currentBlockHeightIsoDate: (currentBlockHeightIsoDate: string) => void;
   _userMiningHistory: (userMiningHistory: MINING_HISTORY[]) => void;
+  _userStakingHistory: (userStakingHistory: STACKING_HISTORY[]) => void;
 };
 export enum POOL_STATUS {
   MINING = "MINING",
@@ -84,6 +60,12 @@ export type MINING_HISTORY = {
   amount: number;
 };
 
+export type STACKING_HISTORY = {
+  blockHeight: number;
+  cycles: number;
+  date: string;
+  stackedAmount: number;
+};
 export type MINING_HISTORY_TYPE = MINING_HISTORY & {
   pool: POOL_TYPE;
 };
@@ -105,12 +87,15 @@ const StateLogic = (props: React.PropsWithChildren<{}>) => {
 
   const [totalStx, _totalStx] = useState<number>(0);
 
-  const [stakingHistory, _stakingHistory] = useState<StackingType[]>([]);
-
   const [userMiningHistory, _userMiningHistory] = useState<MINING_HISTORY[]>(
     []
   );
 
+  const [userStakingHistory, _userStakingHistory] = useState<
+    STACKING_HISTORY[]
+  >([]);
+
+  /*
   useEffect(() => {
     if (stakingHistory.length > 0 && currentBlockHeight !== 0) {
       const stackingInfo = stakingHistory.map((d, i) => {
@@ -129,21 +114,29 @@ const StateLogic = (props: React.PropsWithChildren<{}>) => {
       _stakingHistory(stackingInfo);
     }
   }, [currentBlockHeight]);
+  */
 
   useEffect(() => {
     if (senderAddress) {
       if (userMiningHistory.length === 0 && pools.length > 0) {
-        // hanldeFetchingTHings();
+        hanldeFetchingTHings();
       }
     }
-  }, [senderAddress, pools, userMiningHistory]);
+  }, [senderAddress, pools]);
 
   const hanldeFetchingTHings = async () => {
+    console.log("are you runnign");
     try {
       if (senderAddress) {
         const shems = await fetchPoolHisotry(senderAddress);
 
-        _userMiningHistory(shems);
+        if (shems && shems.listOfPoolsContributedTo) {
+          _userMiningHistory(shems.listOfPoolsContributedTo);
+        }
+
+        if (shems && shems.listOfStakingHistory) {
+          _userStakingHistory(shems.listOfStakingHistory);
+        }
       } else {
         console.log("No Princiapl Address");
       }
@@ -246,14 +239,14 @@ const StateLogic = (props: React.PropsWithChildren<{}>) => {
     totalStx,
     _totalStx,
 
-    stakingHistory,
-    _stakingHistory,
-
     currentBlockHeightIsoDate,
     _currentBlockHeightIsoDate,
 
     userMiningHistory,
     _userMiningHistory,
+
+    userStakingHistory,
+    _userStakingHistory,
   };
 
   console.log("pools", pools);

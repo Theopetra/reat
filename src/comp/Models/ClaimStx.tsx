@@ -8,11 +8,12 @@ import {
   contractPrincipalCV,
   bufferCVFromString,
   someCV,
+  PostConditionMode,
 } from "@stacks/transactions";
 
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { POOL_TYPE, StackingType, useAppState } from "../../state";
+import { POOL_TYPE, STACKING_HISTORY, useAppState } from "../../state";
 import {
   MINING_STAKING_ADDRESS,
   MINING_STAKING_NAME,
@@ -32,15 +33,18 @@ import {
 import Text, { BodySubText, NavText, TextTypes } from "../Text";
 import { ModelTitle } from "../Title";
 
-export type ClaimStxType = ModelProps & StackingType & {};
+export type ClaimStxType = ModelProps &
+  STACKING_HISTORY & {
+    rewardCycle: number;
+  };
 
 const ClaimStx = ({
   closeToast,
-  cycle,
-  stacked,
-  startBlock,
-  stxEarned,
-  completionBlock,
+  blockHeight,
+  cycles,
+  date,
+  stackedAmount,
+  rewardCycle,
 }: ClaimStxType) => {
   const { senderAddress } = useAppState();
   const handleSuccessModel = (txId: string) => {
@@ -58,6 +62,11 @@ const ClaimStx = ({
         closeOnClick: false,
         closeButton: true,
         position: "top-center",
+        onOpen: () => {
+          if (closeToast) {
+            closeToast();
+          }
+        },
       }
     );
   };
@@ -65,7 +74,7 @@ const ClaimStx = ({
     try {
       // ensure there are no errors in poolInputErrors
 
-      const args = [uintCV(cycle)];
+      const args = [uintCV(rewardCycle)];
 
       const txOptions: any = {
         contractAddress: MINING_STAKING_ADDRESS,
@@ -77,6 +86,7 @@ const ClaimStx = ({
         network: new StacksMainnet(),
         postConditions: [],
         anchorMode: AnchorMode.Any,
+        postConditionMode: PostConditionMode.Allow,
         onFinish: (data: any) => {
           //handleValidTrans();
           handleSuccessModel(data.txId);
@@ -108,14 +118,11 @@ const ClaimStx = ({
       />
       <Text type={TextTypes.BoldSubText}>CONFIRM DETAILS</Text>
       <div className="flex flex-col gap-4">
-        <ModelInfo title="REAT Stacked" text={stacked} />
-        <ModelInfo title="STX Earned" text={stxEarned || "N/A"} />
+        <ModelInfo title="REAT Stacked" text={stackedAmount} />
+        <ModelInfo title="STX Earned" text={"PENDING"} />
 
-        <ModelInfo title="Stacking Start" text={"#" + startBlock} />
-        <ModelInfo
-          title="Stacking End"
-          text={"#" + (startBlock ? startBlock + 2100 : 0)}
-        />
+        <ModelInfo title="Stacking Start" text={"#" + blockHeight} />
+        <ModelInfo title="Stacking End" text={"PENDING"} />
       </div>
 
       <div></div>
